@@ -1,0 +1,143 @@
+---
+title: "Ignition Status Handling"
+description:
+  "This guide will walk you through the various statuses that occur during an
+  Ignition session."
+---
+
+Axle’s Ignition session is the main interface that allows your customers to
+connect to their insurance accounts and authorize access to scoped data from
+their insurance policies.
+
+Please first review our Quickstart guide and API docs on how to start an
+Ignition session, if you have not already.
+
+### Ignition Config
+
+Your `POST` request to `/ignition` is configured with the following request
+body:
+
+Optional: `redirectUri` - the URL we'll redirect the user to upon completion,
+exit, or error outcomes of the Ignition session, defaults to no redirect
+Optional: `webhookUri` - the URL we'll send events to as the user proceeds
+through the Ignition session, defaults to no webhook events Optional: `config` -
+optional Ignition session configuration, please refer to example for structure
+and defaults
+
+```bash Request Sample
+curl --request POST \
+  --url https://api.axle.insure/ignition \
+  --header 'Content-Type: application/json' \
+  --header 'x-client-id: cli_mZj6YGXhQyQnccN97aXbq' \
+  --header 'x-client-secret: RZM-5BErZuChKqycbCS1O' \
+  --data '{
+  "redirectUri": "https://example.com/insurance/redirect",
+  "webhookUri": "https://example.com/insurance/webhook"
+  "config": {
+    "acceptManual": false,
+    "metadata": {
+      "driverId": "c3c95031-c57d-475b-a228-07152b7b6dce"
+    }
+  }
+}
+```
+
+### Redirect Parameters
+
+On navigation to the `redirectUri` provided, the URI will be appended with the
+following parameters:
+
+`status`: String
+
+- complete
+- exit
+- error
+
+Additional parameters (dependent on status, see below)
+
+- `authCode`: String - authorization code that can be exchange for accessToken
+  for scoped access to connected account and/or policy
+- `result`: String - "link" (account connection was made) OR "manual" (details
+  were entered through manual collection form)
+- `step`: String - the step where the Ignition session was exited
+- `message`: String - additional information about the Ignition session error
+
+```text Redirect sample URL
+  https://example.com/insurance/redirect?status=complete&authCode=cod_LwPJhgxnjinMEPfGYc-XV&result=linked
+```
+
+<Note>
+  The `authCode` expires after 10 minutes, so ensure your backend service is
+  exchanging codes through `POST /token/exchange` in real time.
+</Note>
+
+#### onCompleted
+
+When the user successfully connects to their carrier account and shares
+authorized access to a selected policy, OR if `manual` is enabled, when the user
+submits their policy information and/or documentation through Axle's manual
+collection form.
+
+```json
+{
+  "status": "complete",
+  "authCode": "<authCode>",
+  "result": "link" || "manual"
+}
+```
+
+#### onExit
+
+When the user opts out of connecting to their carrier account and/or selecting a
+policy, OR if `manual` is enabled, when the user opts out of sharing the
+requested policy information and/or documentation.
+
+```json
+{
+  "status": "exit",
+  "step": "<step-name>"
+}
+```
+
+#### onError
+
+When Axle is unable to retrieve account or policy information from a selected
+carrier, OR if `manual` is enabled, when Axle is unable to collect policy
+information and/or documentation from the user.
+
+```json
+{
+  "status": "error",
+  "message": "<message-body>"
+}
+```
+
+<Warning>
+  Never send requests from your client to the Axle API. The client should only
+  be used to handle Ignition status through redirect.
+</Warning>
+
+### Webhook Events
+
+If an optional `webhookUri` is provided, a `POST` request will be sent to the
+`webhookUri` with the following body:
+
+```json Example webhook request body
+{
+  "id": "<webhook_id>",
+  "type": "ignition.completed",
+  "data": {
+    "token": "ign_Z4ni-JHBvkn9PlKJHPEwk",
+    ...
+  },
+  "createdAt": "2011-10-05T14:48:00.000Z"
+}
+```
+
+| TYPE               | DATA                                                              |
+| ------------------ | ----------------------------------------------------------------- |
+| ignition.created   | token : String, config: Object                                    |
+| ignition.completed | token : String, config: Object, authCode : String,result : String |
+| ignition.opened    | token : String, config: Object                                    |
+| ignition.exited    | token : String, config: Object, step : String                     |
+| ignition.errored   | token : String, config: Object, message : String                  |

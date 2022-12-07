@@ -1,0 +1,19 @@
+---
+title: "Config"
+---
+
+Set Ignition session configuration. All parameters are optional. Custom
+properties can be added to `metadata`, such as `driverId`.
+
+acceptManual defaults to false. metadata defaults to undefined.
+
+<ParamField body="acceptManual" type="boolean" default="false" />
+
+<ParamField body="metadata" type="object" />
+
+```json
+{
+  "acceptManual": false,
+  "metadata": {}
+}
+```

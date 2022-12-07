@@ -1,0 +1,31 @@
+---
+title: "Third Party"
+---
+
+<ResponseField name="property" type="string" />
+
+<ResponseField name="type" type="string" default="interest">
+  Allowed values: `lienholder` `lessor` `interest`
+</ResponseField>
+
+<ResponseField name="name" type="string" />
+
+<ResponseField name="address" type="Addresses" >
+
+    <Expandable title="properties" >
+
+        <ResponseField name="addressLine1" type="string" />
+
+        <ResponseField name="country" type="string" />
+
+        <ResponseField name="addressLine2" type="string" />
+
+        <ResponseField name="state" type="string" />
+
+        <ResponseField name="city" type="string" />
+
+        <ResponseField name="postalCode" type="string" />
+
+    </Expandable>
+
+</ResponseField>

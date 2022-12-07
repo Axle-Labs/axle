@@ -1,0 +1,37 @@
+---
+title: "Account"
+description:
+  "The Account object represents a user's linked account with their insurance
+  carrier and includes high-level account information (e.g. name) and any
+  children objects (e.g. Policies) associated with the Account."
+---
+
+<ParamField body="id" type="string" required />
+
+<ParamField body="carrier" type="string" required />
+
+<ParamField body="firstName" type="string" required />
+
+<ParamField body="lastName" type="string" required />
+
+<ParamField body="phone" type="string" />
+
+<ParamField body="email" type="string" />
+
+<ParamField body="policies" type="string" required />
+
+<ParamField body="createdAt" type="string" required />
+
+<ParamField body="modifiedAt" type="string" />
+
+```json Example
+{
+  "id": "acc_gM2wn_gaqUv76ZljeVXOv",
+  "firstName": "John",
+  "lastName": "Smith",
+  "email": "john.smith@grr.la",
+  "carrier": "state-farm",
+  "createdAt": "2022-01-01T00:00:00.000Z",
+  "policies": ["pol_CbxGmGWnp9bGAFCC-eod2"]
+}
+```
