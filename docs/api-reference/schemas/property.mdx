@@ -1,0 +1,23 @@
+---
+title: "Property"
+---
+
+<ResponseField name="id" type="string" />
+
+<ResponseField name="type" type="string">
+  Allowed value: `vehicle`
+</ResponseField>
+
+<ResponseField name="data" type="Vehicle" >
+
+    <Expandable title="properties" >
+
+        <ResponseField name="bodyStyle" type="string" />
+        <ResponseField name="vin" type="string" required/>
+        <ResponseField name="model" type="string" required/>
+        <ResponseField name="year" type="string" required/>
+        <ResponseField name="make" type="string" required/>
+
+    </Expandable>
+
+</ResponseField>

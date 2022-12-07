@@ -1,0 +1,91 @@
+{
+  "name": "Axle",
+  "logo": {
+    "light": "/logo/light.svg",
+    "dark": "/logo/dark.svg"
+  },
+  "api": {
+    "baseUrl": ["https://api.axle.insure", "https://sandbox.axle.insure"]
+  },
+  "favicon": "/favicon.png",
+  "colors": {
+    "primary": "#3F3F46",
+    "light": "#D4D4D8",
+    "dark": "#27272A",
+    "ultraLight": "#FAFAFA",
+    "ultraDark": "#18181B",
+    "background": {
+      "dark": "#121212"
+    }
+  },
+  "topbarCtaButton": {
+    "name": "Get Started",
+    "url": "https://www.axle.insure/contact"
+  },
+  "topbarLinks": [
+    {
+      "name": "Contact Us",
+      "url": "https://www.axle.insure/contact"
+    }
+  ],
+  "anchors": [
+    {
+      "name": "About Us",
+      "icon": "users",
+      "url": "https://axle-labs.notion.site/About-55e423301e4c4136814be7ac117a7dea"
+    },
+    {
+      "name": "Contact Us",
+      "icon": "envelope",
+      "url": "https://www.axle.insure/contact"
+    }
+  ],
+  "navigation": [
+    {
+      "group": "Getting Started",
+      "pages": ["quickstart", "ignition-status-handling"]
+    },
+    {
+      "group": "Axle API",
+      "pages": [
+        "api-reference/overview",
+        {
+          "group": "Ignition",
+          "pages": ["api-reference/ignition/start-ignition"]
+        },
+        {
+          "group": "Tokens",
+          "pages": ["api-reference/tokens/exchange-token"]
+        },
+        {
+          "group": "Accounts",
+          "pages": [
+            "api-reference/accounts/get-account",
+            "api-reference/accounts/get-policy",
+            "api-reference/accounts/account",
+            "api-reference/accounts/policy"
+          ]
+        },
+        {
+          "group": "Schemas",
+          "pages": [
+            "api-reference/schemas/addresses",
+            "api-reference/schemas/coverages",
+            "api-reference/schemas/property",
+            "api-reference/schemas/vehicle",
+            "api-reference/schemas/insured",
+            "api-reference/schemas/third-party",
+            "api-reference/schemas/config",
+            "api-reference/schemas/success",
+            "api-reference/schemas/error"
+          ]
+        }
+      ]
+    }
+  ],
+  "footerSocials": {
+    "twitter": "https://twitter.com/axlelabs",
+    "linkedin": "https://www.linkedin.com/company/axle-labs/",
+    "website": "https://www.axle.insure/"
+  }
+}

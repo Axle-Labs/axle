@@ -1,0 +1,289 @@
+---
+title: "Policy"
+description:
+  "The Policy object represents a specific policy associated with the user's
+  linked account and includes high-level policy information (e.g. policy number)
+  and any children objects (e.g. Coverages) associated with the Policy."
+---
+
+<ParamField body="id" type="string" required />
+
+<ParamField body="account" type="string" required />
+
+<ParamField body="type" type="string">
+  Allowed values: `auto` `motorcycle`
+</ParamField>
+
+<ParamField body="carrier" type="string" required />
+
+<ParamField body="policyNumber" type="string" required />
+
+<ParamField body="isActive" type="boolean" required />
+
+<ParamField body="effectiveDate" type="string" required />
+
+<ParamField body="expirationDate" type="string" required />
+
+<ParamField body="address" type="Adresses" >
+
+    <Expandable title="properties">
+
+        <ResponseField name="addressLine1" type="string" />
+
+        <ResponseField name="country" type="string" />
+
+        <ResponseField name="addressLine2" type="string" />
+
+        <ResponseField name="state" type="string" />
+
+        <ResponseField name="city" type="string" />
+
+        <ResponseField name= "postalCode" type="string" />
+
+    </Expandable>
+
+</ParamField>
+
+<ParamField body="coverages" type="array[Coverages]" >
+
+    <Expandable title="properties">
+
+        <ResponseField name="property" type="string" />
+
+        <ResponseField name="code" type="string" >
+        Allowed values: `BI` `PD` `UM` `UMPD` `COLL` `COMP`
+        </ResponseField>
+
+        <ResponseField name="label" type="string" />
+
+        <ResponseField name="limitPerPerson" type="integer<int32>" />
+
+        <ResponseField name="limitPerAccident" type="integer<int32>" />
+
+        <ResponseField name= "deductable" type="integer<int32>" />
+
+    </Expandable>
+
+</ParamField>
+
+<ParamField body="properties" type="array[Property]" >
+
+    <Expandable title="properties">
+
+        <ResponseField name="id" type="string" />
+
+        <ResponseField name="type" type="string" >
+        Allowed value: `vehicle`
+        </ResponseField>
+
+        <ResponseField name="data" type="Vehicle" />
+
+    </Expandable>
+
+</ParamField>
+
+<ParamField body="insured" type="array[Insured]" >
+
+    <Expandable title="properties">
+
+        <ResponseField name="property" type="string" />
+
+        <ResponseField name="firstName" type="string" />
+
+        <ResponseField name="lastName" type="string" />
+
+        <ResponseField name="dateOfBirthYear" type="string" />
+
+        <ResponseField name="licenseNo" type="string" />
+
+        <ResponseField name="licenseState" type="string" />
+
+        <ResponseField name="licenseStatus" type="string" />
+
+        <ResponseField name="dateOfBirth" type="string" />
+
+        <ResponseField name="type" type="string" />
+
+    </Expandable>
+
+</ParamField>
+
+<ParamField body="insured" type="array[Insured]" >
+
+    <Expandable title="properties">
+
+        <ResponseField name="property" type="string" />
+
+        <ResponseField name="type" type="string" />
+
+        <ResponseField name="name" type="string" />
+
+        <ResponseField name="address" type="Addresses" />
+
+    </Expandable>
+
+</ParamField>
+
+<ParamField body="createdAt" type="string" required />
+
+<ParamField body="modifiedAt" type="string" />
+
+```json Example
+{
+  "id": "pol_CbxGmGWnp9bGAFCC-eod2",
+  "account": "acc_gM2wn_gaqUv76ZljeVXOv",
+  "type": "auto",
+  "carrier": "state-farm",
+  "policyNumber": "123456789",
+  "isActive": true,
+  "effectiveDate": "2021-10-22T04:00:00.000Z",
+  "expirationDate": "2022-10-22T04:00:00.000Z",
+  "address": {
+    "addressLine1": "123 Fake St.",
+    "addressLine2": "Unit 456",
+    "city": "Atlanta",
+    "state": "Georgia",
+    "postalCode": "30315",
+    "country": "USA"
+  },
+  "coverages": [
+    {
+      "limitPerPerson": 250000,
+      "code": "BI",
+      "label": "Bodily Injury Liability",
+      "limitPerAccident": 500000,
+      "property": "prp_uSdzLVpi8c76H7kl6AQ-F"
+    },
+    {
+      "code": "PD",
+      "label": "Property Damage Liability",
+      "limitPerAccident": 100000,
+      "property": "prp_uSdzLVpi8c76H7kl6AQ-F"
+    },
+    {
+      "limitPerPerson": 100000,
+      "code": "UMBI",
+      "label": "Uninsured Bodily Injury Liability",
+      "limitPerAccident": 300000,
+      "property": "prp_uSdzLVpi8c76H7kl6AQ-F"
+    },
+    {
+      "code": "COMP",
+      "label": "Comprehensive",
+      "deductible": 375,
+      "property": "prp_uSdzLVpi8c76H7kl6AQ-F"
+    },
+    {
+      "code": "COLL",
+      "label": "Collision",
+      "deductible": 375,
+      "property": "prp_uSdzLVpi8c76H7kl6AQ-F"
+    },
+    {
+      "limitPerPerson": 250000,
+      "code": "BI",
+      "label": "Bodily Injury Liability",
+      "limitPerAccident": 500000,
+      "property": "prp_tmGUxLpgHjmW9r6M6WjhS"
+    },
+    {
+      "code": "PD",
+      "label": "Property Damage Liability",
+      "limitPerAccident": 100000,
+      "property": "prp_tmGUxLpgHjmW9r6M6WjhS"
+    },
+    {
+      "limitPerPerson": 100000,
+      "code": "UMBI",
+      "label": "Uninsured Bodily Injury Liability",
+      "limitPerAccident": 300000,
+      "property": "prp_tmGUxLpgHjmW9r6M6WjhS"
+    }
+  ],
+  "properties": [
+    {
+      "id": "prp_uSdzLVpi8c76H7kl6AQ-F",
+      "type": "vehicle",
+      "data": {
+        "bodyStyle": "sedan",
+        "vin": "WDDWJ8EB4KF776265",
+        "model": "C 300",
+        "year": "2019",
+        "make": "Mercedes-Benz"
+      }
+    },
+    {
+      "id": "prp_tmGUxLpgHjmW9r6M6WjhS",
+      "type": "vehicle",
+      "data": {
+        "bodyStyle": "minivan",
+        "vin": "5FNRL38209B014050",
+        "model": "Odyssey",
+        "year": "2009",
+        "make": "Honda"
+      }
+    }
+  ],
+  "thirdParties": [
+    {
+      "property": "prp_uSdzLVpi8c76H7kl6AQ-F",
+      "type": "lienholder",
+      "name": "Super Credit Union",
+      "address": {
+        "addressLine1": "PO Box 123456",
+        "country": null,
+        "addressLine2": null,
+        "state": "GA",
+        "city": "Atlanta",
+        "postalCode": "30348-5245"
+      }
+    },
+    {
+      "property": "prp_tmGUxLpgHjmW9r6M6WjhS",
+      "type": "lessor",
+      "name": "Super Leasing Trust",
+      "address": {
+        "addressLine1": "PO Box 123456",
+        "country": null,
+        "addressLine2": null,
+        "state": "GA",
+        "city": "Atlanta",
+        "postalCode": "30348-5245"
+      }
+    }
+  ],
+  "insureds": [
+    {
+      "firstName": "John",
+      "lastName": "Smith",
+      "dateOfBirthYear": "1990",
+      "licenseNo": "•••••1234",
+      "licenseState": "GA",
+      "licenseStatus": "Valid",
+      "type": "Primary",
+      "property": "prp_uSdzLVpi8c76H7kl6AQ-F"
+    },
+    {
+      "firstName": "Jane",
+      "lastName": "Doe",
+      "dateOfBirthYear": "1992",
+      "licenseNo": "•••••5678",
+      "licenseState": "GA",
+      "licenseStatus": "Valid",
+      "type": "Secondary",
+      "property": "prp_uSdzLVpi8c76H7kl6AQ-F"
+    },
+    {
+      "firstName": "Jane",
+      "lastName": "Doe",
+      "dateOfBirthYear": "1992",
+      "licenseNo": "•••••5678",
+      "licenseState": "GA",
+      "licenseStatus": "Valid",
+      "type": "Primary",
+      "property": "prp_tmGUxLpgHjmW9r6M6WjhS"
+    }
+  ],
+  "createdAt": "2022-01-01T00:00:00.000Z"
+}
+```
