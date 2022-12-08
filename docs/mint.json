@@ -5,7 +5,10 @@
     "dark": "/logo/dark.svg"
   },
   "api": {
-    "baseUrl": ["https://api.axle.insure", "https://sandbox.axle.insure"]
+    "baseUrl": [
+      "https://api.axle.insure",
+      "https://sandbox.axle.insure"
+    ]
   },
   "favicon": "/favicon.png",
   "colors": {
@@ -18,11 +21,18 @@
       "dark": "#121212"
     }
   },
+  "modeToggle": {
+    "default": "light"
+  },
   "topbarCtaButton": {
     "name": "Get Started",
     "url": "https://www.axle.insure/contact"
   },
   "topbarLinks": [
+    {
+      "name": "We're hiring!",
+      "url": "https://www.ycombinator.com/companies/axle/jobs"
+    },
     {
       "name": "Contact Us",
       "url": "https://www.axle.insure/contact"
@@ -30,54 +40,53 @@
   ],
   "anchors": [
     {
-      "name": "About Us",
-      "icon": "users",
-      "url": "https://axle-labs.notion.site/About-55e423301e4c4136814be7ac117a7dea"
-    },
-    {
-      "name": "Contact Us",
-      "icon": "envelope",
+      "name": "Get Started",
+      "icon": "rocket-launch",
       "url": "https://www.axle.insure/contact"
     }
   ],
   "navigation": [
     {
-      "group": "Getting Started",
-      "pages": ["quickstart", "ignition-status-handling"]
+      "group": "Home",
+      "pages": [
+        "welcome"
+      ]
     },
     {
-      "group": "Axle API",
+      "group": "Guides",
+      "pages": [
+        "guides/quickstart"
+      ]
+    },
+    {
+      "group": "API Reference",
       "pages": [
         "api-reference/overview",
         {
           "group": "Ignition",
-          "pages": ["api-reference/ignition/start-ignition"]
+          "pages": [
+            "api-reference/ignition/start-ignition",
+            "api-reference/ignition/ignition-status-handling"
+          ]
         },
         {
           "group": "Tokens",
-          "pages": ["api-reference/tokens/exchange-token"]
+          "pages": [
+            "api-reference/tokens/exchange-token"
+          ]
         },
         {
           "group": "Accounts",
           "pages": [
-            "api-reference/accounts/get-account",
-            "api-reference/accounts/get-policy",
             "api-reference/accounts/account",
-            "api-reference/accounts/policy"
+            "api-reference/accounts/get-account"
           ]
         },
         {
-          "group": "Schemas",
+          "group": "Policies",
           "pages": [
-            "api-reference/schemas/addresses",
-            "api-reference/schemas/coverages",
-            "api-reference/schemas/property",
-            "api-reference/schemas/vehicle",
-            "api-reference/schemas/insured",
-            "api-reference/schemas/third-party",
-            "api-reference/schemas/config",
-            "api-reference/schemas/success",
-            "api-reference/schemas/error"
+            "api-reference/policies/policy",
+            "api-reference/policies/get-policy"
           ]
         }
       ]
