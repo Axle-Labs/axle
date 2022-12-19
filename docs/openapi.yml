@@ -53,7 +53,7 @@ paths:
                 redirectUri: "https://example.com/redirect"
                 webhookUri: "https://example.com/webhook"
                 config:
-                  - userId: "usr_yKOVj0B0sr3I1vAz2Khsb"
+                  userId: "usr_yKOVj0B0sr3I1vAz2Khsb"
         required: true
       responses:
         "200":
