@@ -49,6 +49,11 @@ paths:
                     resulting account to.
                 config:
                   $ref: "#/components/schemas/Config"
+            example:
+                redirectUri: "https://example.com/redirect"
+                webhookUri: "https://example.com/webhook"
+                config:
+                  - userId: "usr_yKOVj0B0sr3I1vAz2Khsb"
         required: true
       responses:
         "200":
