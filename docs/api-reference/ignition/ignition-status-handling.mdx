@@ -5,21 +5,17 @@ description:
   Ignition session."
 ---
 
-Axle’s Ignition session is the main interface that allows your customers to
-connect to their insurance accounts and authorize access to scoped data from
-their insurance policies.
+Axle’s Ignition session is the main interface that allows your customers to connect to their insurance accounts and authorize access to scoped data from their insurance policies.
 
-Please first review our Quickstart guide and API docs on how to start an
-Ignition session, if you have not already.
+Please first review our Quickstart guide and API docs on how to start an Ignition session, if you have not already.
 
 ### Ignition Config
 
 Your `POST` request to `/ignition` is configured with the following request
 body:
-
-Optional: `redirectUri` - the URL we'll redirect the user to upon completion, exit, or error outcomes of the Ignition session, defaults to no redirect
-Optional: `webhookUri` - the URL we'll send events to as the user proceeds through the Ignition session, defaults to no webhook events
-Optional: `config` - optional Ignition session configuration, please refer to example for structure and defaults
+- Optional: `redirectUri` - the URL we'll redirect the user to upon completion, exit, or error outcomes of the Ignition session, defaults to no redirect
+- Optional: `webhookUri` - the URL we'll send events to as the user proceeds through the Ignition session, defaults to no webhook events
+- Optional: `config` - optional Ignition session configuration, please refer to example for structure and defaults
 
 ```bash Request Sample
 curl --request POST \
@@ -41,17 +37,14 @@ curl --request POST \
 
 ### Redirect Parameters
 
-On navigation to the `redirectUri` provided, the URI will be appended with the
-following parameters:
+On navigation to the `redirectUri` provided, the URI will be appended with the following parameters:
 
 `status`: String
-
 - complete
 - exit
 - error
 
 Additional parameters (dependent on status, see below)
-
 - `authCode`: String - authorization code that can be exchange for accessToken for scoped access to connected account and/or policy
 - `result`: String - "link" (account connection was made and policy is available) OR "manual" (details were entered through manual collection form) 
 - `step`: String - the step where the Ignition session was exited
@@ -67,10 +60,7 @@ Additional parameters (dependent on status, see below)
 
 #### onCompleted
 
-When the user successfully connects to their carrier account and shares
-authorized access to a selected policy, OR if `acceptManual` is enabled, when the user
-submits their policy information and/or documentation through Axle's manual
-collection form.
+When the user successfully connects to their carrier account and shares authorized access to a selected policy, OR if `acceptManual` is enabled, when the user submits their policy information and/or documentation through Axle's manual collection form.
 
 ```json
 {
@@ -82,9 +72,7 @@ collection form.
 
 #### onExit
 
-When the user opts out of connecting to their carrier account and/or selecting a
-policy, OR if `acceptManual` is enabled, when the user opts out of sharing the
-requested policy information and/or documentation.
+When the user opts out of connecting to their carrier account and/or selecting a policy, OR if `acceptManual` is enabled, when the user opts out of sharing the requested policy information and/or documentation.
 
 ```json
 {
@@ -95,9 +83,7 @@ requested policy information and/or documentation.
 
 #### onError
 
-When Axle is unable to retrieve account or policy information from a selected
-carrier, OR if `acceptManual` is enabled, when Axle is unable to collect policy
-information and/or documentation from the user.
+When Axle is unable to retrieve account or policy information from a selected carrier, OR if `acceptManual` is enabled, when Axle is unable to collect policy information and/or documentation from the user.
 
 ```json
 {
@@ -107,14 +93,12 @@ information and/or documentation from the user.
 ```
 
 <Warning>
-  Never send requests from your client to the Axle API. The client should only
-  be used to handle Ignition status through redirect.
+  Never send requests from your client to the Axle API. The client should only be used to handle Ignition status through redirect.
 </Warning>
 
 ### Webhook Events
 
-If an optional `webhookUri` is provided, a `POST` request will be sent to the
-`webhookUri` with the following body:
+If an optional `webhookUri` is provided, a `POST` request will be sent to the `webhookUri` with the following body:
 
 ```json Example webhook request body
 {
@@ -128,10 +112,10 @@ If an optional `webhookUri` is provided, a `POST` request will be sent to the
 }
 ```
 
-| TYPE               | DATA                                                              |
-| ------------------ | ----------------------------------------------------------------- |
-| ignition.created   | token : String, config: Object                                    |
-| ignition.completed | token : String, config: Object, authCode : String,result : String |
-| ignition.opened    | token : String, config: Object                                    |
-| ignition.exited    | token : String, config: Object, step : String                     |
-| ignition.errored   | token : String, config: Object, message : String                  |
+| TYPE               | DATA                                                               |
+| ------------------ | ------------------------------------------------------------------ |
+| ignition.created   | token : String, config: Object                                     |
+| ignition.completed | token : String, config: Object, authCode : String, result : String |
+| ignition.opened    | token : String, config: Object                                     |
+| ignition.exited    | token : String, config: Object, step : String                      |
+| ignition.errored   | token : String, config: Object, message : String                   |
