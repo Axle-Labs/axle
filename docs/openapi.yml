@@ -47,13 +47,13 @@ paths:
                   description:
                     The URI we should send updates about this session or the
                     resulting account to.
-                config:
-                  $ref: "#/components/schemas/Config"
+                user:
+                  $ref: "#/components/schemas/User"
+                metadata:
+                  type: object
             example:
                 redirectUri: "https://example.com/redirect"
                 webhookUri: "https://example.com/webhook"
-                config:
-                  userId: "usr_yKOVj0B0sr3I1vAz2Khsb"
         required: true
       responses:
         "200":
@@ -636,22 +636,26 @@ components:
       required:
         - type
         - name
-    Config:
+    User:
       type: object
       x-examples:
         Example:
-          acceptManual: false
-          metadata: {}
+          id: "usr_foqnkvhwerq7h81"
+          firstName: "John"
+          lastName: "Smith"
       description:
-        Set Ignition session configuration. All parameters are optional. Custom
-        properties can be added to `metadata`, such as `driverId`.
-      title: Config
+        User to attach to Ignition session. If user is set, unique `id` must be provided.
+      title: User
       properties:
-        acceptManual:
-          type: boolean
-          default: false
-        metadata:
-          type: object
+        id:
+          type: string
+          required: true
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string 
     Success:
       title: Success
       type: boolean
