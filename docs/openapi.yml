@@ -51,6 +51,8 @@ paths:
                   $ref: "#/components/schemas/User"
                 metadata:
                   type: object
+                  description:
+                    Optional object to store ephermeral information about the session, such as `reservationTime`. Will be returned in webhook events.
             example:
                 redirectUri: "https://example.com/redirect"
                 webhookUri: "https://example.com/webhook"
@@ -643,13 +645,13 @@ components:
           id: "usr_foqnkvhwerq7h81"
           firstName: "John"
           lastName: "Smith"
+          email: "john@smith.com"
       description:
         User to attach to Ignition session. If user is set, unique `id` must be provided.
       title: User
       properties:
         id:
           type: string
-          required: true
         firstName:
           type: string
         lastName:
