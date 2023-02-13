@@ -15,7 +15,8 @@ Your `POST` request to `/ignition` is configured with the following request
 body:
 - Optional: `redirectUri` - the URL we'll redirect the user to upon completion, exit, or error outcomes of the Ignition session, defaults to no redirect
 - Optional: `webhookUri` - the URL we'll send events to as the user proceeds through the Ignition session, defaults to no webhook events
-- Optional: `config` - optional Ignition session configuration, please refer to example for structure and defaults
+- Optional: `user` - optional user to attach, please refer to [startIgnition](https://docs.axle.insure/api-reference/ignition/start-ignition) for examples
+- Optional: `metadata` - optional Ignition session metadata, please refer to [startIgnition](https://docs.axle.insure/api-reference/ignition/start-ignition) for examples
 
 ```bash Request Sample
 curl --request POST \
@@ -26,12 +27,6 @@ curl --request POST \
   --data '{
   "redirectUri": "https://example.com/insurance/redirect",
   "webhookUri": "https://example.com/insurance/webhook"
-  "config": {
-    "acceptManual": false,
-    "metadata": {
-      "driverId": "c3c95031-c57d-475b-a228-07152b7b6dce"
-    }
-  }
 }
 ```
 
@@ -112,10 +107,10 @@ If an optional `webhookUri` is provided, a `POST` request will be sent to the `w
 }
 ```
 
-| TYPE               | DATA                                                               |
-| ------------------ | ------------------------------------------------------------------ |
-| ignition.created   | token : String, config: Object                                     |
-| ignition.completed | token : String, config: Object, authCode : String, result : String |
-| ignition.opened    | token : String, config: Object                                     |
-| ignition.exited    | token : String, config: Object, step : String                      |
-| ignition.errored   | token : String, config: Object, message : String                   |
+| TYPE               | DATA                                                                               |
+| ------------------ | ---------------------------------------------------------------------------------- |
+| ignition.created   | token : String, user: Object, metadata: Object                                     |
+| ignition.completed | token : String, user: Object, metadata: Object, authCode : String, result : String |
+| ignition.opened    | token : String, user: Object, metadata: Object                                     |
+| ignition.exited    | token : String, user: Object, metadata: Object, step : String                      |
+| ignition.errored   | token : String, user: Object, metadata: Object, message : String                   |
