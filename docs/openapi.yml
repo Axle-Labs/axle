@@ -20,15 +20,6 @@ paths:
       parameters:
         - $ref: "#/components/parameters/x-client-id"
         - $ref: "#/components/parameters/x-client-secret"
-        - $ref: "#/components/parameters/type"
-        - schema:
-            type: string
-          in: query
-          name: account
-          description:
-            The unique ID for the requested account. Returned as part of the
-            Token Exchange flow in exchangeToken. Must be set for
-            type="relink-account"
       requestBody:
         description: ""
         content:
@@ -51,11 +42,10 @@ paths:
                   $ref: "#/components/schemas/User"
                 metadata:
                   type: object
-                  description:
-                    Optional object to store ephermeral information about the session, such as `reservationTime`. Will be returned in webhook events.
+                  description: Optional object to store ephermeral information about the session, such as `reservationTime`. Will be returned in webhook events.
             example:
-                redirectUri: "https://example.com/redirect"
-                webhookUri: "https://example.com/webhook"
+              redirectUri: "https://example.com/redirect"
+              webhookUri: "https://example.com/webhook"
         required: true
       responses:
         "200":
@@ -145,24 +135,23 @@ paths:
                     type: object
                     required:
                       - accessToken
-                      - accountId
+                      - account
                     properties:
                       accessToken:
                         type: string
                         description:
                           The access token required for access to the requested
                           user’s Account.
-                      accountId:
+                      account:
                         type: string
-                        description:
-                          The unique id for the user's linked Account.
+                        description: The unique id for the user's linked Account.
                 required:
                   - success
                   - data
       deprecated: false
       tags:
         - Tokens
-  "/accounts/{accountId}":
+  /accounts/{id}:
     get:
       summary: Get Account
       description:
@@ -174,6 +163,7 @@ paths:
         - $ref: "#/components/parameters/x-client-id"
         - $ref: "#/components/parameters/x-client-secret"
         - $ref: "#/components/parameters/x-access-token"
+        - $ref: "#/components/parameters/expand"
         - $ref: "#/components/parameters/refresh"
       responses:
         "200":
@@ -191,8 +181,8 @@ paths:
       tags:
         - Accounts
     parameters:
-      - $ref: "#/components/parameters/accountId"
-  "/accounts/{accountId}/policies/{policyId}":
+      - $ref: "#/components/parameters/account"
+  /policies/{id}:
     get:
       summary: Get Policy
       description:
@@ -204,6 +194,7 @@ paths:
         - $ref: "#/components/parameters/x-client-id"
         - $ref: "#/components/parameters/x-client-secret"
         - $ref: "#/components/parameters/x-access-token"
+        - $ref: "#/components/parameters/expand"        
         - $ref: "#/components/parameters/refresh"
       responses:
         "200":
@@ -221,8 +212,7 @@ paths:
       tags:
         - Accounts
     parameters:
-      - $ref: "#/components/parameters/accountId"
-      - $ref: "#/components/parameters/policyId"
+      - $ref: "#/components/parameters/policy"
 components:
   schemas:
     Account:
@@ -646,18 +636,26 @@ components:
           firstName: "John"
           lastName: "Smith"
           email: "john@smith.com"
-      description:
-        User to attach to Ignition session. If user is set, unique `id` must be provided.
+      description: User to attach to Ignition session. If user is set, unique `id` must be provided.
       title: User
       properties:
         id:
           type: string
+          description: Your application's unique user id.
         firstName:
           type: string
+          description: User's first name.
         lastName:
           type: string
+          description: User's last name.
         email:
-          type: string 
+          type: string
+          description: User's email address.
+        phone:
+          type: string
+          description: User's phone number in E.164 format.
+      required:
+        - "id"
     Success:
       title: Success
       type: boolean
@@ -673,8 +671,7 @@ components:
           $ref: "#/components/schemas/Success"
         message:
           type: string
-          description:
-            "Provides a reason for why the operation failed, if available."
+          description: "Provides a reason for why the operation failed, if available."
   parameters:
     x-client-id:
       name: x-client-id
@@ -682,9 +679,7 @@ components:
       required: true
       schema:
         type: string
-      description:
-        Your clientID. This can be found under the developer section of the Axle
-        Dashboard or shared with you from the Axle team.
+      description: Your client ID. This will be shared with you during onboarding.
     x-client-secret:
       name: x-client-secret
       in: header
@@ -692,11 +687,10 @@ components:
       schema:
         type: string
       description:
-        Your secret API key. This can be found under the developer section of
-        the Axle Dashboard or shared with you from the Axle team - this should
+        Your secret API key. This will be shared with you during onboarding and should
         be considered sensitive - it’s a password after all!
-    accountId:
-      name: accountId
+    account:
+      name: id
       in: path
       required: true
       schema:
@@ -713,8 +707,8 @@ components:
       description:
         The access token required for access to the requested user’s Account.
         Returned as part of the Token Exchange flow in exchangeToken.
-    policyId:
-      name: policyId
+    policy:
+      name: id
       in: path
       required: true
       schema:
@@ -730,6 +724,15 @@ components:
         type: boolean
       description:
         Set to *true* if you would like to request an update. Defaults to
+        *false*.
+    expand:
+      name: expand
+      in: query
+      required: false
+      schema:
+        type: boolean
+      description:
+        Set to *true* if you would like to expand related entities (e.g., account, policy). Defaults to
         *false*.
     type:
       name: type
