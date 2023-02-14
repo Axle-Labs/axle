@@ -131,12 +131,12 @@ can now leverage the Axle API to access their insurance data 🎉🎉!
 ### Step 5: Retrieve the Account
 
 Now that we have an `accessToken`, we can retrieve the Account object for the
-user's linked account by making a `GET` request to `accounts/{accountId}` with
-the `accessToken` passed in the `x-access-token` header:
+user's linked account by making a `GET` request to `accounts/{id}` with
+the `accessToken` passed in the `x-access-token` header. By passing the `expand` parameter, we can also can retrieve all policies available on the account:
 
 ```bash Request Sample: cURL
 curl --request GET \
-  --url https://api.axle.insure/accounts/acc_gM2wn_gaqUv76ZljeVXOv \
+  --url https://api.axle.insure/accounts/acc_gM2wn_gaqUv76ZljeVXOv?expand=true \
   --header 'Content-Type: application/json' \
   --header 'x-access-token: tok_IwShXCT_JPr6rmtiCVxcQ' \
   --header 'x-client-id: cli_mZj6YGXhQyQnccN97aXbq' \
