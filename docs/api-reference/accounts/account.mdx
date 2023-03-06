@@ -1,43 +1,87 @@
 ---
 title: "The Account object"
-description:
-  "An Account represents a user's linked account with their insurance
+description: "An Account represents an account with an insurance
   carrier and includes high-level account information (e.g. name) and any
-  children objects (e.g. Policies) associated with the Account."
+  Policy objects associated with the Account."
 ---
 
 ## Attributes
 
 <br />
 
-<ParamField body="id" type="string" required />
+<ParamField body="id" type="string" required>
+  Unique identifier for the Account object.
+</ParamField>
 
 <ParamField body="carrier" type="string" required />
+  Insurance carrier that is the source for the Account data.
+</ParamField>
 
-<ParamField body="firstName" type="string" required />
+<ParamField body="firstName" type="string" required>
+  First name of insurance account owner.
+</ParamField>
 
-<ParamField body="lastName" type="string" required />
+<ParamField body="lastName" type="string" required>
+  Last name of insurance account owner.
+</ParamField>
 
-<ParamField body="phone" type="string" />
+<ParamField body="phone" type="string">
+  Primary phone number of insurance account owner.
+</ParamField>
 
-<ParamField body="email" type="string" />
+<ParamField body="email" type="string">
+  Primary email address of insurance account owner.
+</ParamField>
 
-<ParamField body="policies" type="string" required />
+<ParamField body="policies" type="array[string]" required>
+  List of unique identifiers of Policy objects associated with the Account
+</ParamField>
 
-<ParamField body="createdAt" type="string" required />
+<ParamField body="connection" type="Connection" >
 
-<ParamField body="modifiedAt" type="string" />
+    <Expandable title="Connection">
+
+      <ResponseField name="status" type="string" required >
+        The Account connection status represents if Axle can actively request new Account and Policy data from the insurance carrier.
+        <br />Available options: `active` `authentication-required`
+      </ResponseField>
+
+      <ResponseField name="updatedAt" type="string" required >
+        ISO 8601 timestamp at which the Account connection status was updated.
+      </ResponseField>
+
+    </Expandable>
+
+</ParamField>
+
+<ParamField body="createdAt" type="string" required>
+  ISO 8601 timestamp at which the Account object was generated via Axle.
+</ParamField>
+
+<ParamField body="modifiedAt" type="string" required />
+ ISO 8601 timestamp at which the Account object was modified via Axle. The Account object is modified only when there are differences between the current Account and new Account data requested from the carrier.
+</ParamField>
+
+<ParamField body="refreshedAt" type="string" required />
+  ISO 8601 timestamp at which the Account object was refreshed via Axle. The Account object is refreshed only when Axle successfully requests new Account data from the insurance carrier.
+</ParamField>
 
 <RequestExample>
-```json The account object
+```json The Account object
 {
   "id": "acc_gM2wn_gaqUv76ZljeVXOv",
+  "carrier": "state-farm",
   "firstName": "John",
   "lastName": "Smith",
   "email": "john.smith@grr.la",
-  "carrier": "state-farm",
+  "policies": ["pol_CbxGmGWnp9bGAFCC-eod2"],
+  "connection": {
+    "status": "active",
+    "updatedAt": "2022-01-01T00:00:00.000Z"
+  },
   "createdAt": "2022-01-01T00:00:00.000Z",
-  "policies": ["pol_CbxGmGWnp9bGAFCC-eod2"]
+  "modifiedAt": "2022-01-01T00:00:00.000Z",
+  "refreshedAt": "2022-01-01T00:00:00.000Z"
 }
 ```
 </RequestExample>
