@@ -1,0 +1,15 @@
+---
+title: "Third Party"
+---
+
+<ResponseField name="type" type="string" required>
+  Available options: `lienholder` `lessor` `interest`
+</ResponseField>
+
+<ResponseField name="name" type="string" required />
+
+<ResponseField name="address" type="Address" />
+
+<ResponseField name="property" type="string" >
+  Unique identifier of Property afforded coverage for specified Third Party. If Third Party is afforded coverage across all properties on the policy, `property` will be `undefined`.
+<ResponseField>

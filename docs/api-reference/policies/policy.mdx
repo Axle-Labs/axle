@@ -1,68 +1,51 @@
 ---
 title: "The Policy object"
-description:
-  "A Policy represents a specific policy associated with the user's
-  linked account and includes high-level policy information (e.g. policy number)
-  and any children objects (e.g. Coverages) associated with the Policy."
+description: "A Policy represents a specific policy associated with an
+  Account and includes high-level policy information (e.g. policy number)
+  and any children objects (e.g., coverages) associated with the policy."
 ---
 
 ## Attributes
 
-<ParamField body="id" type="string" required />
+<ParamField body="id" type="string" required>
+  Unique identifier for the Policy object.
+</ParamField>
 
-<ParamField body="account" type="string" required />
+<ParamField body="account" type="string" required>
+  Unique identifier for the Account object associated with the Policy.
+</ParamField>
 
-<ParamField body="type" type="string">
-  Allowed values: `auto` `motorcycle`
+<ParamField body="type" type="string" required>
+  Type of insurance policy that the Policy object represents.
+  <br>Available options: `auto` `motorcycle`
 </ParamField>
 
 <ParamField body="carrier" type="string" required />
-
-<ParamField body="policyNumber" type="string" required />
-
-<ParamField body="isActive" type="boolean" required />
-
-<ParamField body="effectiveDate" type="string" required />
-
-<ParamField body="expirationDate" type="string" required />
-
-<ParamField body="address" type="Adresses" >
-
-    <Expandable title="properties">
-
-        <ResponseField name="addressLine1" type="string" />
-
-        <ResponseField name="country" type="string" />
-
-        <ResponseField name="addressLine2" type="string" />
-
-        <ResponseField name="state" type="string" />
-
-        <ResponseField name="city" type="string" />
-
-        <ResponseField name= "postalCode" type="string" />
-
-    </Expandable>
-
+  Insurance carrier that is the source for the Policy data.
 </ParamField>
 
-<ParamField body="coverages" type="array[Coverages]" >
+<ParamField body="policyNumber" type="string" required>
+  Identifier of the policy, as specified by the insurance carrier.
+</ParamField>
 
-    <Expandable title="properties">
+<ParamField body="isActive" type="boolean" required>
+  Active status of the policy, as specified by the insurance carrier.
+</ParamField>
 
-        <ResponseField name="property" type="string" />
+<ParamField body="effectiveDate" type="string" required>
+  ISO 8601 timestamp of current term effective date of the policy, as specified
+  by the insurance carrier.
+</ParamField>
 
-        <ResponseField name="code" type="string" >
-        Allowed values: `BI` `PD` `UM` `UMPD` `COLL` `COMP`
-        </ResponseField>
+<ParamField body="expirationDate" type="string" required />
+  ISO 8601 timestamp of current term expiration date of the policy, as specified by the insurance carrier.
+</ParamField>
 
-        <ResponseField name="label" type="string" />
+<ParamField body="address" type="Address" >
 
-        <ResponseField name="limitPerPerson" type="integer<int32>" />
+    <Expandable title="Address">
 
-        <ResponseField name="limitPerAccident" type="integer<int32>" />
-
-        <ResponseField name= "deductable" type="integer<int32>" />
+        <Snippet file="address.mdx" />
 
     </Expandable>
 
@@ -70,15 +53,19 @@ description:
 
 <ParamField body="properties" type="array[Property]" >
 
-    <Expandable title="properties">
+    <Expandable title="Property">
 
-        <ResponseField name="id" type="string" />
+        <Snippet file="property.mdx" />
 
-        <ResponseField name="type" type="string" >
-        Allowed value: `vehicle`
-        </ResponseField>
+    </Expandable>
 
-        <ResponseField name="data" type="Vehicle" />
+</ParamField>
+
+<ParamField body="coverages" type="array[Coverage]" >
+
+    <Expandable title="Coverage">
+
+        <Snippet file="coverage.mdx" />
 
     </Expandable>
 
@@ -86,52 +73,38 @@ description:
 
 <ParamField body="insured" type="array[Insured]" >
 
-    <Expandable title="properties">
+    <Expandable title="Insured">
 
-        <ResponseField name="property" type="string" />
-
-        <ResponseField name="firstName" type="string" />
-
-        <ResponseField name="lastName" type="string" />
-
-        <ResponseField name="dateOfBirthYear" type="string" />
-
-        <ResponseField name="licenseNo" type="string" />
-
-        <ResponseField name="licenseState" type="string" />
-
-        <ResponseField name="licenseStatus" type="string" />
-
-        <ResponseField name="dateOfBirth" type="string" />
-
-        <ResponseField name="type" type="string" />
+        <Snippet file="insured.mdx" />
 
     </Expandable>
 
 </ParamField>
 
-<ParamField body="insured" type="array[Insured]" >
+<ParamField body="thirdParties" type="array[ThirdParty]" >
 
-    <Expandable title="properties">
+    <Expandable title="ThirdParty">
 
-        <ResponseField name="property" type="string" />
-
-        <ResponseField name="type" type="string" />
-
-        <ResponseField name="name" type="string" />
-
-        <ResponseField name="address" type="Addresses" />
+        <Snippet file="thirdParty.mdx" />
 
     </Expandable>
 
 </ParamField>
 
-<ParamField body="createdAt" type="string" required />
+<ParamField body="createdAt" type="string" required>
+  ISO 8601 timestamp at which the Policy object was generated via Axle.
+</ParamField>
 
-<ParamField body="modifiedAt" type="string" />
+<ParamField body="modifiedAt" type="string" required />
+ ISO 8601 timestamp at which the Policy object was modified via Axle. The Policy object is modified only when there are differences between the current Policy and new Policy data requested from the carrier.
+</ParamField>
+
+<ParamField body="refreshedAt" type="string" required />
+  ISO 8601 timestamp at which the Policy object was refreshed via Axle. The Policy object is refreshed only when Axle successfully requests new Policy data from the carrier.
+</ParamField>
 
 <RequestExample>
-```json The policy object
+```json The Policy object
 {
   "id": "pol_CbxGmGWnp9bGAFCC-eod2",
   "account": "acc_gM2wn_gaqUv76ZljeVXOv",
@@ -142,67 +115,13 @@ description:
   "effectiveDate": "2021-10-22T04:00:00.000Z",
   "expirationDate": "2022-10-22T04:00:00.000Z",
   "address": {
-    "addressLine1": "123 Fake St.",
+    "addressLine1": "123 Main St.",
     "addressLine2": "Unit 456",
     "city": "Atlanta",
     "state": "Georgia",
     "postalCode": "30315",
     "country": "USA"
   },
-  "coverages": [
-    {
-      "limitPerPerson": 250000,
-      "code": "BI",
-      "label": "Bodily Injury Liability",
-      "limitPerAccident": 500000,
-      "property": "prp_uSdzLVpi8c76H7kl6AQ-F"
-    },
-    {
-      "code": "PD",
-      "label": "Property Damage Liability",
-      "limitPerAccident": 100000,
-      "property": "prp_uSdzLVpi8c76H7kl6AQ-F"
-    },
-    {
-      "limitPerPerson": 100000,
-      "code": "UMBI",
-      "label": "Uninsured Bodily Injury Liability",
-      "limitPerAccident": 300000,
-      "property": "prp_uSdzLVpi8c76H7kl6AQ-F"
-    },
-    {
-      "code": "COMP",
-      "label": "Comprehensive",
-      "deductible": 375,
-      "property": "prp_uSdzLVpi8c76H7kl6AQ-F"
-    },
-    {
-      "code": "COLL",
-      "label": "Collision",
-      "deductible": 375,
-      "property": "prp_uSdzLVpi8c76H7kl6AQ-F"
-    },
-    {
-      "limitPerPerson": 250000,
-      "code": "BI",
-      "label": "Bodily Injury Liability",
-      "limitPerAccident": 500000,
-      "property": "prp_tmGUxLpgHjmW9r6M6WjhS"
-    },
-    {
-      "code": "PD",
-      "label": "Property Damage Liability",
-      "limitPerAccident": 100000,
-      "property": "prp_tmGUxLpgHjmW9r6M6WjhS"
-    },
-    {
-      "limitPerPerson": 100000,
-      "code": "UMBI",
-      "label": "Uninsured Bodily Injury Liability",
-      "limitPerAccident": 300000,
-      "property": "prp_tmGUxLpgHjmW9r6M6WjhS"
-    }
-  ],
   "properties": [
     {
       "id": "prp_uSdzLVpi8c76H7kl6AQ-F",
@@ -225,6 +144,63 @@ description:
         "year": "2009",
         "make": "Honda"
       }
+    }
+  ],
+  "coverages": [
+    { 
+      "code": "BI",
+      "label": "Bodily Injury Liability",
+      "limitPerPerson": 250000,
+      "limitPerAccident": 500000
+    },
+    {
+      "code": "PD",
+      "label": "Property Damage Liability",
+      "limitPerAccident": 100000
+    },
+    {
+      "code": "UMBI",
+      "label": "Uninsured Bodily Injury Liability",
+      "limitPerPerson": 100000,
+      "limitPerAccident": 300000, 
+    },
+    {
+      "code": "COMP",
+      "label": "Comprehensive",
+      "deductible": 375,
+      "property": "prp_uSdzLVpi8c76H7kl6AQ-F"
+    },
+    {
+      "code": "COLL",
+      "label": "Collision",
+      "deductible": 375,
+      "property": "prp_uSdzLVpi8c76H7kl6AQ-F"
+    }
+  ],
+  "insureds": [
+    {
+      "type": "primary",
+      "firstName": "John",
+      "lastName": "Smith",
+      "dateOfBirthYear": "1990",
+      "licenseNo": "•••••1234",
+      "property": "prp_uSdzLVpi8c76H7kl6AQ-F"
+    },
+    {
+      "type": "secondary",
+      "firstName": "Jane",
+      "lastName": "Doe",
+      "dateOfBirthYear": "1992",
+      "licenseNo": "•••••5678",
+      "property": "prp_uSdzLVpi8c76H7kl6AQ-F"
+    },
+    {
+      "type": "primary",
+      "firstName": "Jane",
+      "lastName": "Doe",
+      "dateOfBirthYear": "1992",
+      "licenseNo": "•••••5678",
+      "property": "prp_tmGUxLpgHjmW9r6M6WjhS"
     }
   ],
   "thirdParties": [
@@ -255,39 +231,9 @@ description:
       }
     }
   ],
-  "insureds": [
-    {
-      "firstName": "John",
-      "lastName": "Smith",
-      "dateOfBirthYear": "1990",
-      "licenseNo": "•••••1234",
-      "licenseState": "GA",
-      "licenseStatus": "Valid",
-      "type": "Primary",
-      "property": "prp_uSdzLVpi8c76H7kl6AQ-F"
-    },
-    {
-      "firstName": "Jane",
-      "lastName": "Doe",
-      "dateOfBirthYear": "1992",
-      "licenseNo": "•••••5678",
-      "licenseState": "GA",
-      "licenseStatus": "Valid",
-      "type": "Secondary",
-      "property": "prp_uSdzLVpi8c76H7kl6AQ-F"
-    },
-    {
-      "firstName": "Jane",
-      "lastName": "Doe",
-      "dateOfBirthYear": "1992",
-      "licenseNo": "•••••5678",
-      "licenseState": "GA",
-      "licenseStatus": "Valid",
-      "type": "Primary",
-      "property": "prp_tmGUxLpgHjmW9r6M6WjhS"
-    }
-  ],
-  "createdAt": "2022-01-01T00:00:00.000Z"
+  "createdAt": "2022-01-01T00:00:00.000Z",
+  "modifiedAt": "2022-01-01T00:00:00.000Z",
+  "refreshedAt": "2022-01-01T00:00:00.000Z"
 }
 ```
 </RequestExample>

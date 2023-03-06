@@ -2,11 +2,13 @@
 title: "Insured"
 ---
 
-<ResponseField name="property" type="string" />
-
 <ResponseField name="firstName" type="string" required />
 
 <ResponseField name="lastName" type="string" required />
+
+<ResponseField name="type" type="string">
+  Available options: `primary` `secondary`
+</ResponseField>
 
 <ResponseField name="dateOfBirthYear" type="string" />
 
@@ -18,4 +20,6 @@ title: "Insured"
 
 <ResponseField name="dateOfBirth" type="string" />
 
-<ResponseField name="type" type="string" />
+<ResponseField name="property" type="string" >
+  Unique identifier of Property afforded coverage for specified Insured. If Insured is afforded coverage across all properties on the policy, `property` will be `undefined`.
+<ResponseField>

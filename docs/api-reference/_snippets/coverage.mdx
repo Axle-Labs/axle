@@ -1,0 +1,25 @@
+---
+title: "Coverages"
+---
+
+<ResponseField name="code" type="string" required>
+  Available options: `BI` `PD` `UMBI` `UMPD` `UIMBI` `UIMPD` `UUIMBI` `UUIMPD`
+  `COLL` `COMP`
+</ResponseField>
+
+<ResponseField name="label" type="string" required />
+
+<ResponseField name="limitPerPerson" type="integer<int32>" />
+
+<ResponseField name="limitPerAccident" type="integer<int32>" />
+
+<ResponseField name="deductible" type="integer<int32>" />
+
+<ResponseField name="property" type="string" >
+  Unique identifier of Property afforded coverage. If coverage is afforded to all properties on the policy, `property` will be `undefined`.
+<ResponseField>
+
+<Info>
+  Within a Policy object, there will only be a single Coverage object per
+  coverage `code` per `property`.
+</Info>

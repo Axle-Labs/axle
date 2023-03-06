@@ -2,21 +2,23 @@
 title: "Property"
 ---
 
-<ResponseField name="id" type="string" />
+<ResponseField name="id" type="string">
+  Unique identifier for the Property object.
+</ResponseField>
 
 <ResponseField name="type" type="string">
-  Allowed value: `vehicle`
+  Available options: `vehicle`
 </ResponseField>
 
 <ResponseField name="data" type="Vehicle" >
 
-    <Expandable title="properties" >
+    <Expandable title="Vehicle" >
 
-        <ResponseField name="bodyStyle" type="string" />
         <ResponseField name="vin" type="string" required/>
         <ResponseField name="model" type="string" required/>
         <ResponseField name="year" type="string" required/>
         <ResponseField name="make" type="string" required/>
+        <ResponseField name="bodyStyle" type="string" />
 
     </Expandable>
 
