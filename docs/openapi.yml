@@ -157,14 +157,13 @@ paths:
       description:
         The Get Account method will return an Account object including
         high-level account information (e.g., name) and any children objects
-        (e.g., Policies) associated with the Account.
+        (e.g., Policies) associated with the Account. Please note that this method will NOT refresh the Account object.
       operationId: GetAccount
       parameters:
         - $ref: "#/components/parameters/x-client-id"
         - $ref: "#/components/parameters/x-client-secret"
         - $ref: "#/components/parameters/x-access-token"
         - $ref: "#/components/parameters/expand"
-        - $ref: "#/components/parameters/refresh"
       responses:
         "200":
           description: ""
@@ -188,14 +187,13 @@ paths:
       description:
         The Get Policy method returns a Policy object including high-level
         policy information (e.g., policy number) and any children objects (e.g.,
-        Coverages) associated with the Policy.
+        Coverages) associated with the Policy. Please note that this method will NOT refresh the Policy object.
       operationId: GetPolicy
       parameters:
         - $ref: "#/components/parameters/x-client-id"
         - $ref: "#/components/parameters/x-client-secret"
         - $ref: "#/components/parameters/x-access-token"
-        - $ref: "#/components/parameters/expand"        
-        - $ref: "#/components/parameters/refresh"
+        - $ref: "#/components/parameters/expand"
       responses:
         "200":
           description: ""
@@ -210,7 +208,7 @@ paths:
                     $ref: "#/components/schemas/Policy"
       deprecated: false
       tags:
-        - Accounts
+        - Policies
     parameters:
       - $ref: "#/components/parameters/policy"
 components:
@@ -218,11 +216,9 @@ components:
     Account:
       title: Account
       type: object
-      description:
-        The Account object represents a user's linked account with their
-        insurance carrier and includes high-level account information (e.g.
-        name) and any children objects (e.g. Policies) associated with the
-        Account.
+      description: An Account represents an account with an insurance
+        carrier and includes high-level account information (e.g. name) and any
+        Policy objects associated with the Account.
       x-examples:
         Example:
           id: acc_gM2wn_gaqUv76ZljeVXOv
@@ -230,9 +226,14 @@ components:
           lastName: Smith
           email: john.smith@grr.la
           carrier: state-farm
-          createdAt: "2022-01-01T00:00:00.000Z"
           policies:
             - pol_CbxGmGWnp9bGAFCC-eod2
+          connection:
+            status: "active"
+            updatedAt: "2022-01-01T00:00:00.000Z"
+          createdAt: "2022-01-01T00:00:00.000Z"
+          modifiedAt: "2022-01-01T00:00:00.000Z"
+          refreshedAt: "2022-01-01T00:00:00.000Z"
       x-tags:
         - Accounts
       properties:
@@ -256,6 +257,8 @@ components:
           type: string
         modifiedAt:
           type: string
+        refreshedAt:
+          type: string
       required:
         - id
         - carrier
@@ -263,9 +266,14 @@ components:
         - lastName
         - policies
         - createdAt
+        - modifiedAt
+        - refreshedAt
     Policy:
       title: Policy
       type: object
+      description: A Policy represents a specific policy associated with an
+        Account and includes high-level policy information (e.g. policy number)
+        and any children objects (e.g., coverages) associated with the policy.
       x-examples:
         Example:
           id: pol_CbxGmGWnp9bGAFCC-eod2
@@ -384,11 +392,8 @@ components:
               type: Primary
               property: prp_tmGUxLpgHjmW9r6M6WjhS
           createdAt: "2022-01-01T00:00:00.000Z"
-      description:
-        The Policy object represents a specific policy associated with the
-        user's linked account and includes high-level policy information (e.g.
-        policy number) and any children objects (e.g. Coverages) associated with
-        the Policy.
+          modifiedAt: "2022-01-01T00:00:00.000Z"
+          refreshedAt: "2022-01-01T00:00:00.000Z"
       x-tags:
         - Accounts
       properties:
@@ -437,6 +442,8 @@ components:
           type: string
         modifiedAt:
           type: string
+        refreshedAt:
+          type: string
       required:
         - id
         - account
@@ -452,6 +459,8 @@ components:
         - insureds
         - thirdParties
         - createdAt
+        - modifiedAt
+        - refreshedAt
     Address:
       title: Addresses
       type: object
@@ -496,6 +505,8 @@ components:
             - PD
             - UMBI
             - UMPD
+            - UIMBI
+            - UIMPD
             - COLL
             - COMP
         label:
