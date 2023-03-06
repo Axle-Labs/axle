@@ -13,7 +13,7 @@ description: "An Account represents an account with an insurance
   Unique identifier for the Account object.
 </ParamField>
 
-<ParamField body="carrier" type="string" required />
+<ParamField body="carrier" type="string" required>
   Insurance carrier that is the source for the Account data.
 </ParamField>
 
@@ -58,12 +58,16 @@ description: "An Account represents an account with an insurance
   ISO 8601 timestamp at which the Account object was generated via Axle.
 </ParamField>
 
-<ParamField body="modifiedAt" type="string" required />
- ISO 8601 timestamp at which the Account object was modified via Axle. The Account object is modified only when there are differences between the current Account and new Account data requested from the carrier.
+<ParamField body="modifiedAt" type="string" required>
+  ISO 8601 timestamp at which the Account object was modified via Axle. The
+  Account object is modified only when there are differences between the current
+  Account and new Account data requested from the carrier.
 </ParamField>
 
-<ParamField body="refreshedAt" type="string" required />
-  ISO 8601 timestamp at which the Account object was refreshed via Axle. The Account object is refreshed only when Axle successfully requests new Account data from the insurance carrier.
+<ParamField body="refreshedAt" type="string" required>
+  ISO 8601 timestamp at which the Account object was refreshed via Axle. The
+  Account object is refreshed only when Axle successfully requests new Account
+  data from the insurance carrier.
 </ParamField>
 
 <RequestExample>

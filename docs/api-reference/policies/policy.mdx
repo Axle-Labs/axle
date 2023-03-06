@@ -15,12 +15,12 @@ description: "A Policy represents a specific policy associated with an
   Unique identifier for the Account object associated with the Policy.
 </ParamField>
 
-<ParamField body="type" type="string" required>
+<ParamField body="type" type="string" required >
   Type of insurance policy that the Policy object represents.
   <br>Available options: `auto` `motorcycle`
 </ParamField>
 
-<ParamField body="carrier" type="string" required />
+<ParamField body="carrier" type="string" required>
   Insurance carrier that is the source for the Policy data.
 </ParamField>
 
@@ -37,8 +37,9 @@ description: "A Policy represents a specific policy associated with an
   by the insurance carrier.
 </ParamField>
 
-<ParamField body="expirationDate" type="string" required />
-  ISO 8601 timestamp of current term expiration date of the policy, as specified by the insurance carrier.
+<ParamField body="expirationDate" type="string" required>
+  ISO 8601 timestamp of current term expiration date of the policy, as specified
+  by the insurance carrier.
 </ParamField>
 
 <ParamField body="address" type="Address" >
@@ -95,12 +96,16 @@ description: "A Policy represents a specific policy associated with an
   ISO 8601 timestamp at which the Policy object was generated via Axle.
 </ParamField>
 
-<ParamField body="modifiedAt" type="string" required />
- ISO 8601 timestamp at which the Policy object was modified via Axle. The Policy object is modified only when there are differences between the current Policy and new Policy data requested from the carrier.
+<ParamField body="modifiedAt" type="string" required>
+  ISO 8601 timestamp at which the Policy object was modified via Axle. The
+  Policy object is modified only when there are differences between the current
+  Policy and new Policy data requested from the carrier.
 </ParamField>
 
-<ParamField body="refreshedAt" type="string" required />
-  ISO 8601 timestamp at which the Policy object was refreshed via Axle. The Policy object is refreshed only when Axle successfully requests new Policy data from the carrier.
+<ParamField body="refreshedAt" type="string" required>
+  ISO 8601 timestamp at which the Policy object was refreshed via Axle. The
+  Policy object is refreshed only when Axle successfully requests new Policy
+  data from the carrier.
 </ParamField>
 
 <RequestExample>
