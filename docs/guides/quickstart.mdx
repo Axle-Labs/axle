@@ -132,7 +132,7 @@ can now leverage the Axle API to access their insurance data 🎉🎉!
 
 Now that we have an `accessToken`, we can retrieve the Account object for the
 user's linked account by making a `GET` request to `accounts/{id}` with
-the `accessToken` passed in the `x-access-token` header. By passing the `expand` parameter, we can also can retrieve all policies available on the account:
+the `accessToken` passed in the `x-access-token` header. By passing the `expand` parameter, we can also can retrieve all Policy objects available on the account:
 
 ```bash Request Sample: cURL
 curl --request GET \
@@ -152,7 +152,6 @@ curl --request GET \
     "lastName": "Smith",
     "email": "john.smith@grr.la",
     "carrier": "state-farm",
-    "createdAt": "2022-01-01T00:00:00.000Z",
     "policies": [
       {
         "id": "pol_CbxGmGWnp9bGAFCC-eod2",
@@ -233,9 +232,18 @@ curl --request GET \
             "type": "Secondary"
           }
         ],
-        "createdAt": "2022-01-01T00:00:00.000Z"
+        "createdAt": "2022-01-01T00:00:00.000Z",
+        "modifiedAt": "2022-01-01T00:00:00.000Z",
+        "refreshedAt": "2022-01-01T00:00:00.000Z"
       }
-    ]
+    ],
+    "connection": {
+      "status": "active",
+      "updatedAt": "2022-01-01T00:00:00.000Z"
+    },
+    "createdAt": "2022-01-01T00:00:00.000Z",
+    "modifiedAt": "2022-01-01T00:00:00.000Z",
+    "refreshedAt": "2022-01-01T00:00:00.000Z"
   }
 }
 ```
