@@ -5,10 +5,7 @@
     "dark": "/logo/dark.svg"
   },
   "api": {
-    "baseUrl": [
-      "https://api.axle.insure",
-      "https://sandbox.axle.insure"
-    ]
+    "baseUrl": ["https://api.axle.insure", "https://sandbox.axle.insure"]
   },
   "favicon": "/favicon-lg.png",
   "colors": {
@@ -48,15 +45,11 @@
   "navigation": [
     {
       "group": "Home",
-      "pages": [
-        "welcome"
-      ]
+      "pages": ["welcome"]
     },
     {
       "group": "Guides",
-      "pages": [
-        "guides/quickstart"
-      ]
+      "pages": ["guides/quickstart"]
     },
     {
       "group": "API Reference",
@@ -71,9 +64,7 @@
         },
         {
           "group": "Tokens",
-          "pages": [
-            "api-reference/tokens/exchange-token"
-          ]
+          "pages": ["api-reference/tokens/exchange-token"]
         },
         {
           "group": "Accounts",

@@ -46,7 +46,17 @@ description: "A Policy represents a specific policy associated with an
 
     <Expandable title="Address">
 
-        <Snippet file="address.mdx" />
+       <ResponseField name="addressLine1" type="string" />
+
+      <ResponseField name="addressLine2" type="string" />
+
+      <ResponseField name="city" type="string" />
+
+      <ResponseField name="state" type="string" />
+
+      <ResponseField name="postalCode" type="string" />
+
+      <ResponseField name="country" type="string" />
 
     </Expandable>
 
@@ -56,7 +66,29 @@ description: "A Policy represents a specific policy associated with an
 
     <Expandable title="Property">
 
-        <Snippet file="property.mdx" />
+        <ResponseField name="id" type="string">
+
+        Unique identifier for the Property object.
+
+        </ResponseField>
+
+        <ResponseField name="type" type="string">
+          Available options: `vehicle`
+        </ResponseField>
+
+        <ResponseField name="data" type="Vehicle" >
+
+            <Expandable title="Vehicle" >
+
+                <ResponseField name="vin" type="string" required/>
+                <ResponseField name="model" type="string" required/>
+                <ResponseField name="year" type="string" required/>
+                <ResponseField name="make" type="string" required/>
+                <ResponseField name="bodyStyle" type="string" />
+
+            </Expandable>
+
+        </ResponseField>
 
     </Expandable>
 
@@ -66,7 +98,27 @@ description: "A Policy represents a specific policy associated with an
 
     <Expandable title="Coverage">
 
-        <Snippet file="coverage.mdx" />
+        <ResponseField name="code" type="string" required>
+          Available options: `BI` `PD` `UMBI` `UMPD` `UIMBI` `UIMPD` `UUIMBI` `UUIMPD`
+          `COLL` `COMP`
+        </ResponseField>
+
+        <ResponseField name="label" type="string" required />
+
+        <ResponseField name="limitPerPerson" type="integer<int32>" />
+
+        <ResponseField name="limitPerAccident" type="integer<int32>" />
+
+        <ResponseField name="deductible" type="integer<int32>" />
+
+        <ResponseField name="property" type="string" >
+          Unique identifier of Property afforded coverage. If coverage is afforded to all properties on the policy, `property` will be `undefined`.
+        <ResponseField>
+
+        <Info>
+          Within a Policy object, there will only be a single Coverage object per
+          coverage `code` per `property`.
+        </Info>
 
     </Expandable>
 
@@ -76,7 +128,27 @@ description: "A Policy represents a specific policy associated with an
 
     <Expandable title="Insured">
 
-        <Snippet file="insured.mdx" />
+       <ResponseField name="firstName" type="string" required />
+
+      <ResponseField name="lastName" type="string" required />
+
+      <ResponseField name="type" type="string">
+        Available options: `primary` `secondary`
+      </ResponseField>
+
+      <ResponseField name="dateOfBirthYear" type="string" />
+
+      <ResponseField name="licenseNo" type="string" />
+
+      <ResponseField name="licenseState" type="string" />
+
+      <ResponseField name="licenseStatus" type="string" />
+
+      <ResponseField name="dateOfBirth" type="string" />
+
+      <ResponseField name="property" type="string" >
+        Unique identifier of Property afforded coverage for specified Insured. If Insured is afforded coverage across all properties on the policy, `property` will be `undefined`.
+      <ResponseField>
 
     </Expandable>
 
@@ -86,7 +158,17 @@ description: "A Policy represents a specific policy associated with an
 
     <Expandable title="ThirdParty">
 
-        <Snippet file="thirdParty.mdx" />
+        <ResponseField name="type" type="string" required>
+          Available options: `lienholder` `lessor` `interest`
+        </ResponseField>
+
+        <ResponseField name="name" type="string" required />
+
+        <ResponseField name="address" type="Address" />
+
+        <ResponseField name="property" type="string" >
+          Unique identifier of Property afforded coverage for specified Third Party. If Third Party is afforded coverage across all properties on the policy, `property` will be `undefined`.
+        <ResponseField>
 
     </Expandable>
 
