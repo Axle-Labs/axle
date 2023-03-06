@@ -66,13 +66,13 @@ description: "A Policy represents a specific policy associated with an
 
     <Expandable title="Property">
 
-        <ResponseField name="id" type="string">
+        <ResponseField name="id" type="string" required>
 
         Unique identifier for the Property object.
 
         </ResponseField>
 
-        <ResponseField name="type" type="string">
+        <ResponseField name="type" type="string" required>
           Available options: `vehicle`
         </ResponseField>
 
@@ -80,10 +80,10 @@ description: "A Policy represents a specific policy associated with an
 
             <Expandable title="Vehicle" >
 
-                <ResponseField name="vin" type="string" required/>
-                <ResponseField name="model" type="string" required/>
-                <ResponseField name="year" type="string" required/>
-                <ResponseField name="make" type="string" required/>
+                <ResponseField name="vin" type="string" required />
+                <ResponseField name="model" type="string" required />
+                <ResponseField name="year" type="string" required />
+                <ResponseField name="make" type="string" required />
                 <ResponseField name="bodyStyle" type="string" />
 
             </Expandable>
@@ -113,7 +113,7 @@ description: "A Policy represents a specific policy associated with an
 
         <ResponseField name="property" type="string" >
           Unique identifier of Property afforded coverage. If coverage is afforded to all properties on the policy, `property` will be `undefined`.
-        <ResponseField>
+        </ResponseField>
 
         <Info>
           Within a Policy object, there will only be a single Coverage object per
@@ -148,7 +148,7 @@ description: "A Policy represents a specific policy associated with an
 
       <ResponseField name="property" type="string" >
         Unique identifier of Property afforded coverage for specified Insured. If Insured is afforded coverage across all properties on the policy, `property` will be `undefined`.
-      <ResponseField>
+      </ResponseField>
 
     </Expandable>
 
@@ -168,7 +168,7 @@ description: "A Policy represents a specific policy associated with an
 
         <ResponseField name="property" type="string" >
           Unique identifier of Property afforded coverage for specified Third Party. If Third Party is afforded coverage across all properties on the policy, `property` will be `undefined`.
-        <ResponseField>
+        </ResponseField>
 
     </Expandable>
 
