@@ -136,7 +136,7 @@ paths:
                     required:
                       - accessToken
                       - account
-                      - policy
+                      - policies
                     properties:
                       accessToken:
                         type: string
