@@ -146,7 +146,7 @@ paths:
                       account:
                         type: string
                         description: The unique id for the Account object.
-                      policy:
+                      policies:
                         type: array
                         description: List of unique ids for the Policy objects. If Ignition is configured to select a single policy (as is the default), the list will only contain 1 item.
                 required:
