@@ -136,15 +136,19 @@ paths:
                     required:
                       - accessToken
                       - account
+                      - policy
                     properties:
                       accessToken:
                         type: string
                         description:
                           The access token required for access to the requested
-                          user’s Account.
+                          Account object.
                       account:
                         type: string
-                        description: The unique id for the user's linked Account.
+                        description: The unique id for the Account object.
+                      policy:
+                        type: string
+                        description: The unique id for the Policy object.
                 required:
                   - success
                   - data
