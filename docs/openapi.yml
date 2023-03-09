@@ -141,14 +141,14 @@ paths:
                       accessToken:
                         type: string
                         description:
-                          The access token required for access to the requested
-                          Account object.
+                          The token required for access to the requested
+                          Account and Policy objects.
                       account:
                         type: string
                         description: The unique id for the Account object.
                       policy:
-                        type: string
-                        description: The unique id for the Policy object.
+                        type: array
+                        description: List of unique ids for the Policy objects. If Ignition is configured to select a single policy (as is the default), the list will only contain 1 item.
                 required:
                   - success
                   - data
