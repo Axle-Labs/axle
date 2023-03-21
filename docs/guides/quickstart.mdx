@@ -59,12 +59,10 @@ Now that you've constructed an Axle authorization URL you can open an Ignition
 authentication session for the user to link their account:
 
 - On iOS, we suggest leveraging Apple's natively supported `ASWebAuthentication`
-  session
-- On Android, we suggest using `Chrome Custom Tabs` to create an in-app session
-  and Android App Links to listen for successful completions.
+  session ([full documentation](https://developer.apple.com/documentation/authenticationservices/authenticating_a_user_through_a_web_service))
+- On Android, we suggest using `Chrome Custom Tabs` ([full documentation](https://developer.chrome.com/docs/android/custom-tabs/integration-guide/)) to create an in-app session and Android App Links ([full documentation](https://developer.android.com/training/app-links)) to deep-link back into your application.
 - On web, we suggest simply directing the user to the Axle authorization URL and
-  setting up a route to handle the redirection parameters, although it is
-  certainly possible to initialize an iframe in a modal and listen for redirect
+  setting up a route to handle the redirection parameters, or initialize the session within an iframe modal and listen for redirect
   attempts (e.g., using `Window.postMessage())`.
 
 <Check>
