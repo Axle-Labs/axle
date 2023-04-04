@@ -79,6 +79,13 @@
             "api-reference/policies/policy",
             "api-reference/policies/get-policy"
           ]
+        },
+        {
+          "group": "Carriers",
+          "pages": [
+            "api-reference/carriers/get-carrier",
+            "api-reference/carriers/get-carriers"
+          ]
         }
       ]
     }

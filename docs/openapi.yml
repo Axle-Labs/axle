@@ -215,6 +215,56 @@ paths:
         - Policies
     parameters:
       - $ref: "#/components/parameters/policy"
+  /carriers/{id}:
+    get:
+      summary: Get Carrier
+      description: The Get Carrier method returns a Carrier object that include additional details about an Axle-supported insurance carrier.
+      operationId: GetCarrier
+      parameters:
+        - $ref: "#/components/parameters/x-client-id"
+        - $ref: "#/components/parameters/x-client-secret"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    $ref: "#/components/schemas/Success"
+                  data:
+                    $ref: "#/components/schemas/Carrier"
+      deprecated: false
+      tags:
+        - Carriers
+    parameters:
+      - $ref: "#/components/parameters/carrier"
+  /carriers:
+    get:
+      summary: Get Carriers
+      description: The Get Carriers method returns an array of Carrier objects.
+      operationId: GetCarriers
+      parameters:
+        - $ref: "#/components/parameters/x-client-id"
+        - $ref: "#/components/parameters/x-client-secret"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    $ref: "#/components/schemas/Success"
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Carrier"
+      deprecated: false
+      tags:
+        - Carriers
 components:
   schemas:
     Account:
@@ -466,7 +516,7 @@ components:
         - modifiedAt
         - refreshedAt
     Address:
-      title: Addresses
+      title: Address
       type: object
       x-examples:
         example-1:
@@ -490,8 +540,41 @@ components:
           type: string
         postalCode:
           type: string
+    Carrier:
+      title: Carrier
+      type: object
+      x-examples:
+        example-1:
+          id: "state-farm"
+          name: "State Farm"
+          domain: "www.statefarm.com"
+          address:
+            addressLine1: "One State Farm Plaza"
+            addressLine2: ""
+            city: "Bloomington"
+            state: "IL"
+            postalCode: "61710"
+          phone: "+18007828332"
+          logoUrl: "https://example.com/state-farm.svg"
+          modifiedAt: "2023-04-04T19:27:55.523Z"
+      x-internal: false
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        domain:
+          type: string
+        address:
+          $ref: "#/components/schemas/Address"
+        phone:
+          type: string
+        logoUrl:
+          type: string
+        modifiedAt:
+          type: string
     Coverage:
-      title: Coverages
+      title: Coverage
       type: object
       example:
         limitPerPerson: 250000
@@ -644,6 +727,7 @@ components:
         - type
         - name
     User:
+      title: User
       type: object
       x-examples:
         Example:
@@ -652,7 +736,6 @@ components:
           lastName: "Smith"
           email: "john@smith.com"
       description: User to attach to Ignition session. If user is set, unique `id` must be provided.
-      title: User
       properties:
         id:
           type: string
@@ -731,6 +814,13 @@ components:
       description:
         The unique ID for the requested policy. Returned by Get Account for each
         Policy associated with the Account.
+    carrier:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: The unique ID for the requested carrier. Returned in Account and Policy objects as `carrier`.
     refresh:
       name: refresh
       in: query
