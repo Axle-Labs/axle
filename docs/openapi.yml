@@ -573,6 +573,13 @@ components:
           type: string
         modifiedAt:
           type: string
+      required:
+        - id
+        - name
+        - domain
+        - address
+        - phone
+        - modifiedAt
     Coverage:
       title: Coverage
       type: object
