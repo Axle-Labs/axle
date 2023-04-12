@@ -45,7 +45,7 @@
   "navigation": [
     {
       "group": "Home",
-      "pages": ["welcome"]
+      "pages": ["welcome", "security"]
     },
     {
       "group": "Guides",
