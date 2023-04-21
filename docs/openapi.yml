@@ -274,7 +274,7 @@ components:
         carrier and includes high-level account information (e.g. name) and any
         Policy objects associated with the Account.
       x-examples:
-        Example:
+        example:
           id: acc_gM2wn_gaqUv76ZljeVXOv
           firstName: John
           lastName: Smith
@@ -329,7 +329,7 @@ components:
         Account and includes high-level policy information (e.g. policy number)
         and any children objects (e.g., coverages) associated with the policy.
       x-examples:
-        Example:
+        example:
           id: pol_CbxGmGWnp9bGAFCC-eod2
           account: acc_gM2wn_gaqUv76ZljeVXOv
           type: auto
@@ -646,7 +646,7 @@ components:
       title: Vehicle
       type: object
       x-examples:
-        Example:
+        example:
           bodyStyle: ""
           vin: SMTD44GN3HT812287
           model: STREET SCRAMBLER
@@ -737,7 +737,7 @@ components:
       title: User
       type: object
       x-examples:
-        Example:
+        example:
           id: "usr_foqnkvhwerq7h81"
           firstName: "John"
           lastName: "Smith"
