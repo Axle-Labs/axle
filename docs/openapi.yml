@@ -270,9 +270,7 @@ components:
     Account:
       title: Account
       type: object
-      description: An Account represents an account with an insurance
-        carrier and includes high-level account information (e.g. name) and any
-        Policy objects associated with the Account.
+      description: An Account represents an account with an insurance carrier and includes high-level account information (e.g. name) and any Policy objects associated with the Account.
       x-examples:
         example:
           id: acc_gM2wn_gaqUv76ZljeVXOv
@@ -293,32 +291,51 @@ components:
       properties:
         id:
           type: string
+          description: Unique identifier for the Account object.
         carrier:
           type: string
+          description: Insurance carrier that is the source for the Account data.
         firstName:
           type: string
+          description: First name of insurance account owner.
+          nullable: true
         lastName:
           type: string
+          description: Last name of insurance account owner.
+          nullable: true
         phone:
           type: string
+          description: Primary phone number of insurance account owner.
+          nullable: true
         email:
           type: string
+          description: Primary email address of insurance account owner.
+          nullable: true
         policies:
           type: array
+          description: List of unique identifiers of Policy objects associated with the Account.
           items:
             type: string
+        connection:
+          $ref: "#/components/schemas/Connection"
         createdAt:
           type: string
+          description: ISO 8601 timestamp at which the Account object was generated via Axle.
         modifiedAt:
           type: string
+          description: ISO 8601 timestamp at which the Account object was modified via Axle. The Account object is modified only when there are differences between the current Account and new Account data requested from the carrier.
         refreshedAt:
           type: string
+          description: ISO 8601 timestamp at which the Account object was refreshed via Axle. The Account object is refreshed only when Axle successfully requests new Account data from the insurance carrier.
       required:
         - id
         - carrier
         - firstName
         - lastName
+        - email
+        - phone
         - policies
+        - connection
         - createdAt
         - modifiedAt
         - refreshedAt
@@ -453,51 +470,68 @@ components:
       properties:
         id:
           type: string
+          description: Unique identifier for the Policy object.
         account:
           type: string
+          description: Unique identifier for the Account object associated with the Policy.
         type:
           type: string
+          description: Type of insurance policy that the Policy object represents.
+          nullable: true
           enum:
             - auto
             - motorcycle
         carrier:
           type: string
+          description: Insurance carrier that is the source for the Policy data.
         policyNumber:
           type: string
+          nullable: true
+          description: Identifier of the policy, as specified by the insurance carrier.
         isActive:
           type: boolean
+          nullable: true
+          description: Active status of the policy, as specified by the insurance carrier.
         effectiveDate:
           type: string
+          nullable: true
+          description: ISO 8601 timestamp of current term effective date of the policy, as specified by the insurance carrier.
         expirationDate:
           type: string
+          nullable: true
+          description: ISO 8601 timestamp of current term expiration date of the policy, as specified by the insurance carrier.
         address:
+          description: Primary address associated with the policy.
           $ref: "#/components/schemas/Address"
         coverages:
           type: array
-          description: ""
+          description: List of coverage types and levels offered by the policy.
           items:
             $ref: "#/components/schemas/Coverage"
         properties:
           type: array
-          description: ""
+          description: List of properties (such as a vehicle or dwelling) afforded coverage by the policy.
           items:
             $ref: "#/components/schemas/Property"
         insureds:
           type: array
-          description: ""
+          description: List of entities (such as an individuals or businesses) afforded coverage by the policy.
           items:
             $ref: "#/components/schemas/Insured"
         thirdParties:
           type: array
-          description: ""
+          description: List of third parties (such as an individuals or businesses) with interest in the policy.
           items:
             $ref: "#/components/schemas/ThirdParty"
         createdAt:
           type: string
+          description: ISO 8601 timestamp at which the Policy object was generated via Axle.
         modifiedAt:
           type: string
+          description: ISO 8601 timestamp at which the Policy object was modified via Axle. The Policy object is modified only when there are differences between the current Policy and new Policy data requested from the carrier.
         refreshedAt:
           type: string
+          description: ISO 8601 timestamp at which the Policy object was refreshed via Axle. The Policy object is refreshed only when Axle successfully requests new Policy data from the carrier.
       required:
         - id
         - account
@@ -512,6 +546,7 @@ components:
         - properties
         - insureds
         - thirdParties
+        - documents
         - createdAt
         - modifiedAt
         - refreshedAt
@@ -520,26 +555,32 @@ components:
       type: object
       x-examples:
         example-1:
-          addressLine1: string
-          country: string
-          addressLine2: string
-          state: string
-          city: string
-          postalCode: string
+          addressLine1: "One State Farm Plaza"
+          addressLine2: null
+          city: "Bloomington"
+          state: "IL"
+          postalCode: "61710"
+          country: null
       x-internal: false
       properties:
         addressLine1:
           type: string
-        country:
-          type: string
+          nullable: true
         addressLine2:
           type: string
+          nullable: true
         state:
           type: string
+          nullable: true
         city:
           type: string
+          nullable: true
         postalCode:
           type: string
+          nullable: true
+        country:
+          type: string
+          nullable: true
     Carrier:
       title: Carrier
       type: object
@@ -550,10 +591,11 @@ components:
           domain: "www.statefarm.com"
           address:
             addressLine1: "One State Farm Plaza"
-            addressLine2: ""
+            addressLine2: null
             city: "Bloomington"
             state: "IL"
             postalCode: "61710"
+            country: null
           phone: "+18007828332"
           logoUrl: "https://example.com/state-farm.svg"
           modifiedAt: "2023-04-04T19:27:55.523Z"
@@ -584,14 +626,12 @@ components:
       title: Coverage
       type: object
       example:
-        limitPerPerson: 250000
         code: BI
-        label: Bodily Injury Liability
+        label: Bodily Injury
+        limitPerPerson: 250000
         limitPerAccident: 500000
       x-internal: false
       properties:
-        property:
-          type: string
         code:
           type: string
           enum:
@@ -601,6 +641,8 @@ components:
             - UMPD
             - UIMBI
             - UIMPD
+            - UUIMBI
+            - UUIMPD
             - COLL
             - COMP
         label:
@@ -608,12 +650,19 @@ components:
         limitPerPerson:
           type: integer
           format: int32
+          nullable: true
         limitPerAccident:
           type: integer
           format: int32
+          nullable: true
         deductible:
           type: integer
           format: int32
+          nullable: true
+        property:
+          type: string
+          nullable: true
+          description: Unique identifier of Property afforded coverage. If specified coverage is afforded to all properties on the policy, property will be undefined.
       required:
         - code
         - label
@@ -625,17 +674,20 @@ components:
         type: vehicle
         data:
           vin: SMTD44GN3HT812287
-          model: STREET SCRAMBLER
+          model: CR-V
           year: "2017"
-          make: TRIUMPH
+          make: HONDA
       x-internal: false
       properties:
         id:
           type: string
+          nullable: true
         type:
           type: string
+          nullable: true
           enum:
             - vehicle
+            - dwelling
         data:
           $ref: "#/components/schemas/Vehicle"
       required:
@@ -647,23 +699,28 @@ components:
       type: object
       x-examples:
         example:
-          bodyStyle: ""
+          bodyStyle: null
           vin: SMTD44GN3HT812287
-          model: STREET SCRAMBLER
+          model: CR-V
           year: "2017"
-          make: TRIUMPH
+          make: HONDA
       x-internal: false
       properties:
         bodyStyle:
           type: string
+          nullable: true
         vin:
           type: string
+          nullable: true
         model:
           type: string
+          nullable: true
         year:
           type: string
+          nullable: true
         make:
           type: string
+          nullable: true
       required:
         - vin
         - model
@@ -678,32 +735,47 @@ components:
         dateOfBirthYear: "1993"
         licenseNo: •••••7259
         licenseState: GA
-        licenseStatus: Valid
-        dateOfBirth: ""
-        type: Primary named insured
+        dateOfBirth: null
+        type: primary
       x-internal: false
       properties:
-        property:
-          type: string
-        firstName:
-          type: string
-        lastName:
-          type: string
-        dateOfBirthYear:
-          type: string
-        licenseNo:
-          type: string
-        licenseState:
-          type: string
-        licenseStatus:
-          type: string
-        dateOfBirth:
-          type: string
         type:
           type: string
+          nullable: true
+          description: Should be used for display purposes only. All listed insureds are afforded coverage by the policy.
+          enum:
+            - primary
+            - secondary
+        firstName:
+          type: string
+          nullable: true
+        lastName:
+          type: string
+          nullable: true
+        dateOfBirthYear:
+          type: string
+          nullable: true
+        licenseNo:
+          type: string
+          nullable: true
+        licenseState:
+          type: string
+          nullable: true
+        dateOfBirth:
+          type: string
+          nullable: true
+        property:
+          type: string
+          nullable: true
+          description: Unique identifier of Property afforded coverage for specified Insured. If Insured is afforded coverage across all properties on the policy, property will be undefined.
       required:
         - firstName
         - lastName
+        - type
+        - dateOfBirth
+        - dateOfBirthYear
+        - licenseNo
+        - licenseState
     ThirdParty:
       title: Third Party
       type: object
@@ -719,6 +791,8 @@ components:
       properties:
         property:
           type: string
+          nullable: true
+          default: Unique identifier of Property afforded coverage for specified Third Party.
         type:
           type: string
           enum:
@@ -726,13 +800,48 @@ components:
             - lessor
             - interest
           default: interest
+          nullable: true
+          description: Should be used for display purposes only. All listed thirdParties have established financial interest in the associated property.
         name:
           type: string
+          nullable: true
         address:
           $ref: "#/components/schemas/Address"
       required:
         - type
         - name
+        - address
+    Document:
+      title: Document
+      type: object
+      x-examples:
+        example:
+          source: "carrier"
+          name: "Declaration Page"
+          url: "<signed-url>"
+          createdAt: "2022-01-01T00:00:00.000Z"
+      description: User to attach to Ignition session. If user is set, unique `id` must be provided.
+      properties:
+        source:
+          type: string
+          description: The source of the document. Note, user documents are unverified by Axle.
+          enum:
+            - carrier
+            - user
+        name:
+          type: string
+          description: Name of the document, as specified by carrier or user.
+        url:
+          type: string
+          description: URL for document access. Note, the URL is signed and has an expiry of 10 minutes.
+        createdAt:
+          type: string
+          description: ISO 8601 timestamp at which the document was fetched or shared via Axle.
+      required:
+        - source
+        - name
+        - url
+        - createdAt
     User:
       title: User
       type: object
@@ -777,6 +886,20 @@ components:
         message:
           type: string
           description: "Provides a reason for why the operation failed, if available."
+    Connection:
+      title: Connection
+      type: object
+      x-internal: false
+      properties:
+        status:
+          type: string
+          description: The Account connection status represents if Axle can actively request new Account and Policy data from the insurance carrier.
+          enum:
+            - active
+            - authentication-required
+        updatedAt:
+          type: string
+          description: ISO 8601 timestamp at which the Account connection status was updated.
   parameters:
     x-client-id:
       name: x-client-id

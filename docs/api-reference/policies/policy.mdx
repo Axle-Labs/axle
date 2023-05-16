@@ -7,46 +7,46 @@ description: "A Policy represents a specific policy associated with an
 
 ## Attributes
 
-<ParamField body="id" type="string" required>
+<ParamField body="id" type="string">
   Unique identifier for the Policy object.
 </ParamField>
 
-<ParamField body="account" type="string" required>
+<ParamField body="account" type="string">
   Unique identifier for the Account object associated with the Policy.
 </ParamField>
 
-<ParamField body="type" type="string" required>
+<ParamField body="type" type="string">
   Type of insurance policy that the Policy object represents. Available options:
   `auto` `motorcycle`
 </ParamField>
 
-<ParamField body="carrier" type="string" required>
+<ParamField body="carrier" type="string">
   Insurance carrier that is the source for the Policy data.
 </ParamField>
 
-<ParamField body="policyNumber" type="string" required>
+<ParamField body="policyNumber" type="string">
   Identifier of the policy, as specified by the insurance carrier.
 </ParamField>
 
-<ParamField body="isActive" type="boolean" required>
+<ParamField body="isActive" type="boolean">
   Active status of the policy, as specified by the insurance carrier.
 </ParamField>
 
-<ParamField body="effectiveDate" type="string" required>
+<ParamField body="effectiveDate" type="string">
   ISO 8601 timestamp of current term effective date of the policy, as specified
   by the insurance carrier.
 </ParamField>
 
-<ParamField body="expirationDate" type="string" required>
+<ParamField body="expirationDate" type="string">
   ISO 8601 timestamp of current term expiration date of the policy, as specified
   by the insurance carrier.
 </ParamField>
 
-<ParamField body="address" type="Address" >
+<ParamField body="address" type="Address">
 
     <Expandable title="Address">
 
-       <ResponseField name="addressLine1" type="string" />
+      <ResponseField name="addressLine1" type="string" />
 
       <ResponseField name="addressLine2" type="string" />
 
@@ -66,13 +66,13 @@ description: "A Policy represents a specific policy associated with an
 
     <Expandable title="Property">
 
-        <ResponseField name="id" type="string" required>
+        <ResponseField name="id" type="string">
 
         Unique identifier for the Property object.
 
         </ResponseField>
 
-        <ResponseField name="type" type="string" required>
+        <ResponseField name="type" type="string">
           Available options: `vehicle`
         </ResponseField>
 
@@ -80,11 +80,11 @@ description: "A Policy represents a specific policy associated with an
 
             <Expandable title="Vehicle" >
 
-                <ResponseField name="vin" type="string" required />
-                <ResponseField name="model" type="string" required />
-                <ResponseField name="year" type="string" required />
-                <ResponseField name="make" type="string" required />
-                <ResponseField name="bodyStyle" type="string" />
+                <ResponseField name="vin" type="string" />
+                <ResponseField name="model" type="string" />
+                <ResponseField name="year" type="string" />
+                <ResponseField name="make" type="string" />
+                <ResponseField name="bodyStyle" type="string" optional />
 
             </Expandable>
 
@@ -105,14 +105,14 @@ description: "A Policy represents a specific policy associated with an
 
         <ResponseField name="label" type="string" required />
 
-        <ResponseField name="limitPerPerson" type="integer<int32>" />
+        <ResponseField name="limitPerPerson" type="integer<int32>" optional />
 
-        <ResponseField name="limitPerAccident" type="integer<int32>" />
+        <ResponseField name="limitPerAccident" type="integer<int32>" optional />
 
-        <ResponseField name="deductible" type="integer<int32>" />
+        <ResponseField name="deductible" type="integer<int32>" optional />
 
-        <ResponseField name="property" type="string" >
-          Unique identifier of Property afforded coverage. If coverage is afforded to all properties on the policy, `property` will be `undefined`.
+        <ResponseField name="property" type="string" optional >
+          Unique identifier of Property afforded coverage. If specified coverage is afforded to all properties on the policy, `property` will be `undefined`.
         </ResponseField>
 
         <Info>
@@ -128,9 +128,9 @@ description: "A Policy represents a specific policy associated with an
 
     <Expandable title="Insured">
 
-       <ResponseField name="firstName" type="string" required />
+       <ResponseField name="firstName" type="string" />
 
-      <ResponseField name="lastName" type="string" required />
+      <ResponseField name="lastName" type="string" />
 
       <ResponseField name="type" type="string">
         Available options: `primary` `secondary`
@@ -146,7 +146,7 @@ description: "A Policy represents a specific policy associated with an
 
       <ResponseField name="dateOfBirth" type="string" />
 
-      <ResponseField name="property" type="string" >
+      <ResponseField name="property" type="string" optional >
         Unique identifier of Property afforded coverage for specified Insured. If Insured is afforded coverage across all properties on the policy, `property` will be `undefined`.
       </ResponseField>
 
@@ -158,16 +158,41 @@ description: "A Policy represents a specific policy associated with an
 
     <Expandable title="ThirdParty">
 
-        <ResponseField name="type" type="string" required>
+        <ResponseField name="type" type="string" default="interest">
           Available options: `lienholder` `lessor` `interest`
         </ResponseField>
 
-        <ResponseField name="name" type="string" required />
+        <ResponseField name="name" type="string" />
 
         <ResponseField name="address" type="Address" />
 
         <ResponseField name="property" type="string" >
-          Unique identifier of Property afforded coverage for specified Third Party. If Third Party is afforded coverage across all properties on the policy, `property` will be `undefined`.
+          Unique identifier of Property afforded coverage for specified Third Party.
+        </ResponseField>
+
+    </Expandable>
+
+</ParamField>
+
+<ParamField body="documents" type="array[Document]" >
+
+    <Expandable title="Document">
+
+        <ResponseField name="source" type="string">
+          The source of the document. Available options: `carrier` `user`.
+
+          <Tip>
+            User-provided documents are unverified by Axle.
+          </Tip>
+
+        </ResponseField>
+
+        <ResponseField name="name" type="string" />
+
+        <ResponseField name="url" type="string" />
+
+        <ResponseField name="createdAt" type="string" >
+          Unique identifier of Property afforded coverage for specified Third Party.
         </ResponseField>
 
     </Expandable>
