@@ -13,6 +13,7 @@ Please first review our Quickstart guide and API docs on how to start an Ignitio
 
 Your `POST` request to `/ignition` is configured with the following request
 body:
+
 - Optional: `redirectUri` - the URL we'll redirect the user to upon completion, exit, or error outcomes of the Ignition session, defaults to no redirect
 - Optional: `webhookUri` - the URL we'll send events to as the user proceeds through the Ignition session, defaults to no webhook events
 - Optional: `user` - optional user to attach, please refer to [startIgnition](https://docs.axle.insure/api-reference/ignition/start-ignition) for examples
@@ -35,13 +36,15 @@ curl --request POST \
 On navigation to the `redirectUri` provided, the URI will be appended with the following parameters:
 
 `status`: String
+
 - complete
 - exit
 - error
 
 Additional parameters (dependent on status, see below)
+
 - `authCode`: String - authorization code that can be exchange for accessToken for scoped access to connected account and/or policy
-- `result`: String - "link" (account connection was made and policy is available) OR "manual" (details were entered through manual collection form) 
+- `result`: String - "link" (account connection was made and policy is available) OR "manual" (details were entered through manual collection form)
 - `step`: String - the step where the Ignition session was exited
 - `message`: String - additional information about the Ignition session error
 
@@ -50,24 +53,25 @@ Additional parameters (dependent on status, see below)
 ```
 
 <Note>
-  The `authCode` expires after 10 minutes, so ensure your backend service is exchanging codes through `POST /token/exchange` in real time.
+  The `authCode` expires after 10 minutes, so ensure your backend service is
+  exchanging codes through `POST /token/exchange` in real time.
 </Note>
 
 #### onCompleted
 
-When the user successfully connects to their carrier account and shares authorized access to a selected policy, OR if `acceptManual` is enabled, when the user submits their policy information and/or documentation through Axle's manual collection form.
+When the user successfully connects to their carrier account and shares authorized access to a selected policy, OR when the user submits their policy information and/or documentation through Axle's manual collection form.
 
 ```json
 {
   "status": "complete",
   "authCode": "<authCode>",
-  "result": "link" || "manual"
+  "result": "link" || "basic" || "manual"
 }
 ```
 
 #### onExit
 
-When the user opts out of connecting to their carrier account and/or selecting a policy, OR if `acceptManual` is enabled, when the user opts out of sharing the requested policy information and/or documentation.
+When the user opts out of connecting to their carrier account and/or selecting a policy, OR when the user opts out of sharing the requested policy information and/or documentation.
 
 ```json
 {
@@ -78,7 +82,7 @@ When the user opts out of connecting to their carrier account and/or selecting a
 
 #### onError
 
-When Axle is unable to retrieve account or policy information from a selected carrier, OR if `acceptManual` is enabled, when Axle is unable to collect policy information and/or documentation from the user.
+When Axle is unable to retrieve account or policy information from a selected carrier, OR when Axle is unable to collect policy information and/or documentation from the user.
 
 ```json
 {
@@ -88,7 +92,8 @@ When Axle is unable to retrieve account or policy information from a selected ca
 ```
 
 <Warning>
-  Never send requests from your client to the Axle API. The client should only be used to handle Ignition status through redirect.
+  Never send requests from your client to the Axle API. The client should only
+  be used to handle Ignition status through redirect.
 </Warning>
 
 ### Webhook Events
