@@ -462,6 +462,11 @@ components:
               licenseStatus: Valid
               type: Primary
               property: prp_tmGUxLpgHjmW9r6M6WjhS
+          documents:
+            - source: "carrier"
+              name: "Declaration Page"
+              url: "<signed-url>"
+              createdAt: "2022-01-01T00:00:00.000Z"
           createdAt: "2022-01-01T00:00:00.000Z"
           modifiedAt: "2022-01-01T00:00:00.000Z"
           refreshedAt: "2022-01-01T00:00:00.000Z"
@@ -515,14 +520,19 @@ components:
             $ref: "#/components/schemas/Property"
         insureds:
           type: array
-          description: List of entities (such as an individuals or businesses) afforded coverage by the policy.
+          description: List of entities (such as an individuals or businesses) afforded direct coverage by the policy.
           items:
             $ref: "#/components/schemas/Insured"
         thirdParties:
           type: array
-          description: List of third parties (such as an individuals or businesses) with interest in the policy.
+          description: List of external parties with interest in the policy.
           items:
             $ref: "#/components/schemas/ThirdParty"
+        documents:
+          type: array
+          description: List of documents (such as declaration pages and policy agreements) associated with the policy.
+          items:
+            $ref: "#/components/schemas/Document"
         createdAt:
           type: string
           description: ISO 8601 timestamp at which the Policy object was generated via Axle.
@@ -820,7 +830,6 @@ components:
           name: "Declaration Page"
           url: "<signed-url>"
           createdAt: "2022-01-01T00:00:00.000Z"
-      description: User to attach to Ignition session. If user is set, unique `id` must be provided.
       properties:
         source:
           type: string
