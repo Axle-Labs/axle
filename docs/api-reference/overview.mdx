@@ -1,9 +1,15 @@
 ---
 title: Overview
-description: Welcome to the Axle API Reference
+description: Learn about the Axle API
 ---
 
-### API Base URL
+## API basics
+
+- The Axle API is built on RESTful principles.
+- The API operates over HTTPS to ensure the security of data being transferred.
+- All requests and responses are sent in JSON.
+
+### Environments
 
 <CodeGroup>
 
@@ -17,7 +23,62 @@ https://sandbox.axle.insure
 
 </CodeGroup>
 
-### Objects and Endpoints
+### Authentication
+
+All Axle API requests are authenticated using an client-id and client-secret (API key) pairing sent in the request headers.
+
+- x-client-id — unique identifier for client
+- x-client-secret — api key for client (sensitive)
+
+<Check>Contact the Axle team to acquire these keys.</Check>
+
+When making API requests, API keys must match the base URL environment (see above), otherwise a 401-Unauthorized response code will be returned.
+
+### Null values
+
+Individual fields may return null values when the carrier data source supports the field, but no information is present for the selected Account or Policy.
+
+<Tip>
+  *Optional* fields, such as `Policy.coverages["BI"].property` or
+  `Policy.coverages["UMPD"].deductible` may return `null` or `undefined` *
+  `null` - The carrier data source supports the field, but no information is
+  present for the selected Account or Policy. * `undefined` - The carrier data
+  source supports the field and data is available that specifies that the field
+  does not exist on the Account or Policy.
+</Tip>
+
+Example Policy:
+
+```json
+{
+	"...",
+	"policyNumber": "123456789",
+	"isActive": true,
+	"effectiveDate": null,
+	"expirationDate": "2023-10-22T04:00:00.000Z",
+	"address": {
+		"addressLine1": "123 Main St.",
+		"addressLine2": null,
+		"city": "New York",
+		"state": "NY",
+		"postalCode": "10014",
+		"country": "US",
+	},
+	"coverages": [
+		{
+      "code": "PD",
+      "label": "Property Damage",
+      "limitPerAccident": null, // No information was available from carrier data source
+      "deductible": undefined, // The carrier data source specifies that here is no deductible present for this coverage
+			"property": "prp_83sD63h82bbeu2Dgn"
+    },
+		"..."
+	],
+	"..."
+}
+```
+
+## Objects and Endpoints
 
 Get started with one of the following endpoints
 
@@ -39,4 +100,12 @@ Get started with one of the following endpoints
   href="/api-reference/accounts/get-account"
 >
   Retrieve information about a linked Account.
+</Card>
+
+<Card
+  title="Policies"
+  icon="file-contract"
+  href="/api-reference/accounts/get-policy"
+>
+  Retrieve information about a linked Policy.
 </Card>

@@ -5,23 +5,28 @@ description: "An Account represents an account with an insurance
   Policy objects associated with the Account."
 ---
 
+<Tip>
+  All fields are nullable and required unless otherwise specified. See [API
+  overview](/api-reference/overview) for more details.
+</Tip>
+
 ## Attributes
 
 <br />
 
-<ParamField body="id" type="string" required>
+<ParamField body="id" type="string">
   Unique identifier for the Account object.
 </ParamField>
 
-<ParamField body="carrier" type="string" required>
+<ParamField body="carrier" type="string">
   Insurance carrier that is the source for the Account data.
 </ParamField>
 
-<ParamField body="firstName" type="string" required>
+<ParamField body="firstName" type="string">
   First name of insurance account owner.
 </ParamField>
 
-<ParamField body="lastName" type="string" required>
+<ParamField body="lastName" type="string">
   Last name of insurance account owner.
 </ParamField>
 
@@ -33,7 +38,7 @@ description: "An Account represents an account with an insurance
   Primary email address of insurance account owner.
 </ParamField>
 
-<ParamField body="policies" type="array[string]" required>
+<ParamField body="policies" type="array[string]">
   List of unique identifiers of Policy objects associated with the Account
 </ParamField>
 
@@ -41,12 +46,12 @@ description: "An Account represents an account with an insurance
 
     <Expandable title="Connection">
 
-      <ResponseField name="status" type="string" required >
+      <ResponseField name="status" type="string" >
         The Account connection status represents if Axle can actively request new Account and Policy data from the insurance carrier.
         <br />Available options: `active` `authentication-required`
       </ResponseField>
 
-      <ResponseField name="updatedAt" type="string" required >
+      <ResponseField name="updatedAt" type="string" >
         ISO 8601 timestamp at which the Account connection status was updated.
       </ResponseField>
 
@@ -54,17 +59,17 @@ description: "An Account represents an account with an insurance
 
 </ParamField>
 
-<ParamField body="createdAt" type="string" required>
+<ParamField body="createdAt" type="string">
   ISO 8601 timestamp at which the Account object was generated via Axle.
 </ParamField>
 
-<ParamField body="modifiedAt" type="string" required>
+<ParamField body="modifiedAt" type="string">
   ISO 8601 timestamp at which the Account object was modified via Axle. The
   Account object is modified only when there are differences between the current
   Account and new Account data requested from the carrier.
 </ParamField>
 
-<ParamField body="refreshedAt" type="string" required>
+<ParamField body="refreshedAt" type="string">
   ISO 8601 timestamp at which the Account object was refreshed via Axle. The
   Account object is refreshed only when Axle successfully requests new Account
   data from the insurance carrier.

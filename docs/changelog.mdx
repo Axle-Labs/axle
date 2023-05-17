@@ -1,0 +1,48 @@
+---
+title: "Changelog"
+description: "Latest updates to the Axle API"
+---
+
+### Wednesday, May 24, 2023
+
+- Add `null` type support for individual fields in Account and Policy response objects to improve data transparency and actionability
+  - Individual fields will return `null` values when:
+    - The carrier data source supports the field, but no information is present for the selected Account or Policy.
+    - The carrier data source does not support that field.
+  - Optional fields, such as `Policy.coverages["BI"].property` or `Policy.coverages["UMPD"].deductible` may return `null` or `undefined`
+    - `null` - The carrier data source supports the field, but no information is present for the selected Account or Policy.
+    - `undefined` - The carrier data source supports the field and data is available that specifies that the field does not exist on the Account or Policy.
+  - Example Policy:
+
+```json
+{
+	"...",
+	"policyNumber": "123456789",
+	"isActive": true,
+	"effectiveDate": null,
+	"expirationDate": "2023-10-22T04:00:00.000Z",
+	"address": {
+		"addressLine1": "123 Main St.",
+		"addressLine2": null,
+		"city": "New York",
+		"state": "NY",
+		"postalCode": "10014",
+		"country": "US",
+	},
+	"coverages": [
+		{
+            "code": "PD",
+            "label": "Property Damage",
+            "limitPerAccident": null, // No information was available from carrier data source
+            "deductible": undefined, // The carrier data source specifies that here is no deductible present for this coverage
+            "property": "prp_83sD63h82bbeu2Dgn"
+        },
+		"..."
+	],
+	"..."
+}
+```
+
+- Clarification
+  - `Policy.insureds.type` is an optional field, and therefore should be used for display purposes only. The Axle team is working on refining this field to add more specificity and accuracy.
+  - `Policy.thirdParties.type` has a default value of `interest`. If you do not find a thirdParty of type `lienholder` or `lessor` on the policy, the data source may not have specified this classifiation.
