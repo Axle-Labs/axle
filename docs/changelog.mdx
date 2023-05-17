@@ -6,13 +6,13 @@ description: "Latest updates to the Axle API"
 ### Wednesday, May 24, 2023
 
 - Add `null` type support for individual fields in Account and Policy response objects to improve data transparency and actionability
-  - _Non-optional_ fields will return `null` values when:
-    - The carrier data source supports the field, but no information is present for the selected <Account> or <Policy>.
+  - Individual fields will return `null` values when:
+    - The carrier data source supports the field, but no information is present for the selected Account or Policy.
     - The carrier data source does not support that field.
-  - _Optional_ fields, such as `Policy.coverages["BI"].property` or `Policy.coverages["UMPD"].deductible` may return `null` or `undefined`
-    - `null` - The carrier data source supports the field, but no information is present for the selected <Account> or <Policy>.
-    - `undefined` - The carrier data source supports the field and data is available that specifies that the field does not exist on the <Account> or <Policy>.
-  - Example <Policy>:
+  - Optional fields, such as `Policy.coverages["BI"].property` or `Policy.coverages["UMPD"].deductible` may return `null` or `undefined`
+    - `null` - The carrier data source supports the field, but no information is present for the selected Account or Policy.
+    - `undefined` - The carrier data source supports the field and data is available that specifies that the field does not exist on the Account or Policy.
+  - Example Policy:
 
 ```json
 {

@@ -28,7 +28,7 @@ https://sandbox.axle.insure
 All Axle API requests are authenticated using an client-id and client-secret (API key) pairing sent in the request headers.
 
 - x-client-id — unique identifier for client
-- x-client-secret — api_key_secret
+- x-client-secret — api key for client (sensitive)
 
 <Check>Contact the Axle team to acquire these keys.</Check>
 
@@ -36,15 +36,18 @@ When making API requests, API keys must match the base URL environment (see abov
 
 ### Null values
 
-Individual fields may return null values when the carrier data source supports the field, but no information is present for the selected <Account> or <Policy>.
+Individual fields may return null values when the carrier data source supports the field, but no information is present for the selected Account or Policy.
 
 <Tip>
-*Optional* fields, such as `Policy.coverages["BI"].property` or `Policy.coverages["UMPD"].deductible` may return `null` or `undefined`
-  - `null` - The carrier data source supports the field, but no information is present for the selected <Account> or <Policy>.
-  - `undefined` - The carrier data source supports the field and data is available that specifies that the field does not exist on the <Account> or <Policy>.
+  *Optional* fields, such as `Policy.coverages["BI"].property` or
+  `Policy.coverages["UMPD"].deductible` may return `null` or `undefined` *
+  `null` - The carrier data source supports the field, but no information is
+  present for the selected Account or Policy. * `undefined` - The carrier data
+  source supports the field and data is available that specifies that the field
+  does not exist on the Account or Policy.
 </Tip>
 
-Example <Policy>:
+Example Policy:
 
 ```json
 {

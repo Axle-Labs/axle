@@ -5,7 +5,14 @@ description: "A Policy represents a specific policy associated with an
   and any children objects (e.g., coverages) associated with the policy."
 ---
 
+<Tip>
+  All fields are nullable and required unless otherwise specified. See [API
+  overview](/api-reference/overview) for more details.
+</Tip>
+
 ## Attributes
+
+<br />
 
 <ParamField body="id" type="string">
   Unique identifier for the Policy object.
@@ -86,7 +93,7 @@ List of properties (such as a vehicle or dwelling) afforded coverage by the poli
                 <ResponseField name="model" type="string" />
                 <ResponseField name="year" type="string" />
                 <ResponseField name="make" type="string" />
-                <ResponseField name="bodyStyle" type="string" optional />
+                <ResponseField name="bodyStyle" type="string, optional" />
 
             </Expandable>
 
@@ -109,13 +116,13 @@ List of coverage types and levels offered by the policy.
 
         <ResponseField name="label" type="string" required />
 
-        <ResponseField name="limitPerPerson" type="integer<int32>" optional />
+        <ResponseField name="limitPerPerson" type="integer<int32>, optional" />
 
-        <ResponseField name="limitPerAccident" type="integer<int32>" optional />
+        <ResponseField name="limitPerAccident" type="integer<int32>, optional" />
 
-        <ResponseField name="deductible" type="integer<int32>" optional />
+        <ResponseField name="deductible" type="integer<int32>, optional" />
 
-        <ResponseField name="property" type="string" optional >
+        <ResponseField name="property" type="string, optional" >
           Unique identifier of Property afforded coverage. If specified coverage is afforded to all properties on the policy, `property` will be `undefined`.
         </ResponseField>
 
@@ -152,7 +159,7 @@ List of entities (such as an individuals or businesses) afforded direct coverage
 
       <ResponseField name="dateOfBirth" type="string" />
 
-      <ResponseField name="property" type="string" optional >
+      <ResponseField name="property" type="string, optional" >
         Unique identifier of Property afforded coverage for specified Insured. If Insured is afforded coverage across all properties on the policy, `property` will be `undefined`.
       </ResponseField>
 
@@ -224,11 +231,6 @@ List of documents (such as declaration pages and policy agreements) associated w
   Policy object is refreshed only when Axle successfully requests new Policy
   data from the carrier.
 </ParamField>
-
-<Tip>
-  All fields are nullable and non-optional unless otherwise specified. See [API
-  overview](/api-reference/overview) for more details.
-</Tip>
 
 <RequestExample>
 ```json The Policy object
