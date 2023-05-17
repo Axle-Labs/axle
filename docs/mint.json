@@ -45,7 +45,7 @@
   "navigation": [
     {
       "group": "Home",
-      "pages": ["welcome", "security"]
+      "pages": ["welcome", "security", "changelog"]
     },
     {
       "group": "Guides",
