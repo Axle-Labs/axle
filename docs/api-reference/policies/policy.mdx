@@ -64,6 +64,8 @@ description: "A Policy represents a specific policy associated with an
 
 <ParamField body="properties" type="array[Property]" >
 
+List of properties (such as a vehicle or dwelling) afforded coverage by the policy.
+
     <Expandable title="Property">
 
         <ResponseField name="id" type="string">
@@ -96,6 +98,8 @@ description: "A Policy represents a specific policy associated with an
 
 <ParamField body="coverages" type="array[Coverage]" >
 
+List of coverage types and levels offered by the policy.
+
     <Expandable title="Coverage">
 
         <ResponseField name="code" type="string" required>
@@ -125,6 +129,8 @@ description: "A Policy represents a specific policy associated with an
 </ParamField>
 
 <ParamField body="insured" type="array[Insured]" >
+
+List of entities (such as an individuals or businesses) afforded direct coverage by the policy.
 
     <Expandable title="Insured">
 
@@ -156,6 +162,8 @@ description: "A Policy represents a specific policy associated with an
 
 <ParamField body="thirdParties" type="array[ThirdParty]" >
 
+List of external parties with interest in the policy.
+
     <Expandable title="ThirdParty">
 
         <ResponseField name="type" type="string" default="interest">
@@ -175,6 +183,8 @@ description: "A Policy represents a specific policy associated with an
 </ParamField>
 
 <ParamField body="documents" type="array[Document]" >
+
+List of documents (such as declaration pages and policy agreements) associated with the policy.
 
     <Expandable title="Document">
 
