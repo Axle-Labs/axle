@@ -44,7 +44,7 @@ On navigation to the `redirectUri` provided, the URI will be appended with the f
 Additional parameters (dependent on status, see below)
 
 - `authCode`: String - authorization code that can be exchange for accessToken for scoped access to connected account and/or policy
-- `result`: String - "link" (account connection was made and policy is available) OR "manual" (details were entered through manual collection form)
+- `result`: String - "link" (account connection was made and policy is available) OR "basic" (account connection was made but policy details are not available) OR "manual" (details were entered through manual collection form)
 - `step`: String - the step where the Ignition session was exited
 - `message`: String - additional information about the Ignition session error
 

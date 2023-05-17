@@ -209,21 +209,26 @@ List of documents (such as declaration pages and policy agreements) associated w
 
 </ParamField>
 
-<ParamField body="createdAt" type="string" required>
+<ParamField body="createdAt" type="string">
   ISO 8601 timestamp at which the Policy object was generated via Axle.
 </ParamField>
 
-<ParamField body="modifiedAt" type="string" required>
+<ParamField body="modifiedAt" type="string">
   ISO 8601 timestamp at which the Policy object was modified via Axle. The
   Policy object is modified only when there are differences between the current
   Policy and new Policy data requested from the carrier.
 </ParamField>
 
-<ParamField body="refreshedAt" type="string" required>
+<ParamField body="refreshedAt" type="string">
   ISO 8601 timestamp at which the Policy object was refreshed via Axle. The
   Policy object is refreshed only when Axle successfully requests new Policy
   data from the carrier.
 </ParamField>
+
+<Tip>
+  All fields are nullable and non-optional unless otherwise specified. See [API
+  overview](/api-reference/overview) for more details.
+</Tip>
 
 <RequestExample>
 ```json The Policy object
