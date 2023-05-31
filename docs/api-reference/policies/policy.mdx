@@ -199,14 +199,21 @@ List of documents (such as declaration pages and policy agreements) associated w
           The source of the document. Available options: `carrier` `user`.
 
           <Tip>
-            User-provided documents are unverified by Axle.
+            User-provided documents are not verified by Axle.
           </Tip>
 
         </ResponseField>
 
         <ResponseField name="name" type="string" />
 
-        <ResponseField name="url" type="string" />
+        <ResponseField name="url" type="string" >
+          Pre-signed url to access document. 
+          
+          <Tip>
+            For security, document urls have an expiry of 60 minutes.
+          </Tip>
+          
+        </ResponseField>
 
         <ResponseField name="createdAt" type="string" >
           Unique identifier of Property afforded coverage for specified Third Party.
