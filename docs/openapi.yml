@@ -20,6 +20,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/x-client-id"
         - $ref: "#/components/parameters/x-client-secret"
+        - $ref: "#/components/parameters/x-destination-client-id"
       requestBody:
         description: ""
         content:
@@ -100,6 +101,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/x-client-id"
         - $ref: "#/components/parameters/x-client-secret"
+        - $ref: "#/components/parameters/x-destination-client-id"
       requestBody:
         description: ""
         content:
@@ -149,6 +151,8 @@ paths:
                       policies:
                         type: array
                         description: List of unique ids for the Policy objects. If Ignition is configured to select a single policy (as is the default), the list will only contain 1 item.
+                        items:
+                          type: string
                 required:
                   - success
                   - data
@@ -167,6 +171,7 @@ paths:
         - $ref: "#/components/parameters/x-client-id"
         - $ref: "#/components/parameters/x-client-secret"
         - $ref: "#/components/parameters/x-access-token"
+        - $ref: "#/components/parameters/x-destination-client-id"
         - $ref: "#/components/parameters/expand"
       responses:
         "200":
@@ -196,6 +201,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/x-client-id"
         - $ref: "#/components/parameters/x-client-secret"
+        - $ref: "#/components/parameters/x-destination-client-id"
         - $ref: "#/components/parameters/x-access-token"
         - $ref: "#/components/parameters/expand"
       responses:
@@ -265,6 +271,64 @@ paths:
       deprecated: false
       tags:
         - Carriers
+  /clients/createDestinationClient:
+    post:
+      summary: Create Destination Client
+      description: |-
+        Create a destination client associated with your client and secret. This request will return a destinationClientId that you can use to make requests to the Axle API on behalf of your destination clients.
+
+        This is only used by platform clients. See the [Platform Integration](http://localhost:3000/guides/platform-integration) guide for more information on platforms and destination clients.
+      operationId: CreateDestinationClient
+      parameters:
+        - $ref: "#/components/parameters/x-client-id"
+        - $ref: "#/components/parameters/x-client-secret"
+      requestBody:
+        description: ""
+        content:
+          application/json:
+            schema:
+              description: ""
+              type: object
+              properties:
+                displayName:
+                  type: string
+                  description: The name of the destination client to display to the users.
+                entity:
+                  type: string
+                  description: A standardized entity name for the destination client using all lowercase, and dashes instead of spaces. For example, `my-destination-client`.
+              required:
+                - "displayName"
+                - "entity"
+            example:
+              name: "My Destination Client"
+              webhookUri: "https://example.com/webhook"
+        required: true
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                description: ""
+                type: object
+                properties:
+                  success:
+                    $ref: "#/components/schemas/Success"
+                  data:
+                    type: object
+                    required:
+                      - destinationClientId
+                    properties:
+                      destinationClientId:
+                        type: string
+                        description: The client ID of the destination client. You'll use this to make requests to the Axle API on behalf of your destination client.
+                required:
+                  - success
+                  - data
+      deprecated: false
+      tags:
+        - Clients
+
 components:
   schemas:
     Account:
@@ -926,6 +990,13 @@ components:
       description:
         Your secret API key. This will be shared with you during onboarding and should
         be considered sensitive - it’s a password after all!
+    x-destination-client-id:
+      name: x-destination-client-id
+      in: header
+      required: false
+      schema:
+        type: string
+      description: The client ID of the destination client. This is optional and only used by platform clients. See the [Platform Integration](http://localhost:3000/guides/platform-integration) guide for more information.
     account:
       name: id
       in: path

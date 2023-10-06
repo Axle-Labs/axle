@@ -1,0 +1,280 @@
+---
+title: "Platform Integration"
+description: "Integrate Axle's API into your platform, to provide instant insurance verification to your customers."
+---
+
+# What is a platform?
+
+## Platform Example
+
+## How does a platform use Axle?
+
+- Explain that typical clients go through the quickstart flow (this is the core of axle), and that platforms require additional configureation outlined in this guide.
+
+# Using Destination Client
+
+## Customer expresses interest in Axle
+
+## Configure a destination client
+
+## Store destination client ID w/ your customer data
+
+## How to configure quickstart with destination client
+
+### genrate ignition for destination client
+
+### Render ignition in your platform -> see quickstart for details (link to section)
+
+### On ignition completion, exchange token
+
+###
+
+This is where Ignition - Axle's consumer facing consent widget - comes into
+play. This guide will walk you through setting up Ignition, obtaining access
+tokens, and making API requests against the Axle API.
+
+How it works Axle provides a consistent, single point integration to connect
+your users' insurance accounts to your application. To do so, Axle closely
+follows the OAuth 2.0 Authorization Code flow which begins when your user wants
+to link their insurance account to your application.
+
+### Step 1: Create an Ignition token
+
+Make a POST request to /ignition with a
+redirect url - the URL we'll redirect the user to after linking their account -
+and optionally a webhook url. In return, you'll retrieve an ignitionToken which
+you'll need to pass to your app's client. This token will be used to initialize
+Ignition and allows us to create secure, trackable session with your user.
+
+```bash Request Sample: cURL
+curl --request POST \
+  --url https://api.axle.insure/ignition \
+  --header 'Content-Type: application/json' \
+  --header 'x-client-id: cli_mZj6YGXhQyQnccN97aXbq' \
+  --header 'x-client-secret: RZM-5BErZuChKqycbCS1O' \
+  --data '{
+  "redirectUri": "https://example.com/insurance/success",
+  "webhookUri": "https://example.com/webhook"
+}'
+```
+
+```json Response Example
+{
+  "success": true,
+  "data": {
+    "ignitionToken": "ign_ur7EPeAa0km4wRlDrPJ4Z",
+    "ignitionUri": "https://ignition.dev.axle.insure/?token=ign_ur7EPeAa0km4wRlDrPJ4Z"
+  }
+}
+```
+
+<Warning>
+  Never send requests from your client to the Axle API. Establishing a session
+  server side allows us to create a secure session without exposing your
+  credentials.
+</Warning>
+
+### Step 2: Initialize Ignition
+
+Next, construct an Axle authorization URL using
+`https://ignition.axle.insure?token={ignitionToken}` for production and
+`https://ignition.sandbox.axle.insure?token={ignitionToken}` for development.
+
+Now that you've constructed an Axle authorization URL you can open an Ignition
+authentication session for the user to link their account:
+
+- On iOS, we suggest leveraging Apple's natively supported `ASWebAuthentication`
+  session ([full documentation](https://developer.apple.com/documentation/authenticationservices/authenticating_a_user_through_a_web_service))
+- On Android, we suggest using `Chrome Custom Tabs` ([full documentation](https://developer.chrome.com/docs/android/custom-tabs/integration-guide/)) to create an in-app session and Android App Links ([full documentation](https://developer.android.com/training/app-links)) to deep-link back into your application.
+- On web, we suggest simply directing the user to the Axle authorization URL and
+  setting up a route to handle the redirection parameters, or initialize the session within an iframe modal and listen for redirect
+  attempts (e.g., using `Window.postMessage())`.
+
+<Check>
+**Congrats!**
+
+At this stage the user will now be able to securely link their insurance account
+to Axle 🎉.
+
+</Check>
+
+### Step 3: Exchange tokens
+
+Once the user successfully links their account, you'll receive an authorization
+code as a query parameter at the `redirectUri` you provided in step 1.
+
+However, data sent by a client - especially via URLs - is generally considered
+insecure. That's where the OAuth 2.0 Authorization Code grant comes into play.
+We'll exchange the short-lived `authCode` for a long-lived `accessToken` server
+side. You can read more about OAuth 2.0 authorization code grants here.
+
+<Note>
+  `authCodes` expire after 10 minutes so be sure you're exchanging codes in real
+  time.
+</Note>
+
+To do so, make a `POST` request with your `authCode` to `token/exchange`. In
+return you'll receive an `accessToken` and an `accountId`.
+
+```bash Request Sample: cURL
+curl --request POST \
+--url https://api.axle.insure/token/exchange \
+--header 'Content-Type: application/json' \
+--header 'x-client-id: cli_mZj6YGXhQyQnccN97aXbq' \
+--header 'x-client-secret: RZM-5BErZuChKqycbCS1O' \
+--data '{
+"authCode": "cod_LGUgD5ZnqWy3pThdOLUsT"
+}'
+```
+
+```json Response Example
+{
+  "success": true,
+  "data": {
+    "accountId": "acc_gM2wn_gaqUv76ZljeVXOv",
+    "accessToken": "tok_IwShXCT_JPr6rmtiCVxcQ"
+  }
+}
+```
+
+### Step 4: Store access credentials
+
+Store the `accessToken` and `accountId` received in step 4 in your database -
+they'll be used to access account and policy information for the user going
+forward.
+
+<Check>
+**Congrats!**
+
+You have now received an accessToken that represents consent from the user and
+can now leverage the Axle API to access their insurance data 🎉🎉!
+
+</Check>
+
+### Step 5: Retrieve the Account
+
+Now that we have an `accessToken`, we can retrieve the Account object for the
+user's linked account by making a `GET` request to `accounts/{id}` with
+the `accessToken` passed in the `x-access-token` header. By passing the `expand` parameter, we can also can retrieve all Policy objects available on the account:
+
+```bash Request Sample: cURL
+curl --request GET \
+  --url https://api.axle.insure/accounts/acc_gM2wn_gaqUv76ZljeVXOv?expand=true \
+  --header 'Content-Type: application/json' \
+  --header 'x-access-token: tok_IwShXCT_JPr6rmtiCVxcQ' \
+  --header 'x-client-id: cli_mZj6YGXhQyQnccN97aXbq' \
+  --header 'x-client-secret: RZM-5BErZuChKqycbCS1O'
+```
+
+```json Response Example
+{
+  "success": true,
+  "data": {
+    "id": "acc_gM2wn_gaqUv76ZljeVXOv",
+    "firstName": "John",
+    "lastName": "Smith",
+    "email": "john.smith@grr.la",
+    "carrier": "state-farm",
+    "policies": [
+      {
+        "id": "pol_CbxGmGWnp9bGAFCC-eod2",
+        "accountId": "gM2wn_gaqUv76ZljeVXOv",
+        "type": "auto",
+        "carrier": "state-farm",
+        "policyNumber": "123456789",
+        "isActive": true,
+        "effectiveDate": "2021-10-22T04:00:00.000Z",
+        "expirationDate": "2022-10-22T04:00:00.000Z",
+        "address": {
+          "addressLine1": "123 Fake St.",
+          "addressLine2": "Unit 456",
+          "city": "Atlanta",
+          "state": "Georgia",
+          "postalCode": "30315",
+          "country": "USA"
+        },
+        "coverages": [
+          {
+            "limitPerPerson": 250000,
+            "code": "BI",
+            "label": "Bodily Injury Liability",
+            "limitPerAccident": 500000
+          },
+          {
+            "code": "PD",
+            "label": "Property Damage Liability",
+            "limitPerAccident": 100000
+          },
+          {
+            "limitPerPerson": 100000,
+            "code": "UMBI",
+            "label": "Uninsured Bodily Injury Liability",
+            "limitPerAccident": 300000
+          },
+          {
+            "code": "COMP",
+            "label": "Comprehensive",
+            "deductible": 375
+          },
+          {
+            "code": "COLL",
+            "label": "Collision",
+            "deductible": 375
+          }
+        ],
+        "properties": [
+          {
+            "type": "vehicle",
+            "data": {
+              "bodyStyle": "sedan",
+              "vin": "WDDWJ8EB4KF776265",
+              "model": "C 300",
+              "year": "2019",
+              "make": "Mercedes-Benz"
+            },
+            "lienholders": []
+          }
+        ],
+        "insureds": [
+          {
+            "firstName": "John",
+            "lastName": "Smith",
+            "dateOfBirthYear": "1990",
+            "licenseNo": "•••••1234",
+            "licenseState": "GA",
+            "licenseStatus": "Valid",
+            "type": "Primary"
+          },
+          {
+            "firstName": "Jane",
+            "lastName": "Doe",
+            "dateOfBirthYear": "1992",
+            "licenseNo": "•••••5678",
+            "licenseState": "GA",
+            "licenseStatus": "Valid",
+            "type": "Secondary"
+          }
+        ],
+        "createdAt": "2022-01-01T00:00:00.000Z",
+        "modifiedAt": "2022-01-01T00:00:00.000Z",
+        "refreshedAt": "2022-01-01T00:00:00.000Z"
+      }
+    ],
+    "connection": {
+      "status": "active",
+      "updatedAt": "2022-01-01T00:00:00.000Z"
+    },
+    "createdAt": "2022-01-01T00:00:00.000Z",
+    "modifiedAt": "2022-01-01T00:00:00.000Z",
+    "refreshedAt": "2022-01-01T00:00:00.000Z"
+  }
+}
+```
+
+<Check>
+**Well Done!**
+
+Now that you can access the Axle API, be sure to visit the full 📖 API Reference
+to see what endpoints and objects are available.
+
+</Check>
