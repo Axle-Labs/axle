@@ -29,7 +29,7 @@ Axle API requests are authenticated using an client-id and client-secret (API ke
 
 - x-client-id — unique identifier for client
 - x-client-secret — api key for client (sensitive)
-- x-destination-client-id - unique identifier for the destination client (optional field used by platform integrations on select routes)
+- x-destination-client-id — unique identifier for the destination client (optional field used by platform integrations on select routes)
 
 <Check>Contact the Axle team to acquire these keys.</Check>
 
@@ -41,11 +41,12 @@ Individual fields may return null values when the carrier data source supports t
 
 <Tip>
   *Optional* fields, such as `Policy.coverages["BI"].property` or
-  `Policy.coverages["UMPD"].deductible` may return `null` or `undefined` *
-  `null` - The carrier data source supports the field, but no information is
-  present for the selected Account or Policy. * `undefined` - The carrier data
-  source supports the field and data is available that specifies that the field
-  does not exist on the Account or Policy.
+  `Policy.coverages["UMPD"].deductible` may return `null` or `undefined` 
+  
+  - `null` - The carrier data source supports the field, but no information is present
+  for the selected Account or Policy. 
+  - `undefined` - The carrier data source supports the field and data is available that specifies that the field does
+  not exist on the Account or Policy.
 </Tip>
 
 Example Policy:
