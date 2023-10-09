@@ -25,10 +25,11 @@ https://sandbox.axle.insure
 
 ### Authentication
 
-All Axle API requests are authenticated using an client-id and client-secret (API key) pairing sent in the request headers.
+Axle API requests are authenticated using an client-id and client-secret (API key) pairing sent in the request headers.
 
 - x-client-id — unique identifier for client
 - x-client-secret — api key for client (sensitive)
+- x-destination-client-id - unique identifier for the destination client (optional field used by platform integrations on select routes)
 
 <Check>Contact the Axle team to acquire these keys.</Check>
 
@@ -80,7 +81,7 @@ Example Policy:
 
 ## Objects and Endpoints
 
-Get started with one of the following endpoints
+Get started with Axle's core endpoints:
 
 <Card
   title="Ignition"
