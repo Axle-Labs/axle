@@ -49,7 +49,7 @@
     },
     {
       "group": "Guides",
-      "pages": ["guides/quickstart"]
+      "pages": ["guides/quickstart", "guides/platform-integration"]
     },
     {
       "group": "API Reference",
@@ -86,6 +86,10 @@
             "api-reference/carriers/get-carrier",
             "api-reference/carriers/get-carriers"
           ]
+        },
+        {
+          "group": "Clients",
+          "pages": ["api-reference/clients/create-destination-client"]
         }
       ]
     }

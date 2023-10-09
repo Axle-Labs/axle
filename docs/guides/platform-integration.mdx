@@ -1,0 +1,55 @@
+---
+title: "Platform Integration"
+description: "Integrate Axle's API into your platform, to provide instant insurance verification solutions for your customers."
+---
+
+<Info>
+**In progress!**
+
+The Axle team is adding additional detail to this guide to make the platform integration experience as easy as possible. Please reach out to our team with any questions or check back soon for updates!
+
+</Info>
+
+## What is a platform?
+
+By default, Axle scopes access to insurance information to single service. But sometimes, access to insurance information is required by multiple services, particularly when there is a dependency between services. This is Axle's platform integration comes in! A platform can integrate with Axle and gain scoped access to insurance information on behalf any services that are dependent on it.
+
+For example, a dealership management system is a platform as its dealership customers are dependent on it for their operations.
+
+### How does a platform use Axle?
+
+<Tip>
+  If you have not been sent your `x-client-id` and `x-client-secret`, please
+  reach out to the Axle team!
+</Tip>
+
+The first step for a platform is to integrate Axle into their product or service using the process outlined Axle's [Quickstart](/guides/quickstart) guide. Then, additional configuration is required to onboard a dependent service (referred to a `destination client` in the following guide).
+
+## Onboarding a destination client
+
+### Capture interest in Axle
+
+Setup a landing page or self-service mechanism to capture interest in instant insurance information through Axle by your customers, partners, or any other dependent services.
+
+### Register a destination client with Axle
+
+Once a service has expressed interest in leveraging Axle, use the [Create Destination Client](/api-reference/clients/create-destination-client) route to register it as a new destination client.
+
+Store the `destinationClientId` in your database alongside your internal unique identifier for the destination client.
+
+### Make requests on behalf of destination client
+
+You can now authorize requests to Axle's core APIs on behalf of this destination client by providing the `x-destination-client-id` header. The following routes can be authorized on behalf of the destination client:
+
+- [Start Ignition](/api-reference/ignition/start-ignition)
+- [Exchange Token](/api-reference/token/exchange-token)
+- [Get Account](/api-reference/accounts/get-account)
+- [Get Policy](/api-reference/policies/get-policy)
+
+<Check>
+**Well Done!**
+
+Now that you have setup Axle in your platform, be sure to visit the full 📖 API Reference
+to see all the data fields that are available.
+
+</Check>
