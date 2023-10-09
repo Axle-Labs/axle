@@ -300,8 +300,8 @@ paths:
                 - "displayName"
                 - "entity"
             example:
-              name: "My Destination Client"
-              webhookUri: "https://example.com/webhook"
+              displayName: "My Destination Client"
+              entity: "my-destination-client"
         required: true
       responses:
         "200":
