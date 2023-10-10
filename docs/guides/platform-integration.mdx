@@ -23,7 +23,7 @@ They're already acccustomed to using a certain dealership management system, so 
 In the Axle system, we refer to a platform's customers as `destination clients`.
 The platform is responsible for onboarding destination clients to Axle, and then can make requests to Axle's APIs on behalf of the destination client.
 
-Platforms can configure a new destination client using the [Create Destination Client API](/clients/create-destination-client).
+Platforms can configure a new destination client using the [`/platform/clients`](/api-reference/platform/clients) endpoint.
 This will return a unique `destination client id`, which the platform should store in their database alongside their internal unique identifier for the destination client,
 because it will be used to authorize requests to Axle's APIs on behalf of the destination client.
 
@@ -44,7 +44,7 @@ Setup a landing page or self-service mechanism to capture interest in instant in
 
 ### Register a destination client with Axle
 
-Once a service has expressed interest in leveraging Axle, use the [Create Destination Client](/api-reference/clients/create-destination-client) route to register it as a new destination client.
+Once a service has expressed interest in leveraging Axle, use the [`/platform/client`](/api-reference/platform/clients) endpoint to register it as a new destination client.
 
 Store the `destinationClientId` in your database alongside your internal unique identifier for the destination client. This will be used to authorize requests to Axle's APIs on behalf of the destination client.
 

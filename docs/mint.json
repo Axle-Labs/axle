@@ -88,8 +88,8 @@
           ]
         },
         {
-          "group": "Clients",
-          "pages": ["api-reference/clients/create-destination-client"]
+          "group": "Platform",
+          "pages": ["api-reference/platform/clients"]
         }
       ]
     }
