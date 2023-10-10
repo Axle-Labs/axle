@@ -484,12 +484,15 @@ components:
         createdAt:
           type: string
           description: ISO 8601 timestamp at which the Policy object was generated via Axle.
+          example: "2022-01-01T00:00:00.000Z"
         modifiedAt:
           type: string
           description: ISO 8601 timestamp at which the Policy object was modified via Axle. The Policy object is modified only when there are differences between the current Policy and new Policy data requested from the carrier.
+          example: "2022-01-01T00:00:00.000Z"
         refreshedAt:
           type: string
           description: ISO 8601 timestamp at which the Policy object was refreshed via Axle. The Policy object is refreshed only when Axle successfully requests new Policy data from the carrier.
+          example: "2022-01-01T00:00:00.000Z"
       required:
         - id
         - account
@@ -587,31 +590,35 @@ components:
         label: Bodily Injury
         limitPerPerson: 250000
         limitPerAccident: 500000
-        property: prp_uSdzLVpi8c76H7kl6AQ-F
       x-internal: false
       properties:
         code:
-          type: string
-          enum:
-            - BI
-            - PD
-            - UMBI
-            - UMPD
-            - UIMBI
-            - UIMPD
-            - UUIMBI
-            - UUIMPD
-            - COLL
-            - COMP
-            - DW
-            - OS
-            - PP
-            - LOU
-            - PL
-            - MED
-            - FLOOD
-            - HURCN
-            - EQ
+          oneOf:
+            - type: string
+              title: Auto Coverages
+              enum:
+                - BI
+                - PD
+                - UMBI
+                - UMPD
+                - UIMBI
+                - UIMPD
+                - UUIMBI
+                - UUIMPD
+                - COLL
+                - COMP
+            - type: string
+              title: Home Coverages
+              enum:
+                - DW
+                - OS
+                - PP
+                - LOU
+                - PL
+                - MED
+                - FLOOD
+                - HURCN
+                - EQ
         label:
           type: string
         limitPerPerson:
@@ -638,13 +645,12 @@ components:
       type: object
       example:
         id: prp_uSdzLVpi8c76H7kl6AQ-F
-          type: vehicle
-          data:
-            bodyStyle: sedan
-            vin: WDDWJ8EB4KF776265
-            model: C 300
-            year: "2019"
-            make: Mercedes-Benz
+        type: vehicle
+        data:
+          vin: SMTD44GN3HT812287
+          model: CR-V
+          year: "2017"
+          make: HONDA
       x-internal: false
       properties:
         id:
@@ -657,41 +663,43 @@ components:
             - vehicle
             - dwelling
         data:
-          $ref: "#/components/schemas/Vehicle"
+          oneOf:
+            - $ref: "#/components/schemas/Dwelling"
+            - $ref: "#/components/schemas/Vehicle"
       required:
         - id
         - type
         - data
-    # Dwelling:
-    #   title: Dwelling
-    #   type: object
-    #   example:
-    #     addressLine1: 123 Fake St.
-    #     addressLine2: Unit 456
-    #     city: Atlanta
-    #     state: Georgia
-    #     postalCode: "30315"
-    #     country: USA
-    #   x-internal: false
-    #   properties:
-    #     addressLine1:
-    #       type: string
-    #       nullable: true
-    #     addressLine2:
-    #       type: string
-    #       nullable: true
-    #     state:
-    #       type: string
-    #       nullable: true
-    #     city:
-    #       type: string
-    #       nullable: true
-    #     postalCode:
-    #       type: string
-    #       nullable: true
-    #     country:
-    #       type: string
-    #       nullable: true
+    Dwelling:
+      title: Dwelling
+      type: object
+      example:
+        addressLine1: 123 Fake St.
+        addressLine2: Unit 456
+        city: Atlanta
+        state: Georgia
+        postalCode: "30315"
+        country: USA
+      x-internal: false
+      properties:
+        addressLine1:
+          type: string
+          nullable: true
+        addressLine2:
+          type: string
+          nullable: true
+        state:
+          type: string
+          nullable: true
+        city:
+          type: string
+          nullable: true
+        postalCode:
+          type: string
+          nullable: true
+        country:
+          type: string
+          nullable: true
     Vehicle:
       title: Vehicle
       type: object
@@ -811,12 +819,11 @@ components:
     Document:
       title: Document
       type: object
-      x-examples:
-        example:
-          source: "carrier"
-          name: "Declaration Page"
-          url: "<signed-url>"
-          createdAt: "2022-01-01T00:00:00.000Z"
+      example:
+        source: "carrier"
+        name: "Declaration Page"
+        url: "<signed-url>"
+        createdAt: "2022-01-01T00:00:00.000Z"
       properties:
         source:
           type: string
