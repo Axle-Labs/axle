@@ -461,6 +461,30 @@ components:
           description: List of coverage types and levels offered by the policy.
           items:
             $ref: "#/components/schemas/Coverage"
+          example:
+            - code: BI
+              limitPerPerson: 250000
+              code: BI
+              label: Bodily Injury Liability
+              limitPerAccident: 500000
+              property: prp_uSdzLVpi8c76H7kl6AQ-F
+            - code: PD
+              label: Property Damage Liability
+              limitPerAccident: 100000
+              property: prp_uSdzLVpi8c76H7kl6AQ-F
+            - code: COMP
+              label: Comprehensive
+              deductible: 375
+              property: prp_uSdzLVpi8c76H7kl6AQ-F
+            - code: COLL
+              label: Collision
+              deductible: 375
+              property: prp_uSdzLVpi8c76H7kl6AQ-F
+            - code: UMBI
+              abel: Uninsured Bodily Injury Liability
+              limitPerPerson: 100000
+              limitPerAccident: 300000
+              property: prp_uSdzLVpi8c76H7kl6AQ-F
         properties:
           type: array
           description: List of properties (such as a vehicle or dwelling) afforded coverage by the policy.
@@ -878,7 +902,7 @@ components:
       type: boolean
       description: Indicates whether the operation was performed successfully.
       x-internal: false
-      x-examples: {}
+      example: true
     Error:
       title: Error
       type: object
