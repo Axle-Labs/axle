@@ -271,13 +271,13 @@ paths:
       deprecated: false
       tags:
         - Carriers
-  /clients/createDestinationClient:
+  /platform/clients:
     post:
-      summary: Create Destination Client
+      summary: Create new client
       description: |-
-        Create a destination client associated with your client and secret. This request will return a destinationClientId that you can use to make requests to the Axle API on behalf of your destination clients.
+        Create a destination client associated with your platform client and secret. This request will return a destinationClientId that you can use to make requests to the Axle API on behalf of your destination clients.
 
-        This is only used by platform clients. See the [Platform Integration](/guides/platform-integration) guide for more information on platforms and destination clients.
+        See the [Platform Integration](/guides/platform-integration) guide for more information on how to use this endpoint and the destinationClientId.
       operationId: CreateDestinationClient
       parameters:
         - $ref: "#/components/parameters/x-client-id"
