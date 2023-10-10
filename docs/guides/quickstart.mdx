@@ -155,7 +155,7 @@ curl --request GET \
     "policies": [
       {
         "id": "pol_CbxGmGWnp9bGAFCC-eod2",
-        "accountId": "gM2wn_gaqUv76ZljeVXOv",
+        "accountId": "acc_gM2wn_gaqUv76ZljeVXOv",
         "type": "auto",
         "carrier": "state-farm",
         "policyNumber": "123456789",
@@ -174,18 +174,18 @@ curl --request GET \
           {
             "limitPerPerson": 250000,
             "code": "BI",
-            "label": "Bodily Injury Liability",
+            "label": "Bodily Injury",
             "limitPerAccident": 500000
           },
           {
             "code": "PD",
-            "label": "Property Damage Liability",
+            "label": "Property Damage",
             "limitPerAccident": 100000
           },
           {
             "limitPerPerson": 100000,
             "code": "UMBI",
-            "label": "Uninsured Bodily Injury Liability",
+            "label": "Uninsured Bodily Injury",
             "limitPerAccident": 300000
           },
           {
@@ -208,8 +208,7 @@ curl --request GET \
               "model": "C 300",
               "year": "2019",
               "make": "Mercedes-Benz"
-            },
-            "lienholders": []
+            }
           }
         ],
         "insureds": [
@@ -232,6 +231,8 @@ curl --request GET \
             "type": "Secondary"
           }
         ],
+        "thirdParties": [],
+        "documents": [],
         "createdAt": "2022-01-01T00:00:00.000Z",
         "modifiedAt": "2022-01-01T00:00:00.000Z",
         "refreshedAt": "2022-01-01T00:00:00.000Z"

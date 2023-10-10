@@ -463,13 +463,12 @@ components:
             $ref: "#/components/schemas/Coverage"
           example:
             - code: BI
+              label: Bodily Injury
               limitPerPerson: 250000
-              code: BI
-              label: Bodily Injury Liability
               limitPerAccident: 500000
               property: prp_uSdzLVpi8c76H7kl6AQ-F
             - code: PD
-              label: Property Damage Liability
+              label: Property Damage
               limitPerAccident: 100000
               property: prp_uSdzLVpi8c76H7kl6AQ-F
             - code: COMP
@@ -481,7 +480,7 @@ components:
               deductible: 375
               property: prp_uSdzLVpi8c76H7kl6AQ-F
             - code: UMBI
-              abel: Uninsured Bodily Injury Liability
+              label: Uninsured Bodily Injury
               limitPerPerson: 100000
               limitPerAccident: 300000
               property: prp_uSdzLVpi8c76H7kl6AQ-F
@@ -809,8 +808,8 @@ components:
       title: Third Party
       type: object
       example:
-        name: Georgias Own Credit Union
-        type: lienholder
+        name: Super Leasing Trust
+        type: lessor
         address:
           addressLine1: Po Box 105205
           state: GA
