@@ -409,140 +409,17 @@ components:
       description: A Policy represents a specific policy associated with an
         Account and includes high-level policy information (e.g. policy number)
         and any children objects (e.g., coverages) associated with the policy.
-      x-examples:
-        example:
-          id: pol_CbxGmGWnp9bGAFCC-eod2
-          account: acc_gM2wn_gaqUv76ZljeVXOv
-          type: auto
-          carrier: state-farm
-          policyNumber: "123456789"
-          isActive: true
-          effectiveDate: "2021-10-22T04:00:00.000Z"
-          expirationDate: "2022-10-22T04:00:00.000Z"
-          address:
-            addressLine1: 123 Fake St.
-            addressLine2: Unit 456
-            city: Atlanta
-            state: Georgia
-            postalCode: "30315"
-            country: USA
-          coverages:
-            - limitPerPerson: 250000
-              code: BI
-              label: Bodily Injury Liability
-              limitPerAccident: 500000
-              property: prp_uSdzLVpi8c76H7kl6AQ-F
-            - code: PD
-              label: Property Damage Liability
-              limitPerAccident: 100000
-              property: prp_uSdzLVpi8c76H7kl6AQ-F
-            - limitPerPerson: 100000
-              code: UMBI
-              label: Uninsured Bodily Injury Liability
-              limitPerAccident: 300000
-              property: prp_uSdzLVpi8c76H7kl6AQ-F
-            - code: COMP
-              label: Comprehensive
-              deductible: 375
-              property: prp_uSdzLVpi8c76H7kl6AQ-F
-            - code: COLL
-              label: Collision
-              deductible: 375
-              property: prp_uSdzLVpi8c76H7kl6AQ-F
-            - limitPerPerson: 250000
-              code: BI
-              label: Bodily Injury Liability
-              limitPerAccident: 500000
-              property: prp_tmGUxLpgHjmW9r6M6WjhS
-            - code: PD
-              label: Property Damage Liability
-              limitPerAccident: 100000
-              property: prp_tmGUxLpgHjmW9r6M6WjhS
-            - limitPerPerson: 100000
-              code: UMBI
-              label: Uninsured Bodily Injury Liability
-              limitPerAccident: 300000
-              property: prp_tmGUxLpgHjmW9r6M6WjhS
-          properties:
-            - id: prp_uSdzLVpi8c76H7kl6AQ-F
-              type: vehicle
-              data:
-                bodyStyle: sedan
-                vin: WDDWJ8EB4KF776265
-                model: C 300
-                year: "2019"
-                make: Mercedes-Benz
-            - id: prp_tmGUxLpgHjmW9r6M6WjhS
-              type: vehicle
-              data:
-                bodyStyle: minivan
-                vin: 5FNRL38209B014050
-                model: Odyssey
-                year: "2009"
-                make: Honda
-          thirdParties:
-            - property: prp_uSdzLVpi8c76H7kl6AQ-F
-              type: lienholder
-              name: Super Credit Union
-              address:
-                addressLine1: PO Box 123456
-                country: null
-                addressLine2: null
-                state: GA
-                city: Atlanta
-                postalCode: 30348-5245
-            - property: prp_tmGUxLpgHjmW9r6M6WjhS
-              type: lessor
-              name: Super Leasing Trust
-              address:
-                addressLine1: PO Box 123456
-                country: null
-                addressLine2: null
-                state: GA
-                city: Atlanta
-                postalCode: 30348-5245
-          insureds:
-            - firstName: John
-              lastName: Smith
-              dateOfBirthYear: "1990"
-              licenseNo: •••••1234
-              licenseState: GA
-              licenseStatus: Valid
-              type: Primary
-              property: prp_uSdzLVpi8c76H7kl6AQ-F
-            - firstName: Jane
-              lastName: Doe
-              dateOfBirthYear: "1992"
-              licenseNo: •••••5678
-              licenseState: GA
-              licenseStatus: Valid
-              type: Secondary
-              property: prp_uSdzLVpi8c76H7kl6AQ-F
-            - firstName: Jane
-              lastName: Doe
-              dateOfBirthYear: "1992"
-              licenseNo: •••••5678
-              licenseState: GA
-              licenseStatus: Valid
-              type: Primary
-              property: prp_tmGUxLpgHjmW9r6M6WjhS
-          documents:
-            - source: "carrier"
-              name: "Declaration Page"
-              url: "<signed-url>"
-              createdAt: "2022-01-01T00:00:00.000Z"
-          createdAt: "2022-01-01T00:00:00.000Z"
-          modifiedAt: "2022-01-01T00:00:00.000Z"
-          refreshedAt: "2022-01-01T00:00:00.000Z"
       x-tags:
         - Accounts
       properties:
         id:
           type: string
           description: Unique identifier for the Policy object.
+          example: "pol_CbxGmGWnp9bGAFCC-eod2"
         account:
           type: string
           description: Unique identifier for the Account object associated with the Policy.
+          example: "acc_gM2wn_gaqUv76ZljeVXOv"
         type:
           type: string
           description: Type of insurance policy that the Policy object represents.
@@ -550,25 +427,32 @@ components:
           enum:
             - auto
             - motorcycle
+            - home
+          example: "auto"
         carrier:
           type: string
           description: Insurance carrier that is the source for the Policy data.
+          example: "state-farm"
         policyNumber:
           type: string
           nullable: true
           description: Identifier of the policy, as specified by the insurance carrier.
+          example: "123456789"
         isActive:
           type: boolean
           nullable: true
           description: Active status of the policy, as specified by the insurance carrier.
+          example: true
         effectiveDate:
           type: string
           nullable: true
           description: ISO 8601 timestamp of current term effective date of the policy, as specified by the insurance carrier.
+          example: "2022-10-22T04:00:00.000Z"
         expirationDate:
           type: string
           nullable: true
           description: ISO 8601 timestamp of current term expiration date of the policy, as specified by the insurance carrier.
+          example: "2023-10-22T04:00:00.000Z"
         address:
           description: Primary address associated with the policy.
           $ref: "#/components/schemas/Address"
@@ -627,14 +511,13 @@ components:
     Address:
       title: Address
       type: object
-      x-examples:
-        example-1:
-          addressLine1: "One State Farm Plaza"
-          addressLine2: null
-          city: "Bloomington"
-          state: "IL"
-          postalCode: "61710"
-          country: null
+      example:
+        addressLine1: 123 Fake St.
+        addressLine2: Unit 456
+        city: Atlanta
+        state: Georgia
+        postalCode: "30315"
+        country: USA
       x-internal: false
       properties:
         addressLine1:
@@ -704,6 +587,7 @@ components:
         label: Bodily Injury
         limitPerPerson: 250000
         limitPerAccident: 500000
+        property: prp_uSdzLVpi8c76H7kl6AQ-F
       x-internal: false
       properties:
         code:
@@ -719,6 +603,15 @@ components:
             - UUIMPD
             - COLL
             - COMP
+            - DW
+            - OS
+            - PP
+            - LOU
+            - PL
+            - MED
+            - FLOOD
+            - HURCN
+            - EQ
         label:
           type: string
         limitPerPerson:
@@ -745,12 +638,13 @@ components:
       type: object
       example:
         id: prp_uSdzLVpi8c76H7kl6AQ-F
-        type: vehicle
-        data:
-          vin: SMTD44GN3HT812287
-          model: CR-V
-          year: "2017"
-          make: HONDA
+          type: vehicle
+          data:
+            bodyStyle: sedan
+            vin: WDDWJ8EB4KF776265
+            model: C 300
+            year: "2019"
+            make: Mercedes-Benz
       x-internal: false
       properties:
         id:
@@ -768,16 +662,45 @@ components:
         - id
         - type
         - data
+    # Dwelling:
+    #   title: Dwelling
+    #   type: object
+    #   example:
+    #     addressLine1: 123 Fake St.
+    #     addressLine2: Unit 456
+    #     city: Atlanta
+    #     state: Georgia
+    #     postalCode: "30315"
+    #     country: USA
+    #   x-internal: false
+    #   properties:
+    #     addressLine1:
+    #       type: string
+    #       nullable: true
+    #     addressLine2:
+    #       type: string
+    #       nullable: true
+    #     state:
+    #       type: string
+    #       nullable: true
+    #     city:
+    #       type: string
+    #       nullable: true
+    #     postalCode:
+    #       type: string
+    #       nullable: true
+    #     country:
+    #       type: string
+    #       nullable: true
     Vehicle:
       title: Vehicle
       type: object
-      x-examples:
-        example:
-          bodyStyle: null
-          vin: SMTD44GN3HT812287
-          model: CR-V
-          year: "2017"
-          make: HONDA
+      example:
+        bodyStyle: null
+        vin: SMTD44GN3HT812287
+        model: CR-V
+        year: "2017"
+        make: HONDA
       x-internal: false
       properties:
         bodyStyle:

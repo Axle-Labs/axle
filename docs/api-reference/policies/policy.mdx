@@ -24,7 +24,7 @@ description: "A Policy represents a specific policy associated with an
 
 <ParamField body="type" type="string">
   Type of insurance policy that the Policy object represents. Available options:
-  `auto` `motorcycle`
+  `auto` `motorcycle` `home`
 </ParamField>
 
 <ParamField body="carrier" type="string">
@@ -50,7 +50,7 @@ description: "A Policy represents a specific policy associated with an
 </ParamField>
 
 <ParamField body="address" type="Address">
-
+    The mailing address.
     <Expandable title="Address">
 
       <ResponseField name="addressLine1" type="string" />
@@ -82,10 +82,10 @@ List of properties (such as a vehicle or dwelling) afforded coverage by the poli
         </ResponseField>
 
         <ResponseField name="type" type="string">
-          Available options: `vehicle`
+          Available options: `vehicle` `dwelling`
         </ResponseField>
 
-        <ResponseField name="data" type="Vehicle" >
+        <ResponseField name="data" type="Vehicle or Dwelling" >
 
             <Expandable title="Vehicle" >
 
@@ -96,7 +96,19 @@ List of properties (such as a vehicle or dwelling) afforded coverage by the poli
                 <ResponseField name="bodyStyle" type="string, optional" />
 
             </Expandable>
+          <Expandable title="Dwelling">
+            <ResponseField name="addressLine1" type="string" />
 
+            <ResponseField name="addressLine2" type="string" />
+
+            <ResponseField name="city" type="string" />
+
+            <ResponseField name="state" type="string" />
+
+            <ResponseField name="postalCode" type="string" />
+
+            <ResponseField name="country" type="string" />
+          </Expandable>
         </ResponseField>
 
     </Expandable>
@@ -110,8 +122,10 @@ List of coverage types and levels offered by the policy.
     <Expandable title="Coverage">
 
         <ResponseField name="code" type="string" required>
-          Available options: `BI` `PD` `UMBI` `UMPD` `UIMBI` `UIMPD` `UUIMBI` `UUIMPD`
+          Available options for an auto insurance policy: `BI` `PD` `UMBI` `UMPD` `UIMBI` `UIMPD` `UUIMBI` `UUIMPD`
           `COLL` `COMP`
+        <br/>
+          Available options for a home insurance policy: `DW` `OS` `PP` `LOU` `PL` `MED` `FLOOD` `HURCN` `EQ`
         </ResponseField>
 
         <ResponseField name="label" type="string" required />
@@ -207,12 +221,12 @@ List of documents (such as declaration pages and policy agreements) associated w
         <ResponseField name="name" type="string" />
 
         <ResponseField name="url" type="string" >
-          Pre-signed url to access document. 
-          
+          Pre-signed url to access document.
+
           <Tip>
             For security, document urls have an expiry of 60 minutes.
           </Tip>
-          
+
         </ResponseField>
 
         <ResponseField name="createdAt" type="string" >
@@ -240,7 +254,7 @@ List of documents (such as declaration pages and policy agreements) associated w
 </ParamField>
 
 <RequestExample>
-```json The Policy object
+```json Auto Insurance Policy Object
 {
   "id": "pol_CbxGmGWnp9bGAFCC-eod2",
   "account": "acc_gM2wn_gaqUv76ZljeVXOv",
@@ -355,6 +369,108 @@ List of documents (such as declaration pages and policy agreements) associated w
     },
     {
       "property": "prp_tmGUxLpgHjmW9r6M6WjhS",
+      "type": "lienholder",
+      "name": "Super Credit Union",
+      "address": {
+        "addressLine1": "PO Box 123456",
+        "country": null,
+        "addressLine2": null,
+        "state": "GA",
+        "city": "Atlanta",
+        "postalCode": "30348-5245"
+      }
+    }
+  ],
+  "documents": [
+    {
+      "source": "carrier",
+      "name": "Declaration Page",
+      "url": "<signed-url>",
+      "createdAt": "2022-01-01T00:00:00.000Z"
+    }
+  ],
+  "createdAt": "2022-01-01T00:00:00.000Z",
+  "modifiedAt": "2022-01-01T00:00:00.000Z",
+  "refreshedAt": "2022-01-01T00:00:00.000Z"
+}
+```
+```json Home Insurance Policy Object
+{
+  "id": "pol_CbxGmGWnp9bGAFCC-eod2",
+  "account": "acc_gM2wn_gaqUv76ZljeVXOv",
+  "type": "home",
+  "carrier": "state-farm",
+  "policyNumber": "123456789",
+  "isActive": true,
+  "effectiveDate": "2022-10-22T04:00:00.000Z",
+  "expirationDate": "2023-10-22T04:00:00.000Z",
+  "address": {
+    "addressLine1": "123 Main St.",
+    "addressLine2": "Unit 456",
+    "city": "Atlanta",
+    "state": "Georgia",
+    "postalCode": "30315",
+    "country": "USA"
+  },
+  "properties": [
+    {
+      "id": "prp_tmGUxLpgHjmW9r6M6WjhS",
+      "type": "dwelling",
+      "data": {
+        "addressLine1": "456 Main St.",
+        "addressLine2": "Unit 789",
+        "city": "Atlanta",
+        "state": "Georgia",
+        "postalCode": "30315",
+        "country": "USA"
+      }
+    }
+  ],
+  "coverages": [
+    { 
+      "code": "DW",
+      "label": "Dwelling",
+      "limitPerAccident": 45000,
+      "deductible": 1000
+    },
+    {
+      "code": "OS",
+      "label": "Other Structures",
+      "limitPerAccident": 100000,
+      "deductible": 1000
+    },
+    {
+      "code": "PL",
+      "label": "Personal Liability",
+      "limitPerAccident": 100000
+    },
+    {
+      "code": "MED",
+      "label": "Medical Expenses",
+      "limitPerAccident": 50000
+    }
+  ],
+  "insureds": [
+    {
+      "type": "primary",
+      "firstName": "John",
+      "lastName": "Smith",
+      "dateOfBirthYear": "1990",
+      "licenseNo": "•••••1234",
+      "property":"prp_tmGUxLpgHjmW9r6M6WjhS"
+    },
+    {
+      "type": "secondary",
+      "firstName": "Jane",
+      "lastName": "Doe",
+      "dateOfBirthYear": "1992",
+      "licenseNo": "•••••5678",
+      "property": "prp_tmGUxLpgHjmW9r6M6WjhS"
+    }
+  ],
+  "thirdParties": [
+    {
+      "property": "prp_tmGUxLpgHjmW9r6M6WjhS",
       "type": "lessor",
       "name": "Super Leasing Trust",
       "address": {
@@ -369,11 +485,11 @@ List of documents (such as declaration pages and policy agreements) associated w
   ],
   "documents": [
     {
-      "source": "carrier"
-      "name": "Declaration Page"
-      "url": "<signed-url>"
+      "source": "carrier",
+      "name": "Declaration Page",
+      "url": "<signed-url>",
       "createdAt": "2022-01-01T00:00:00.000Z"
-    }
+    },
   ],
   "createdAt": "2022-01-01T00:00:00.000Z",
   "modifiedAt": "2022-01-01T00:00:00.000Z",
