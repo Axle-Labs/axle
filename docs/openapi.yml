@@ -639,9 +639,6 @@ components:
                 - LOU
                 - PL
                 - MED
-                - FLOOD
-                - HURCN
-                - EQ
         label:
           type: string
         limitPerPerson:
