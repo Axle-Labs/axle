@@ -842,6 +842,7 @@ components:
       example:
         source: "carrier"
         name: "Declaration Page"
+        type: "declaration-page"
         url: "<signed-url>"
         createdAt: "2022-01-01T00:00:00.000Z"
       properties:
@@ -854,6 +855,9 @@ components:
         name:
           type: string
           description: Name of the document, as specified by carrier or user.
+        type:
+          type: string
+          enum: ["declaration-page", "id-card", "policy-agreement"]
         url:
           type: string
           description: URL for document access. Note, the URL is signed and has an expiry of 10 minutes.

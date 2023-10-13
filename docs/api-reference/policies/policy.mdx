@@ -220,6 +220,10 @@ List of documents (such as declaration pages and policy agreements) associated w
 
         <ResponseField name="name" type="string" />
 
+        <ResponseField name="type" type="string" >
+          "declaration-page", "policy-agreement", or "id-card"
+        </ResponseField>
+
         <ResponseField name="url" type="string" >
           Pre-signed url to access document.
 
@@ -372,6 +376,7 @@ List of documents (such as declaration pages and policy agreements) associated w
     {
       "source": "carrier",
       "name": "Declaration Page",
+      "type": "declaration-page",
       "url": "<signed-url>",
       "createdAt": "2022-01-01T00:00:00.000Z"
     }
@@ -474,6 +479,7 @@ List of documents (such as declaration pages and policy agreements) associated w
     {
       "source": "carrier",
       "name": "Declaration Page",
+      "type": "declaration-page",
       "url": "<signed-url>",
       "createdAt": "2022-01-01T00:00:00.000Z"
     },
