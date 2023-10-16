@@ -44,6 +44,7 @@ On navigation to the `redirectUri` provided, the URI will be appended with the f
 Additional parameters (dependent on status, see below)
 
 - `authCode`: String - authorization code that can be exchange for accessToken for scoped access to connected account and/or policy
+- `client`: String - the client ID associated with the session. This is primarily useful for platforms who have multiple clients. See [platform integration](/guides/platform-integration) for more information about platforms.
 - `result`: String - "link" (account connection was made and policy is available) OR "basic" (account connection was made but policy details are not available) OR "manual" (details were entered through manual collection form)
 - `step`: String - the step where the Ignition session was exited
 - `message`: String - additional information about the Ignition session error
@@ -65,6 +66,7 @@ When the user successfully connects to their carrier account and shares authoriz
 {
   "status": "complete",
   "authCode": "<authCode>",
+  "client": "<client-id>",
   "result": "link" || "basic" || "manual"
 }
 ```
@@ -77,6 +79,7 @@ When the user opts out of connecting to their carrier account and/or selecting a
 {
   "status": "exit",
   "step": "<step-name>"
+  "client": "<client-id>"
 }
 ```
 
@@ -88,6 +91,7 @@ When Axle is unable to retrieve account or policy information from a selected ca
 {
   "status": "error",
   "message": "<message-body>"
+  "client": "<client-id>"
 }
 ```
 
@@ -104,6 +108,7 @@ If an optional `webhookUri` is provided, a `POST` request will be sent to the `w
 {
   "id": "<webhook_id>",
   "type": "ignition.completed",
+  "client": "<client-id>",
   "data": {
     "token": "ign_Z4ni-JHBvkn9PlKJHPEwk",
     ...
