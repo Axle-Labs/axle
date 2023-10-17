@@ -1,5 +1,5 @@
 ---
-title: "Platform Integration"
+title: "Axle for Platforms"
 description: "Integrate Axle's API into your platform, to provide instant insurance verification solutions for your customers."
 ---
 
@@ -57,6 +57,10 @@ You can now authorize requests to Axle's core APIs on behalf of this destination
 </CardGroup>
 
 For more details and advice about how to integrate these API calls with your service, please see the [Quickstart](/guides/quickstart) guide.
+
+### Handle redirect or webhook Ignition events
+
+All events include a `client` parameter with the destination client `id`, so you can easily associate an event with the correct destination client. Please refer to our guide on [Ignition Status Handling](/api-reference/ignition/ignition-status-handling) for more details.
 
 <Check>
 **Well Done!**
