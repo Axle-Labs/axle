@@ -275,9 +275,9 @@ paths:
     post:
       summary: Create Client
       description: |-
-        Create a destination client associated with your platform client and secret. This request will return a destinationClientId that you can use to make requests to the Axle API on behalf of your destination clients.
+        Create a destination client associated with your platform client and secret. This request will return a destination client `id` that you can use to make requests to the Axle API on behalf of your destination clients.
 
-        See the [Axle for Platforms](/guides/platform-integration) guide for more information on how to use this endpoint and the destinationClientId.
+        See the [Axle for Platforms](/guides/platform-integration) guide for more information on how to use this endpoint and the destination client `id`.
       operationId: CreateDestinationClient
       parameters:
         - $ref: "#/components/parameters/x-client-id"
