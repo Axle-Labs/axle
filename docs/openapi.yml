@@ -842,7 +842,8 @@ components:
       example:
         source: "carrier"
         name: "Declaration Page"
-        type: "declaration-page"
+        type:
+          - "declaration-page"
         url: "<signed-url>"
         createdAt: "2022-01-01T00:00:00.000Z"
       properties:
@@ -856,8 +857,14 @@ components:
           type: string
           description: Name of the document, as specified by carrier or user.
         type:
-          type: string
-          enum: ["declaration-page", "id-card", "policy-agreement"]
+          type: array
+          description: The type of information contained in the document, as specified by carrier or user. A document may have multiple types.
+          items:
+            type: string
+            enum:
+              - declaration-page
+              - id-card
+              - policy-agreement
         url:
           type: string
           description: URL for document access. Note, the URL is signed and has an expiry of 10 minutes.
