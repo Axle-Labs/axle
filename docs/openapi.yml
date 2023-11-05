@@ -221,6 +221,39 @@ paths:
         - Policies
     parameters:
       - $ref: "#/components/parameters/policy"
+  /policies/{id}/report:
+    get:
+      summary: Get Policy Report
+      description:
+        The Get Policy Report method returns a PDF report of the user's policy, including high-level
+        policy information (e.g., policy number) and any children objects (e.g.,
+        Coverages) associated with the Policy.
+      operationId: GetPolicyReport
+      parameters:
+        - $ref: "#/components/parameters/x-client-id"
+        - $ref: "#/components/parameters/x-client-secret"
+        - $ref: "#/components/parameters/x-destination-client-id"
+        - $ref: "#/components/parameters/x-access-token"
+        - $ref: "#/components/parameters/attachPolicy"
+        - $ref: "#/components/parameters/returnType"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    $ref: "#/components/schemas/Success"
+                  data:
+                    $ref: "#/components/schemas/PolicyReport"
+      deprecated: false
+      tags:
+        - Policies
+    parameters:
+      - $ref: "#/components/parameters/policy"
+
   /carriers/{id}:
     get:
       summary: Get Carrier
@@ -534,6 +567,23 @@ components:
         - createdAt
         - modifiedAt
         - refreshedAt
+    PolicyReport:
+      title: Policy Report
+      type: object
+      example:
+        url: "<signed-url>"
+        fileBytes: "<file-bytes>"
+        policy: "<policy-data>"
+      x-internal: false
+      properties:
+        url:
+          type: string
+          description: URL for document access. Note, the URL is signed and has an expiry of __ minutes.
+        fileBytes:
+          type: string
+          description: Base64 encoded file bytes.
+        policy:
+          $ref: "#/components/schemas/Policy"
     Address:
       title: Address
       type: object
@@ -1010,6 +1060,24 @@ components:
       description:
         Set to *true* if you would like to expand related entities (e.g., account, policy). Defaults to
         *false*.
+    attachPolicy:
+      name: attachPolicy
+      in: query
+      required: false
+      schema:
+        type: boolean
+      description:
+        Set to *true* if you would like the policy object to be returned in addition to the policy report. Defaults to
+        *false*.
+    returnType:
+      name: returnType
+      in: query
+      required: false
+      schema:
+        type: string
+      description:
+        Set to "fileBytes" if you would like the policy report pdf returned as a base64 encoded string. Defaults to
+        "url", which returns a signed url to the policy report pdf.
     type:
       name: type
       in: query
