@@ -272,6 +272,34 @@ paths:
       tags:
         - Carriers
   /platform/clients:
+    get:
+      summary: Get Clients
+      description: |-
+        Get a list of destination clients associated with your platform client and secret. This request will return a list of destination client `id`s that you can use to make requests to the Axle API on behalf of your destination clients.
+
+        See the [Axle for Platforms](/guides/platform-integration) guide for more information on how to use this endpoint and the destination client `id`.
+      operationId: GetDestinationClients
+      parameters:
+        - $ref: "#/components/parameters/x-client-id"
+        - $ref: "#/components/parameters/x-client-secret"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    $ref: "#/components/schemas/Success"
+                  data:
+                    type: array
+                    items:
+                      type: string
+                      description: An array of the client ID's of the destination clients associated with your credential.
+      deprecated: false
+      tags:
+        - Clients
     post:
       summary: Create Client
       description: |-

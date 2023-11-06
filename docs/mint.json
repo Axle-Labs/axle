@@ -89,7 +89,10 @@
         },
         {
           "group": "Platform",
-          "pages": ["api-reference/platform/clients"]
+          "pages": [
+            "api-reference/platform/clients",
+            "api-reference/platform/getClients"
+          ]
         }
       ]
     }
