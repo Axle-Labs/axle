@@ -219,9 +219,9 @@ paths:
     get:
       summary: Get Policy Report
       description:
-        The Get Policy Report method returns a PDF report of the requested Policy object, including high-level
+        "The Get Policy Report method returns a PDF report of the requested Policy object, including high-level
         policy information (e.g., policy number) and any children objects (e.g.,
-        Coverages) associated with the Policy.
+        Coverages) associated with the Policy. Please note, this route only available in the sandbox environment."
       operationId: GetPolicyReport
       parameters:
         - $ref: "#/components/parameters/x-client-id"
@@ -229,7 +229,7 @@ paths:
         - $ref: "#/components/parameters/x-destination-client-id"
         - $ref: "#/components/parameters/x-access-token"
         - $ref: "#/components/parameters/expand"
-        - $ref: "#/components/parameters/bytes"
+        - $ref: "#/components/parameters/mode"
       responses:
         "200":
           description: ""
@@ -569,19 +569,16 @@ components:
         policy: "pol_123456789"
       x-internal: false
       properties:
-        url:
+        report:
           type: string
-          description: URL for document access. Note, the URL is signed and has an expiry of 60 minutes.
+          description: If `mode=url`, signed URL. Note, the URL has an expiry of 60 minutes. If `mode=base64`, base64 encoded string.
         policy:
           oneOf:
             - type: string
             - type: object
-          description: Unique identifier for the Policy object, or if `expand` is set to *true*, Policy object.
-        bytes:
-          type: string
-          description: Raw file content, `base64` encoded.
+          description: Unique identifier for the Policy object, or if `expand=true`, Policy object.
       required:
-        - url
+        - report
         - policy
     Address:
       title: Address
@@ -1023,7 +1020,7 @@ components:
       schema:
         type: string
       description:
-        The access token required for access to the requested user’s Account.
+        The access token required for access to the requested Account.
         Returned as part of the Token Exchange flow in exchangeToken.
     policy:
       name: id
@@ -1056,16 +1053,14 @@ components:
       required: false
       schema:
         type: boolean
-      description:
-        Set to *true* if you would like to expand related entities (e.g., account, policy). Defaults to
-        *false*.
-    bytes:
-      name: bytes
+      description: Set to *true* if you would like to expand related entities (e.g., account, policy). Defaults to *false*.
+    mode:
+      name: mode
       in: query
       required: false
       schema:
-        type: boolean
-      description: Set to *true* if you would like a `base64` encoded string with the raw file content included in the response. Defaults to *false*.
+        type: string
+      description: "Options: `url` or `base64`. Defaults to `url`."
     type:
       name: type
       in: query
