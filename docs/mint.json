@@ -77,7 +77,8 @@
           "group": "Policies",
           "pages": [
             "api-reference/policies/policy",
-            "api-reference/policies/get-policy"
+            "api-reference/policies/get-policy",
+            "api-reference/policies/get-policy-report"
           ]
         },
         {

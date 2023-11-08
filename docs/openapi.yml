@@ -31,14 +31,10 @@ paths:
               properties:
                 redirectUri:
                   type: string
-                  description:
-                    The URI we should direct the user to after authenticating
-                    successfully.
+                  description: The URI we should direct the user to after authenticating successfully or exiting the Ignition session.
                 webhookUri:
                   type: string
-                  description:
-                    The URI we should send updates about this session or the
-                    resulting account to.
+                  description: The URI we should send updates about this session or the resulting Account or Policy objects.
                 user:
                   $ref: "#/components/schemas/User"
                 metadata:
@@ -73,12 +69,10 @@ paths:
                     properties:
                       ignitionUri:
                         type: string
-                        description:
-                          The url you should direct the user to to link their
-                          account.
+                        description: The URL that hosts the Ignition session. This URL can be navigated to in an iframe, webview, or a separate page. See [Quickstart](/guides/quickstart) for more details.
                       ignitionToken:
                         type: string
-                        description: The unique ID for the ignition session.
+                        description: The unique ID for the Ignition session.
                 required:
                   - success
                   - data
@@ -221,6 +215,39 @@ paths:
         - Policies
     parameters:
       - $ref: "#/components/parameters/policy"
+  /policies/{id}/report:
+    get:
+      summary: Get Policy Report
+      description:
+        "The Get Policy Report method returns a PDF report of the requested Policy object, including high-level
+        policy information (e.g., policy number) and any children objects (e.g.,
+        Coverages) associated with the Policy. Please note, this route only available in the sandbox environment."
+      operationId: GetPolicyReport
+      parameters:
+        - $ref: "#/components/parameters/x-client-id"
+        - $ref: "#/components/parameters/x-client-secret"
+        - $ref: "#/components/parameters/x-destination-client-id"
+        - $ref: "#/components/parameters/x-access-token"
+        - $ref: "#/components/parameters/expand"
+        - $ref: "#/components/parameters/mode"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    $ref: "#/components/schemas/Success"
+                  data:
+                    $ref: "#/components/schemas/PolicyReport"
+      deprecated: false
+      tags:
+        - Policies
+    parameters:
+      - $ref: "#/components/parameters/policy"
+
   /carriers/{id}:
     get:
       summary: Get Carrier
@@ -534,6 +561,25 @@ components:
         - createdAt
         - modifiedAt
         - refreshedAt
+    PolicyReport:
+      title: Policy Report
+      type: object
+      example:
+        url: "<signed-url>"
+        policy: "pol_123456789"
+      x-internal: false
+      properties:
+        report:
+          type: string
+          description: If `mode=url`, signed URL. Note, the URL has an expiry of 60 minutes. If `mode=base64`, base64 encoded string.
+        policy:
+          oneOf:
+            - type: string
+            - type: object
+          description: Unique identifier for the Policy object, or if `expand=true`, Policy object.
+      required:
+        - report
+        - policy
     Address:
       title: Address
       type: object
@@ -974,7 +1020,7 @@ components:
       schema:
         type: string
       description:
-        The access token required for access to the requested user’s Account.
+        The access token required for access to the requested Account.
         Returned as part of the Token Exchange flow in exchangeToken.
     policy:
       name: id
@@ -1007,9 +1053,14 @@ components:
       required: false
       schema:
         type: boolean
-      description:
-        Set to *true* if you would like to expand related entities (e.g., account, policy). Defaults to
-        *false*.
+      description: Set to *true* if you would like to expand related entities (e.g., account, policy). Defaults to *false*.
+    mode:
+      name: mode
+      in: query
+      required: false
+      schema:
+        type: string
+      description: "Options: `url` or `base64`. Defaults to `url`."
     type:
       name: type
       in: query
