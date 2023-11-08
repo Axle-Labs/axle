@@ -221,7 +221,11 @@ paths:
       description:
         "The Get Policy Report method returns a PDF report of the requested Policy object, including high-level
         policy information (e.g., policy number) and any children objects (e.g.,
-        Coverages) associated with the Policy. Please note, this route only available in the sandbox environment."
+        Coverages) associated with the Policy.
+
+
+        **Please note, this route is currently only available in the sandbox environment.**
+        "
       operationId: GetPolicyReport
       parameters:
         - $ref: "#/components/parameters/x-client-id"
@@ -565,7 +569,7 @@ components:
       title: Policy Report
       type: object
       example:
-        url: "<signed-url>"
+        report: "https://axle-labs-policy-reports..."
         policy: "pol_123456789"
       x-internal: false
       properties:
@@ -1060,7 +1064,7 @@ components:
       required: false
       schema:
         type: string
-      description: "Options: `url` or `base64`. Defaults to `url`."
+      description: "Specify desired return type of the report. Options: `url` for a signedUrl or `base64` for the full file returned in base64 encoding. Defaults to `url`."
     type:
       name: type
       in: query
