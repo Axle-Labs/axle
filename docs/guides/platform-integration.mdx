@@ -46,7 +46,14 @@ Setup a landing page or self-service mechanism to capture interest in instant in
 
 Once a service has expressed interest in leveraging Axle, use the [`/platform/client`](/api-reference/platform/clients) endpoint to register it as a new destination client.
 
+When registering a new client, you'll be asked for the following information:
+
+- `displayName`: A human-friendly name for the destination client. This will be used in Ignition and in the Axle dashboard.
+- `entity`: A url-friendly name for the destination client. These must be unique in the Axle system, so we recommend using a combination of your platform's name and the destination client's name.
+
 Store the destination client's `id` in your database alongside your internal unique identifier for the destination client. This will be used to authorize requests to Axle's APIs on behalf of the destination client.
+
+If you do happen to lose the destination client `id`, you can retrieve it using the [`/platform/clients`](/api-reference/platform/clients) endpoint to get a list of all destination clients registered with your platform.
 
 ### Make requests on behalf of destination client
 
