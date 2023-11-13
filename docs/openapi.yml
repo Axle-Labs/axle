@@ -589,6 +589,7 @@ components:
         - isActive
         - effectiveDate
         - expirationDate
+        - premium
         - address
         - coverages
         - properties
