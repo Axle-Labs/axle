@@ -49,6 +49,11 @@ description: "A Policy represents a specific policy associated with an
   by the insurance carrier.
 </ParamField>
 
+<ParamField body="premium" type="number">
+  Total policy premium, as specified by the insurance carrier. *Note: only
+  available for `type=home` policies*
+</ParamField>
+
 <ParamField body="address" type="Address">
     Primary address associated with the policy.
     <Expandable title="Address">
@@ -130,11 +135,11 @@ List of coverage types and levels offered by the policy.
 
         <ResponseField name="label" type="string" required />
 
-        <ResponseField name="limitPerPerson" type="integer<int32>, optional" />
+        <ResponseField name="limitPerPerson" type="number, optional" />
 
-        <ResponseField name="limitPerAccident" type="integer<int32>, optional" />
+        <ResponseField name="limitPerAccident" type="number, optional" />
 
-        <ResponseField name="deductible" type="integer<int32>, optional" />
+        <ResponseField name="deductible" type="number, optional" />
 
         <ResponseField name="property" type="string, optional" >
           Unique identifier of Property afforded coverage. If specified coverage is afforded to all properties on the policy, `property` will be `undefined`.
@@ -269,6 +274,7 @@ List of documents (such as declaration pages and policy agreements) associated w
   "isActive": true,
   "effectiveDate": "2021-10-22T04:00:00.000Z",
   "expirationDate": "2022-10-22T04:00:00.000Z",
+  "premium": null,
   "address": {
     "addressLine1": "123 Main St.",
     "addressLine2": "Unit 456",
@@ -397,6 +403,7 @@ List of documents (such as declaration pages and policy agreements) associated w
   "isActive": true,
   "effectiveDate": "2022-10-22T04:00:00.000Z",
   "expirationDate": "2023-10-22T04:00:00.000Z",
+  "premium": 999.99,
   "address": {
     "addressLine1": "123 Main St.",
     "addressLine2": "Unit 456",

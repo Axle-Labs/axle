@@ -512,6 +512,11 @@ components:
           nullable: true
           description: ISO 8601 timestamp of current term expiration date of the policy, as specified by the insurance carrier.
           example: "2023-10-22T04:00:00.000Z"
+        premium:
+          type: number
+          nullable: true
+          description: "Total policy premium, as specified by the insurance carrier. *Note: only available for `type=home` policies*"
+          example: 999.99
         address:
           description: Primary address associated with the policy.
           $ref: "#/components/schemas/Address"
@@ -584,6 +589,7 @@ components:
         - isActive
         - effectiveDate
         - expirationDate
+        - premium
         - address
         - coverages
         - properties
@@ -720,16 +726,13 @@ components:
         label:
           type: string
         limitPerPerson:
-          type: integer
-          format: int32
+          type: number
           nullable: true
         limitPerAccident:
-          type: integer
-          format: int32
+          type: number
           nullable: true
         deductible:
-          type: integer
-          format: int32
+          type: number
           nullable: true
         property:
           type: string
