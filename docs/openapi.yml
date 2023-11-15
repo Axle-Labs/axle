@@ -314,6 +314,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/x-client-id"
         - $ref: "#/components/parameters/x-client-secret"
+        - $ref: "#/components/parameters/expand"
       responses:
         "200":
           description: ""
@@ -326,9 +327,9 @@ paths:
                     $ref: "#/components/schemas/Success"
                   data:
                     type: array
+                    description: A list of identifiers for the destination clients associated with your credential, or if `expand=true`, a list of the destination client `id` and `entity` fields.
                     items:
                       type: string
-                      description: An array of the client ID's of the destination clients associated with your credential.
       deprecated: false
       tags:
         - Clients
@@ -619,6 +620,23 @@ components:
       required:
         - report
         - policy
+    DestinationClient:
+      title: Destination Client
+      type: object
+      example:
+        id: "cli_xxxxxxxxxxxx"
+        entity: "unique-entity-name"
+      x-internal: false
+      properties:
+        id:
+          type: string
+          description: The client ID of the destination client.
+        entity:
+          type: string
+          description: The unique entity of the destination client.
+      required:
+        - id
+        - entity
     Address:
       title: Address
       type: object
@@ -1096,7 +1114,7 @@ components:
       required: false
       schema:
         type: boolean
-      description: Set to *true* if you would like to expand related entities (e.g., account, policy). Defaults to *false*.
+      description: Set to *true* if you would like to expand related entities (e.g., account, policy, client). Defaults to *false*.
     mode:
       name: mode
       in: query
