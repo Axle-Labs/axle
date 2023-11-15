@@ -23,7 +23,7 @@ They're already acccustomed to using a certain dealership management system, so 
 In the Axle system, we refer to a platform's customers as `destination clients`.
 The platform is responsible for onboarding destination clients to Axle, and then can make requests to Axle's APIs on behalf of the destination client.
 
-Platforms can configure a new destination client using the [`/platform/clients`](/api-reference/platform/clients) endpoint.
+Platforms can configure a new destination client using the [`POST /platform/clients`](/api-reference/platform/create-client) endpoint.
 This will return a unique `id` for your new destination client, which the platform should store in their database alongside their internal unique identifier for the destination client,
 because it will be used to authorize requests to Axle's APIs on behalf of the destination client.
 
@@ -44,7 +44,7 @@ Setup a landing page or self-service mechanism to capture interest in instant in
 
 ### Register a destination client with Axle
 
-Once a service has expressed interest in leveraging Axle, use the [`/platform/client`](/api-reference/platform/clients) endpoint to register it as a new destination client.
+Once a service has expressed interest in leveraging Axle, use the [`POST /platform/client`](/api-reference/platform/create-client) endpoint to register it as a new destination client.
 
 When registering a new client, you'll be asked for the following information:
 
@@ -53,7 +53,7 @@ When registering a new client, you'll be asked for the following information:
 
 Store the destination client's `id` in your database alongside your internal unique identifier for the destination client. This will be used to authorize requests to Axle's APIs on behalf of the destination client.
 
-If you do happen to lose the destination client `id`, you can retrieve it using the [`/platform/clients`](/api-reference/platform/clients) endpoint to get a list of all destination clients registered with your platform.
+If you do happen to lose the destination client `id`, you can retrieve it using the [`/platform/clients`](/api-reference/platform/create-client) endpoint to get a list of all destination clients registered with your platform.
 
 ### Make requests on behalf of destination client
 
