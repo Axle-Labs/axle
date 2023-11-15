@@ -21,6 +21,7 @@ paths:
         - $ref: "#/components/parameters/x-client-id"
         - $ref: "#/components/parameters/x-client-secret"
         - $ref: "#/components/parameters/x-destination-client-id"
+        - $ref: "#/components/parameters/x-encrypted-data"
       requestBody:
         description: ""
         content:
@@ -1039,6 +1040,13 @@ components:
       schema:
         type: string
       description: The client ID of the destination client. This is optional and only used by platform clients. See the [Axle for Platforms](/guides/platform-integration) guide for more information.
+    x-encrypted-data:
+      name: x-encrypted-data
+      in: header
+      required: false
+      schema:
+        type: boolean
+      description: Set to *true* if you would like to send an encrypted base64 string as the request body, instead of a JSON string. The body must be encrypted using an Axle-provided public key with RSA_PKCS1_OAEP_PADDING and SHA256 hashing. Defaults to *false*.
     account:
       name: id
       in: path
