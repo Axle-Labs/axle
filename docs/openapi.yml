@@ -281,11 +281,7 @@ paths:
   /carriers:
     get:
       summary: Get Carriers
-      description: "The Get Carriers method returns an array of Carrier objects. 
-
-
-        **Please note, this route is currently under construction. Contact us if you'd like to build off of this route over the next few weeks.**
-        "
+      description: The Get Carriers method returns an array of Carrier objects which include additional details about Axle-supported insurance carriers.
       operationId: GetCarriers
       parameters:
         - $ref: "#/components/parameters/x-client-id"
