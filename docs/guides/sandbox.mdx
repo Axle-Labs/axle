@@ -1,0 +1,46 @@
+---
+title: "Sandbox"
+description: "Axle Sandbox is a simulation environment used for application development and testing. There are several types of configurations available to test. "
+---
+
+## Using sandbox
+Axle sandbox can be reached by sending `HTTPS POST` request on the `sandbox.axle.insure` [domain](https://docs.axle.insure/api-reference/overview#environments). To get started, select test credentials below and ___  
+
+## Test credentials
+You can simulate different flows depending on your desired entity type.
+
+### Simple `auto` test credentials
+
+Following credentials will generate sample data with [Account](https://docs.axle.insure/api-reference/accounts/account) and [Policy](https://docs.axle.insure/api-reference/policies/policy#attributes) attributes. 
+
+```
+username: username
+password: password
+```
+
+### Minimum `auto` test credentials
+
+The minimum `auto` credentials has the same Account and Policy objects where policy value is `inactive` and satisfies only the minimum required policy limits.
+
+```
+username: user-auto-state-minimum
+password: pass-auto-state-minimum
+```
+
+### Simple `home` test credentials
+
+Following credentials will provide Account and Policy objects where type of insurance policy is `home`. For complete list of supported policy types, refer to "[Home Insurance Policy Object](https://docs.axle.insure/api-reference/policies/policy#attributes)"
+
+```
+username: user-home
+password: pass-home
+```
+
+### Error test credentials
+
+Upon invoking using the following credentials, the API will return `500` with [Error](https://docs.axle.insure/api-reference/_snippets/error) response body
+
+```
+username: user-error
+password: pass-error
+```
