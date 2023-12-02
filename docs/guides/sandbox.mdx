@@ -1,17 +1,27 @@
 ---
 title: "Sandbox"
-description: "Axle Sandbox is a simulation environment used for application development and testing. There are several types of configurations available to test. "
+description: "The Axle sandbox can be used to test your integration of Axle's API in your application or platform. All Axle API endpoints can access the sandbox environment."
 ---
 
-## Using sandbox
-Axle sandbox can be reached by sending `HTTPS POST` request on the `sandbox.axle.insure` [domain](https://docs.axle.insure/api-reference/overview#environments). To get started, select test credentials below and ___  
+
+The Axle sandbox can be used to test your integration of Axle's API in your application or platform. All Axle API endpoints can access the [sandbox](https://docs.axle.insure/api-reference/overview#environments) environment.
+
+<Info>
+If you have not received access to the sandbox, please reach out to one of our representatives.
+</Info>
+
+## Using Sandbox
+- Begin the process by creating session using [Start Ignition](https://docs.axle.insure/api-reference/ignition/start-ignition) process that invokes sandbox endpoint. 
+- Once an `ignition` session has been generated, select one of the test credentials to simulate different possible scenarios. These credentials can be used for any carrier listed.
+- Input credentials into login page of the ignition session to complete the process. 
+
+Congrats! Now you can access [Account](https://docs.axle.insure/api-reference/accounts/get-account) or [Policy](https://docs.axle.insure/api-reference/policies/get-policy) objects.
 
 ## Test credentials
-You can simulate different flows depending on your desired entity type.
 
 ### Simple `auto` test credentials
 
-Following credentials will generate sample data with [Account](https://docs.axle.insure/api-reference/accounts/account) and [Policy](https://docs.axle.insure/api-reference/policies/policy#attributes) attributes. 
+Following credentials will generate an **active** account with several active `auto` policies.
 
 ```
 username: username
@@ -20,7 +30,7 @@ password: password
 
 ### Minimum `auto` test credentials
 
-The minimum `auto` credentials has the same Account and Policy objects where policy value is `inactive` and satisfies only the minimum required policy limits.
+The minimum `auto` credentials will create an account with several policies, one of which has **inactive** status, and one policy which satisfies only the minimum required policy limits.
 
 ```
 username: user-auto-state-minimum
@@ -29,7 +39,7 @@ password: pass-auto-state-minimum
 
 ### Simple `home` test credentials
 
-Following credentials will provide Account and Policy objects where type of insurance policy is `home`. For complete list of supported policy types, refer to "[Home Insurance Policy Object](https://docs.axle.insure/api-reference/policies/policy#attributes)"
+Following credentials will generate an **active** account with an active `home` policy.
 
 ```
 username: user-home
@@ -38,7 +48,7 @@ password: pass-home
 
 ### Error test credentials
 
-Upon invoking using the following credentials, the API will return `500` with [Error](https://docs.axle.insure/api-reference/_snippets/error) response body
+Upon invoking using the following credentials, the API will return `500` with [Error](https://docs.axle.insure/api-reference/_snippets/error) response body.
 
 ```
 username: user-error
