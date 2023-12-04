@@ -15,11 +15,15 @@ your users' insurance accounts to your application. To do so, Axle closely
 follows the OAuth 2.0 Authorization Code flow which begins when your user wants
 to link their insurance account to your application.
 
-### Step 1: Create an Ignition token
+<Warning>
+  Never send requests from your client to the Axle API. Establishing a session
+  server side allows us to create a secure session without exposing your Axle
+  API credentials.
+</Warning>
 
-Make a POST request to /ignition with a
-redirect url - the URL we'll redirect the user to after linking their account -
-and optionally a webhook url. In return, you'll retrieve an ignitionToken which
+### Step 1: Generate an Ignition token
+
+Make a `POST` request to `/ignition`. In return, you'll retrieve an ignitionToken which
 you'll need to pass to your app's client. This token will be used to initialize
 Ignition and allows us to create secure, trackable session with your user.
 
@@ -35,27 +39,26 @@ curl --request POST \
 }'
 ```
 
+<Info>
+  You can specify fields when generating an Ignition token to handle the
+  Ignition status and
+</Info>
+
 ```json Response Example
 {
   "success": true,
   "data": {
     "ignitionToken": "ign_ur7EPeAa0km4wRlDrPJ4Z",
-    "ignitionUri": "https://ignition.dev.axle.insure/?token=ign_ur7EPeAa0km4wRlDrPJ4Z"
+    "ignitionUri": "https://ignition.axle.insure/?token=ign_ur7EPeAa0km4wRlDrPJ4Z"
   }
 }
 ```
 
-<Warning>
-  Never send requests from your client to the Axle API. Establishing a session
-  server side allows us to create a secure session without exposing your
-  credentials.
-</Warning>
-
 ### Step 2: Initialize Ignition
 
-Next, construct an Axle authorization URL using
-`https://ignition.axle.insure?token={ignitionToken}` for production and
-`https://ignition.sandbox.axle.insure?token={ignitionToken}` for development.
+Next, construct an Axle Ignition authorization URL using
+`https://ignition.axle.insure/?token={ignitionToken}` for production and
+`https://ignition.sandbox.axle.insure/?token={ignitionToken}` for development.
 
 Now that you've constructed an Axle authorization URL you can open an Ignition
 authentication session for the user to link their account:
@@ -63,9 +66,8 @@ authentication session for the user to link their account:
 - On iOS, we suggest leveraging Apple's natively supported `ASWebAuthentication`
   session ([full documentation](https://developer.apple.com/documentation/authenticationservices/authenticating_a_user_through_a_web_service))
 - On Android, we suggest using `Chrome Custom Tabs` ([full documentation](https://developer.chrome.com/docs/android/custom-tabs/integration-guide/)) to create an in-app session and Android App Links ([full documentation](https://developer.android.com/training/app-links)) to deep-link back into your application.
-- On web, we suggest simply directing the user to the Axle authorization URL and
-  setting up a route to handle the redirection parameters, or initialize the session within an iframe modal and listen for redirect
-  attempts (e.g., using `Window.postMessage())`.
+- On web, we suggest simply directing the user to the Axle Ignition authorization URL in a new window and
+  setting up a route to handle the redirection parameters, or initialize the session within an iframe modal and listen for Window `MessageEvent` using `window.addEventListener`. See our guide on [Ignition Status Handling](/api-reference/ignition/ignition-status-handling) for more details.
 
 <Check>
 **Congrats!**
@@ -78,12 +80,12 @@ to Axle 🎉.
 ### Step 3: Exchange tokens
 
 Once the user successfully links their account, you'll receive an authorization
-code as a query parameter at the `redirectUri` you provided in step 1.
+code as a query parameter at the `redirectUri` you provided in step 1 or in the body of the Window `MessageEvent`.
 
 However, data sent by a client - especially via URLs - is generally considered
 insecure. That's where the OAuth 2.0 Authorization Code grant comes into play.
 We'll exchange the short-lived `authCode` for a long-lived `accessToken` server
-side. You can read more about OAuth 2.0 authorization code grants here.
+side.
 
 <Note>
   `authCodes` expire after 10 minutes so be sure you're exchanging codes in real
@@ -108,7 +110,8 @@ curl --request POST \
 {
   "success": true,
   "data": {
-    "accountId": "acc_gM2wn_gaqUv76ZljeVXOv",
+    "account": "acc_gM2wn_gaqUv76ZljeVXOv",
+    "policies": ["pol_CbxGmGWnp9bGAFCC-eod2"],
     "accessToken": "tok_IwShXCT_JPr6rmtiCVxcQ"
   }
 }
@@ -162,6 +165,7 @@ curl --request GET \
         "isActive": true,
         "effectiveDate": "2021-10-22T04:00:00.000Z",
         "expirationDate": "2022-10-22T04:00:00.000Z",
+        "premium": "543.23",
         "address": {
           "addressLine1": "123 Fake St.",
           "addressLine2": "Unit 456",
@@ -172,9 +176,9 @@ curl --request GET \
         },
         "coverages": [
           {
-            "limitPerPerson": 250000,
             "code": "BI",
             "label": "Bodily Injury",
+            "limitPerPerson": 250000,
             "limitPerAccident": 500000
           },
           {
@@ -183,20 +187,20 @@ curl --request GET \
             "limitPerAccident": 100000
           },
           {
-            "limitPerPerson": 100000,
             "code": "UMBI",
             "label": "Uninsured Bodily Injury",
+            "limitPerPerson": 100000,
             "limitPerAccident": 300000
           },
           {
             "code": "COMP",
             "label": "Comprehensive",
-            "deductible": 375
+            "deductible": 500
           },
           {
             "code": "COLL",
             "label": "Collision",
-            "deductible": 375
+            "deductible": 500
           }
         ],
         "properties": [
@@ -219,7 +223,7 @@ curl --request GET \
             "licenseNo": "•••••1234",
             "licenseState": "GA",
             "licenseStatus": "Valid",
-            "type": "Primary"
+            "type": "primary"
           },
           {
             "firstName": "Jane",
@@ -228,7 +232,7 @@ curl --request GET \
             "licenseNo": "•••••5678",
             "licenseState": "GA",
             "licenseStatus": "Valid",
-            "type": "Secondary"
+            "type": "secondary"
           }
         ],
         "thirdParties": [],
@@ -252,7 +256,6 @@ curl --request GET \
 <Check>
 **Well Done!**
 
-Now that you can access the Axle API, be sure to visit the full 📖 API Reference
-to see what endpoints and objects are available.
+Be sure to visit the full 📖 API Reference to learn more about each endpoint and resource!
 
 </Check>
