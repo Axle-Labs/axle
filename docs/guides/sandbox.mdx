@@ -14,11 +14,11 @@ description: "The Axle sandbox can be used to test your integration of Axle's AP
 - Input credentials into login page to simulate connecting to an insurance account for the selected carrier.
 - If applicable, complete the Ignition session by selecting a policy that you would like to test against.
 
-Congrats! Now you can access [Account](https://docs.axle.insure/api-reference/accounts/get-account) or [Policy](https://docs.axle.insure/api-reference/policies/get-policy) objects.
+Congrats! Now you can access sample [Account](/api-reference/accounts/account) or [Policy](/api-reference/policies/policy) objects after exchanging the generated `authCode` for an `accessToken`. See our [Quickstart](/guides/quickstart) guide for more details.
 
 ## Test credentials
 
-### Simple `auto` test credentials
+### Simple `auto`
 
 The following credentials will connect to an account with several active `auto` policies.
 
@@ -27,7 +27,7 @@ username: username
 password: password
 ```
 
-### Minimum `auto` test credentials
+### Minimum `auto`
 
 The following credentials will connect to an account with several `auto` policies, one of which has **inactive** status and one which satisfies only the minimum required policy coverage in most states.
 
@@ -36,7 +36,7 @@ username: user-auto-state-minimum
 password: pass-auto-state-minimum
 ```
 
-### Simple `home` test credentials
+### Simple `home`
 
 The following credentials will connect to an account with several active `home` policies.
 
@@ -45,7 +45,7 @@ username: user-home
 password: pass-home
 ```
 
-### Error test credentials
+### Error
 
 The following credentials will fail to connect to the Axle service, resulting in an `errored` status for the Ignition session.
 
