@@ -9,15 +9,15 @@ Axle’s Ignition session is the main interface that allows your customers to co
 
 Please first review our Quickstart guide and API docs on how to start an Ignition session, if you have not already.
 
-### Ignition Config
+## Ignition Config
 
 Your `POST` request to `/ignition` is configured with the following request
 body:
 
 - Optional: `redirectUri` - the URL we'll redirect the user to upon completion, exit, or error outcomes of the Ignition session, defaults to no redirect
 - Optional: `webhookUri` - the URL we'll send events to as the user proceeds through the Ignition session, defaults to no webhook events
-- Optional: `user` - optional user to attach, please refer to [startIgnition](https://docs.axle.insure/api-reference/ignition/start-ignition) for examples
-- Optional: `metadata` - optional Ignition session metadata, please refer to [startIgnition](https://docs.axle.insure/api-reference/ignition/start-ignition) for examples
+- Optional: `user` - optional user to attach, please refer to [startIgnition](/api-reference/ignition/start-ignition) for more details
+- Optional: `metadata` - optional Ignition session metadata, please refer to [startIgnition](/api-reference/ignition/start-ignition) for more details
 
 ```bash Request Sample
 curl --request POST \
@@ -31,9 +31,20 @@ curl --request POST \
 }
 ```
 
-### Redirect Parameters
+<Note>
+  You can also receive Ignition status updates through the browser Window
+  interface. This is most useful when initializing an Ignition session in an
+  `iframe` element in your application. If you would like to receive
+  `MessageEvent` to your main application Window, you must specify an `origin`
+  as a URL parameter when initalizing Ignition. The origin should not include any path, just the base domain as a URI.
 
-On navigation to the `redirectUri` provided, the URI will be appended with the following parameters:
+Example: `https://ignition.axle.insure/?origin=http://example.com`
+
+</Note>
+
+## Redirect and Window MessageEvent Parameters
+
+On Ignition status change, the following parameters will be shared via URL to the `redirectUri` provided and in the Window `MessageEvent`.
 
 `status`: String
 
@@ -41,24 +52,19 @@ On navigation to the `redirectUri` provided, the URI will be appended with the f
 - exit
 - error
 
-Additional parameters (dependent on status, see below)
+**Additional parameters** _(dependent on status, see below)_
 
 - `authCode`: String - authorization code that can be exchange for accessToken for scoped access to connected account and/or policy
 - `client`: String - the client ID associated with the session. This is primarily useful for platforms who have multiple clients. See the [Axle for Platforms](/guides/platform-integration) guide for more information about platforms.
-- `result`: String - "link" (account connection was made and policy is available) OR "basic" (account connection was made but policy details are not available) OR "manual" (details were entered through manual collection form)
+- `result`: String - "link" (account connection was made and policy is available) OR "basic" (account connection was made but policy details are not available) OR "manual" (policy details were entered through manual collection form)
 - `step`: String - the step where the Ignition session was exited
 - `message`: String - additional information about the Ignition session error
 
 ```text Redirect sample URL
-  https://example.com/insurance/redirect?status=complete&authCode=cod_LwPJhgxnjinMEPfGYc-XV&result=linked
+  https://example.com/insurance/redirect?status=complete&authCode=cod_LwPJhgxnjinMEPfGYc-XV&client=cli_mZj6YGXhQyQnccN97aXbq&result=link
 ```
 
-<Note>
-  The `authCode` expires after 10 minutes, so ensure your backend service is
-  exchanging codes through `POST /token/exchange` in real time.
-</Note>
-
-#### onCompleted
+### onComplete
 
 When the user successfully connects to their carrier account and shares authorized access to a selected policy, OR when the user submits their policy information and/or documentation through Axle's manual collection form.
 
@@ -71,38 +77,38 @@ When the user successfully connects to their carrier account and shares authoriz
 }
 ```
 
-#### onExit
+### onExit
 
 When the user opts out of connecting to their carrier account and/or selecting a policy, OR when the user opts out of sharing the requested policy information and/or documentation.
 
 ```json
 {
   "status": "exit",
-  "step": "<step-name>"
+  "step": "<step-name>",
   "client": "<client-id>"
 }
 ```
 
-#### onError
+### onError
 
 When Axle is unable to retrieve account or policy information from a selected carrier, OR when Axle is unable to collect policy information and/or documentation from the user.
 
 ```json
 {
   "status": "error",
-  "message": "<message-body>"
+  "message": "<message-body>",
   "client": "<client-id>"
 }
 ```
 
 <Warning>
   Never send requests from your client to the Axle API. The client should only
-  be used to handle Ignition status through redirect.
+  be used to handle Ignition status through redirect or Window MessageEvent.
 </Warning>
 
-### Webhook Events
+## Webhook Events
 
-If an optional `webhookUri` is provided, a `POST` request will be sent to the `webhookUri` with the following body:
+If an optional `webhookUri` is provided, a `POST` request will be sent to the `webhookUri` with the following body. The individual parameters included within `data` are the same as those listed above for the corresponding status, with the addition of `user` and `metadata` shared via the Ignition request body:
 
 ```json Example webhook request body
 {
@@ -111,13 +117,13 @@ If an optional `webhookUri` is provided, a `POST` request will be sent to the `w
   "data": {
     "client": "<client-id>",
     "token": "ign_Z4ni-JHBvkn9PlKJHPEwk",
-    ...
+    ...{ parameters }
   },
-  "createdAt": "2011-10-05T14:48:00.000Z"
+  "createdAt": "2022-10-05T14:48:00.000Z"
 }
 ```
 
-| TYPE               | DATA                                                                                                |
+| Type               | Data                                                                                                |
 | ------------------ | --------------------------------------------------------------------------------------------------- |
 | ignition.created   | client : String, token : String, user: Object, metadata: Object                                     |
 | ignition.completed | client : String, token : String, user: Object, metadata: Object, authCode : String, result : String |
