@@ -16,8 +16,8 @@ body:
 
 - Optional: `redirectUri` - the URL we'll redirect the user to upon completion, exit, or error outcomes of the Ignition session, defaults to no redirect
 - Optional: `webhookUri` - the URL we'll send events to as the user proceeds through the Ignition session, defaults to no webhook events
-- Optional: `user` - optional user to attach, please refer to [startIgnition](https://docs.axle.insure/api-reference/ignition/start-ignition) for examples
-- Optional: `metadata` - optional Ignition session metadata, please refer to [startIgnition](https://docs.axle.insure/api-reference/ignition/start-ignition) for examples
+- Optional: `user` - optional user to attach, please refer to [startIgnition](/api-reference/ignition/start-ignition) for more details
+- Optional: `metadata` - optional Ignition session metadata, please refer to [startIgnition](/api-reference/ignition/start-ignition) for more details
 
 ```bash Request Sample
 curl --request POST \
@@ -42,7 +42,7 @@ Example: `https://ignition.axle.insure/?origin=http://example.com`
 
 </Note>
 
-### Redirect and Window MessageEvent Parameters
+## Redirect and Window MessageEvent Parameters
 
 On Ignition status change, the following parameters will be shared via URL to the `redirectUri` provided and in the Window `MessageEvent`.
 
@@ -64,7 +64,7 @@ On Ignition status change, the following parameters will be shared via URL to th
   https://example.com/insurance/redirect?status=complete&authCode=cod_LwPJhgxnjinMEPfGYc-XV&client=cli_mZj6YGXhQyQnccN97aXbq&result=link
 ```
 
-#### onComplete
+### onComplete
 
 When the user successfully connects to their carrier account and shares authorized access to a selected policy, OR when the user submits their policy information and/or documentation through Axle's manual collection form.
 
@@ -77,7 +77,7 @@ When the user successfully connects to their carrier account and shares authoriz
 }
 ```
 
-#### onExit
+### onExit
 
 When the user opts out of connecting to their carrier account and/or selecting a policy, OR when the user opts out of sharing the requested policy information and/or documentation.
 
@@ -89,7 +89,7 @@ When the user opts out of connecting to their carrier account and/or selecting a
 }
 ```
 
-#### onError
+### onError
 
 When Axle is unable to retrieve account or policy information from a selected carrier, OR when Axle is unable to collect policy information and/or documentation from the user.
 
