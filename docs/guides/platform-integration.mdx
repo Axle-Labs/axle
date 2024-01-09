@@ -44,16 +44,23 @@ Setup a landing page or self-service mechanism to capture interest in instant in
 
 ### Register a destination client with Axle
 
-Once a service has expressed interest in leveraging Axle, use the [`POST /platform/client`](/api-reference/platform/create-client) endpoint to register it as a new destination client.
+Once a service has expressed interest in leveraging Axle, use the [`POST /platform/clients`](/api-reference/platform/create-client) endpoint to register it as a new destination client.
 
 When registering a new client, you'll be asked for the following information:
 
 - `displayName`: A human-friendly name for the destination client. This will be used in Ignition and in the Axle dashboard.
 - `entity`: A url-friendly name for the destination client. These must be unique in the Axle system, so we recommend using a combination of your platform's name and the destination client's name.
 
+<Info>
+  Your new destination client will inherit the Ignition and notification
+  configurations present on your platform client. Please reach out to the Axle
+  team if you would like to modify this base configuration or change a
+  configuration for a specific destination client.
+</Info>
+
 Store the destination client's `id` in your database alongside your internal unique identifier for the destination client. This will be used to authorize requests to Axle's APIs on behalf of the destination client.
 
-If you do happen to lose the destination client `id`, you can retrieve it using the [`/platform/clients`](/api-reference/platform/create-client) endpoint to get a list of all destination clients registered with your platform.
+If you do happen to lose the destination client `id`, you can retrieve it using the [`GET /platform/clients`](/api-reference/platform/get-clients) endpoint to get a list of all destination clients registered with your platform.
 
 ### Make requests on behalf of destination client
 
@@ -65,14 +72,13 @@ You can now authorize requests to Axle's core APIs on behalf of this destination
 
 For more details and advice about how to integrate these API calls with your service, please see the [Quickstart](/guides/quickstart) guide.
 
-### Handle redirect or webhook Ignition events
+### Handle redirect, Window MessageEvent, or webhook Ignition events
 
 All events include a `client` parameter with the destination client `id`, so you can easily associate an event with the correct destination client. Please refer to our guide on [Ignition Status Handling](/api-reference/ignition/ignition-status-handling) for more details.
 
 <Check>
 **Well Done!**
 
-Now that you have setup Axle in your platform, be sure to visit the full [📖 API Reference](/api-reference/overview)
-to see all the data fields that are available.
+Now that you have setup Axle in your platform, be sure to visit the full [📖 API Reference](/api-reference/overview) to see all the data fields that are available.
 
 </Check>
