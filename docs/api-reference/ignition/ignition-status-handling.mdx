@@ -9,9 +9,9 @@ Axle’s Ignition session is the main interface that allows your customers to co
 
 Please first review our Quickstart guide and API docs on how to start an Ignition session, if you have not already.
 
-## Ignition Config
+## Configure an Ignition session for status handling
 
-Your `POST` request to `/ignition` is configured with the following request
+Your `POST` request to `/ignition` can include the following request
 body:
 
 - Optional: `redirectUri` - the URL we'll redirect the user to upon completion, exit, or error outcomes of the Ignition session, defaults to no redirect
@@ -34,8 +34,10 @@ curl --request POST \
 <Note>
   You can also receive Ignition status updates through the browser Window
   interface. This is most useful when initializing an Ignition session in an
-  `iframe` element in your application. If you would like to receive
-  `MessageEvent` to your main application Window, you must specify an `origin`
+  `iframe` element in your application. 
+  
+  If you would like to receive
+  `MessageEvent` messages to your main application Window from Ignition, you must specify an `origin`
   as a URL parameter when initalizing Ignition. The origin should not include any path, just the base domain as a URI.
 
 Example: `https://ignition.axle.insure/?origin=http://example.com`
