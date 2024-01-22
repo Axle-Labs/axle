@@ -160,9 +160,16 @@ List of entities (such as an individuals or businesses) afforded direct coverage
 
     <Expandable title="Insured">
 
-       <ResponseField name="firstName" type="string" />
+      <ResponseField name="firstName" type="string" />
 
       <ResponseField name="lastName" type="string" />
+
+      <Tip>
+        Insurance carriers may represent `firstName` and `lastName` in different ways (such as including middle name in `firstName` or dropping special characters such as `-`).
+
+
+        If your application requires matching your users against policy insureds, we advise combining `firstName` and `lastName` into a single value and then using "fuzzy" matching algorithms with strict thresholds.
+      </Tip>
 
       <ResponseField name="type" type="string">
         Available options: `primary` `secondary`
@@ -226,7 +233,7 @@ List of documents (such as declaration pages and policy agreements) associated w
         <ResponseField name="name" type="string" />
 
         <ResponseField name="type" type="array[string]" >
-          The type of information contained in the document, as specified by carrier or user. A document may have multiple types.
+          The type of information contained in the document, as specified by carrier or user. A document may have multiple types, but each policy will have only 1 document of each type.
           Available options: `declaration-page`, `policy-agreement`, or `id-card`.
         </ResponseField>
 
@@ -345,14 +352,6 @@ List of documents (such as declaration pages and policy agreements) associated w
       "lastName": "Smith",
       "dateOfBirthYear": "1990",
       "licenseNo": "•••••1234",
-      "property": "prp_uSdzLVpi8c76H7kl6AQ-F"
-    },
-    {
-      "type": "secondary",
-      "firstName": "Jane",
-      "lastName": "Doe",
-      "dateOfBirthYear": "1992",
-      "licenseNo": "•••••5678",
       "property": "prp_uSdzLVpi8c76H7kl6AQ-F"
     },
     {
