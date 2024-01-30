@@ -1118,7 +1118,7 @@ components:
       required: false
       schema:
         type: string
-      description: "Specify desired return type of the report. Options: `url` for a signedUrl or `base64` for the full file returned in base64 encoding. Defaults to `url`."
+      description: "Specify desired return mode of the report. Options: `url` for a signedUrl or `base64` for the full file returned in base64 encoding. Defaults to `url`."
     format:
       name: format
       in: query
