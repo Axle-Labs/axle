@@ -1111,7 +1111,7 @@ components:
       required: false
       schema:
         type: boolean
-      description: Set to *true* if you would like to expand related entities (e.g., account, policy, client). Defaults to *false*.
+      description: Set to `true` if you would like to expand related entities (e.g., account, policy, client). Defaults to `false`.
     mode:
       name: mode
       in: query
