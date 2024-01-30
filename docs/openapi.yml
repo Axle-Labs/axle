@@ -220,13 +220,9 @@ paths:
     get:
       summary: Get Policy Report
       description:
-        "The Get Policy Report method returns a PDF report of the requested Policy object, including high-level
+        "The Get Policy Report method returns a PDF or image report of the requested Policy object, including high-level
         policy information (e.g., policy number) and any children objects (e.g.,
-        Coverages) associated with the Policy.
-
-
-        **Please note, this route is currently only available in the sandbox environment.**
-        "
+        Coverages) associated with the Policy."
       operationId: GetPolicyReport
       parameters:
         - $ref: "#/components/parameters/x-client-id"
@@ -235,6 +231,7 @@ paths:
         - $ref: "#/components/parameters/x-access-token"
         - $ref: "#/components/parameters/expand"
         - $ref: "#/components/parameters/mode"
+        - $ref: "#/components/parameters/format"
       responses:
         "200":
           description: ""
@@ -1122,6 +1119,13 @@ components:
       schema:
         type: string
       description: "Specify desired return type of the report. Options: `url` for a signedUrl or `base64` for the full file returned in base64 encoding. Defaults to `url`."
+    format:
+      name: format
+      in: query
+      required: false
+      schema:
+        type: string
+      description: "Specify desired return format of the report. Options: `pdf` or `jpg`. Defaults to `pdf`."
     type:
       name: type
       in: query
