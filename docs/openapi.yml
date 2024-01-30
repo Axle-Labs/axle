@@ -1125,7 +1125,7 @@ components:
       required: false
       schema:
         type: string
-      description: "Specify desired return format of the report. Options: `pdf` or `jpg`. Defaults to `pdf`."
+      description: "Specify desired return format of the report. Options: `pdf` or `jpeg`. Defaults to `pdf`."
     type:
       name: type
       in: query
