@@ -2,13 +2,15 @@ openapi: 3.0.0
 info:
   title: Axle API
   contact: {}
-  version: "1.0"
+  version: "0.1"
 servers:
   - url: "https://api.axle.insure"
     variables: {}
     description: Production
   - description: Sandbox
     url: "https://sandbox.axle.insure"
+security:
+  - ApiKeyAuth: []
 paths:
   /ignition:
     post:
@@ -249,7 +251,6 @@ paths:
         - Policies
     parameters:
       - $ref: "#/components/parameters/policy"
-
   /carriers/{id}:
     get:
       summary: Get Carrier
@@ -617,23 +618,6 @@ components:
       required:
         - report
         - policy
-    DestinationClient:
-      title: Destination Client
-      type: object
-      example:
-        id: "cli_xxxxxxxxxxxx"
-        entity: "unique-entity-name"
-      x-internal: false
-      properties:
-        id:
-          type: string
-          description: The client ID of the destination client.
-        entity:
-          type: string
-          description: The unique entity of the destination client.
-      required:
-        - id
-        - entity
     Address:
       title: Address
       type: object
@@ -1007,16 +991,6 @@ components:
       description: Indicates whether the operation was performed successfully.
       x-internal: false
       example: true
-    Error:
-      title: Error
-      type: object
-      x-internal: false
-      properties:
-        success:
-          $ref: "#/components/schemas/Success"
-        message:
-          type: string
-          description: "Provides a reason for why the operation failed, if available."
     Connection:
       title: Connection
       type: object
@@ -1096,15 +1070,6 @@ components:
       schema:
         type: string
       description: The unique ID for the requested carrier. Returned in Account and Policy objects as `carrier`.
-    refresh:
-      name: refresh
-      in: query
-      required: false
-      schema:
-        type: boolean
-      description:
-        Set to *true* if you would like to request an update. Defaults to
-        *false*.
     expand:
       name: expand
       in: query
@@ -1126,14 +1091,9 @@ components:
       schema:
         type: string
       description: "Specify desired return format of the report. Options: `pdf` or `jpeg`. Defaults to `pdf`."
-    type:
-      name: type
-      in: query
-      required: false
-      schema:
-        type: string
-      description:
-        'Set to "relink-account" to start Ignition session to re-authenticate
-        user. Must also provide `account`. '
   responses: {}
-  securitySchemes: {}
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-client-secret
