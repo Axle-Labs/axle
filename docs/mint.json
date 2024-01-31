@@ -106,5 +106,6 @@
     "twitter": "https://twitter.com/axlelabs",
     "linkedin": "https://www.linkedin.com/company/axle-labs/",
     "website": "https://www.axle.insure/"
-  }
+  },
+  "openapi": "/openapi.yml"
 }
