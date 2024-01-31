@@ -21,7 +21,6 @@ paths:
       operationId: StartIgnition
       parameters:
         - $ref: "#/components/parameters/x-client-id"
-        - $ref: "#/components/parameters/x-client-secret"
         - $ref: "#/components/parameters/x-destination-client-id"
         - $ref: "#/components/parameters/x-encrypted-data"
       requestBody:
@@ -97,7 +96,6 @@ paths:
       operationId: ExchangeToken
       parameters:
         - $ref: "#/components/parameters/x-client-id"
-        - $ref: "#/components/parameters/x-client-secret"
         - $ref: "#/components/parameters/x-destination-client-id"
       requestBody:
         description: ""
@@ -166,7 +164,6 @@ paths:
       operationId: GetAccount
       parameters:
         - $ref: "#/components/parameters/x-client-id"
-        - $ref: "#/components/parameters/x-client-secret"
         - $ref: "#/components/parameters/x-access-token"
         - $ref: "#/components/parameters/x-destination-client-id"
         - $ref: "#/components/parameters/expand"
@@ -197,7 +194,6 @@ paths:
       operationId: GetPolicy
       parameters:
         - $ref: "#/components/parameters/x-client-id"
-        - $ref: "#/components/parameters/x-client-secret"
         - $ref: "#/components/parameters/x-destination-client-id"
         - $ref: "#/components/parameters/x-access-token"
         - $ref: "#/components/parameters/expand"
@@ -228,7 +224,6 @@ paths:
       operationId: GetPolicyReport
       parameters:
         - $ref: "#/components/parameters/x-client-id"
-        - $ref: "#/components/parameters/x-client-secret"
         - $ref: "#/components/parameters/x-destination-client-id"
         - $ref: "#/components/parameters/x-access-token"
         - $ref: "#/components/parameters/expand"
@@ -258,7 +253,6 @@ paths:
       operationId: GetCarrier
       parameters:
         - $ref: "#/components/parameters/x-client-id"
-        - $ref: "#/components/parameters/x-client-secret"
       responses:
         "200":
           description: ""
@@ -283,7 +277,6 @@ paths:
       operationId: GetCarriers
       parameters:
         - $ref: "#/components/parameters/x-client-id"
-        - $ref: "#/components/parameters/x-client-secret"
       responses:
         "200":
           description: ""
@@ -311,7 +304,6 @@ paths:
       operationId: GetDestinationClients
       parameters:
         - $ref: "#/components/parameters/x-client-id"
-        - $ref: "#/components/parameters/x-client-secret"
         - $ref: "#/components/parameters/expand"
       responses:
         "200":
@@ -340,7 +332,6 @@ paths:
       operationId: CreateDestinationClient
       parameters:
         - $ref: "#/components/parameters/x-client-id"
-        - $ref: "#/components/parameters/x-client-secret"
       requestBody:
         description: ""
         content:
@@ -1013,15 +1004,6 @@ components:
       schema:
         type: string
       description: Your client ID. This will be shared with you during onboarding.
-    x-client-secret:
-      name: x-client-secret
-      in: header
-      required: true
-      schema:
-        type: string
-      description:
-        Your secret API key. This will be shared with you during onboarding and should
-        be considered sensitive - it’s a password after all!
     x-destination-client-id:
       name: x-destination-client-id
       in: header
@@ -1097,3 +1079,6 @@ components:
       type: apiKey
       in: header
       name: x-client-secret
+      description:
+        Your secret API key. This will be shared with you during onboarding and should
+        be considered sensitive - it’s a password after all! Your secret will be matched with your client ID to authenticate your requests.
