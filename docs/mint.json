@@ -5,7 +5,8 @@
     "dark": "/logo/dark.svg"
   },
   "api": {
-    "baseUrl": ["https://api.axle.insure", "https://sandbox.axle.insure"]
+    "baseUrl": ["https://api.axle.insure", "https://sandbox.axle.insure"],
+    "maintainOrder": true
   },
   "favicon": "/favicon-lg.png",
   "colors": {
