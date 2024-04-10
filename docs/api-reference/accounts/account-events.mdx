@@ -1,0 +1,59 @@
+---
+title: "Account events"
+description: "This guide will walk you through the various Account events that may occur when monitoring an insurance account."
+---
+
+Once an insurance account is connected through an Ignition session, Axle can monitor that account for updates. These updates will trigger events that are sent from Axle to your systems via webhook or to your organization via communication channels such as email.
+
+<Info>
+  Account events are only sent for insurance accounts connected through Axle
+  Ignition sessions that are configured with `monitoring` enabled. Please
+  contact the Axle team if you would like to enable this feature!
+</Info>
+
+## Webhook Events
+
+<Tip>
+  You must specify a `webhookUri` when generating an Ignition token to receive
+  webhook events. See [Start Ignition](/api-reference/ignition/start-ignition)
+  for more details.
+</Tip>
+
+A `POST` request will be sent to the `webhookUri` with the following body. All events will include `client`, `ref` (Account object identifier), `user` (optionally specified when generating Ignition token), and `metadata` (optionally specified when generating Ignition token).
+
+```json Example webhook request body
+{
+  "id": "<event_id>",
+  "type": "account.updated",
+  "data": {
+    "client": "<client-id>",
+    "ref": "acc_Z4ni-JHBvkn9PlKJHPEwk",
+    "user": {},
+    "metadata": {},
+    ...{ parameters }
+  },
+  "createdAt": "2022-10-05T14:48:00.000Z"
+}
+```
+
+### account.updated
+
+When identifying details or connection status on the account change (see [Account](/api-reference/accounts/account) for more details).
+
+```json Additional data parameters (example)
+{
+  "update": {
+    "email": {
+      "__old": "johndoe@gmail.com",
+      "__new": "janedoe@gmail.com"
+    }
+  },
+  "formattedUpdate": "<Diff-like output that can be used for display>",
+  "account": <Axle Account object>
+}
+```
+
+<Info>
+  The Axle is working on adding additional event types for changes in connection
+  status. Please check back for updates!
+</Info>

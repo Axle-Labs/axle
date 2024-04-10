@@ -75,7 +75,8 @@
           "group": "Accounts",
           "pages": [
             "api-reference/accounts/account",
-            "api-reference/accounts/get-account"
+            "api-reference/accounts/get-account",
+            "api-reference/accounts/account-events"
           ]
         },
         {
@@ -83,7 +84,8 @@
           "pages": [
             "api-reference/policies/policy",
             "api-reference/policies/get-policy",
-            "api-reference/policies/get-policy-report"
+            "api-reference/policies/get-policy-report",
+            "api-reference/policies/policy-events"
           ]
         },
         {
