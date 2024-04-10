@@ -76,7 +76,7 @@
           "pages": [
             "api-reference/accounts/account",
             "api-reference/accounts/get-account",
-            "api-reference/policies/account-events"
+            "api-reference/accounts/account-events"
           ]
         },
         {
