@@ -51,9 +51,20 @@
     {
       "group": "Guides",
       "pages": [
-        "guides/quickstart",
+        {
+          "group": "Quickstart",
+          "pages": ["guides/quickstart", "guides/ignition-events"]
+        },
         "guides/platform-integration",
-        "guides/sandbox"
+        "guides/sandbox",
+        {
+          "group": "Monitoring",
+          "pages": [
+            "guides/monitoring",
+            "guides/account-events",
+            "guides/policy-events"
+          ]
+        }
       ]
     },
     {
@@ -62,10 +73,7 @@
         "api-reference/overview",
         {
           "group": "Ignition",
-          "pages": [
-            "api-reference/ignition/start-ignition",
-            "api-reference/ignition/ignition-status-handling"
-          ]
+          "pages": ["api-reference/ignition/start-ignition"]
         },
         {
           "group": "Tokens",
@@ -75,8 +83,7 @@
           "group": "Accounts",
           "pages": [
             "api-reference/accounts/account",
-            "api-reference/accounts/get-account",
-            "api-reference/accounts/account-events"
+            "api-reference/accounts/get-account"
           ]
         },
         {
@@ -84,8 +91,7 @@
           "pages": [
             "api-reference/policies/policy",
             "api-reference/policies/get-policy",
-            "api-reference/policies/get-policy-report",
-            "api-reference/policies/policy-events"
+            "api-reference/policies/get-policy-report"
           ]
         },
         {
@@ -106,7 +112,7 @@
     }
   ],
   "footerSocials": {
-    "twitter": "https://twitter.com/axlelabs",
+    "x": "https://x.com/axlelabs",
     "linkedin": "https://www.linkedin.com/company/axle-labs/",
     "website": "https://www.axle.insure/"
   },

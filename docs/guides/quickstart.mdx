@@ -1,5 +1,5 @@
 ---
-title: "Quickstart"
+title: "Introduction"
 description: "Axle's powerful API makes it easy for you to quickly retrieve detailed
 information from your users' insurance policies. Here at Axle, we're champions for consumer data control and privacy, so you'll need to gain consent from the user to access their information."
 ---
@@ -40,7 +40,10 @@ curl --request POST \
 ```
 
 <Info>
-  You can specify fields when generating an Ignition token to handle Ignition status updates (see [Ignition Status Handling](/api-reference/ignition/ignition-status-handling) for more details) as well as attach user information or other metadata (see [Start Ignition](/api-reference/ignition/start-ignition) for more details). 
+  You can specify fields when generating an Ignition token to handle Ignition
+  events (see our guide on [Ignition events](/guides/ignition-events) for more
+  details) as well as attach user information or other metadata (see [Start
+  Ignition](/api-reference/ignition/start-ignition) for more details).
 </Info>
 
 ```json Response Example
@@ -66,7 +69,7 @@ authentication session for the user to link their account:
   session ([full documentation](https://developer.apple.com/documentation/authenticationservices/authenticating_a_user_through_a_web_service))
 - On Android, we suggest using `Chrome Custom Tabs` ([full documentation](https://developer.chrome.com/docs/android/custom-tabs/integration-guide/)) to create an in-app session and Android App Links ([full documentation](https://developer.android.com/training/app-links)) to deep-link back into your application.
 - On web, we suggest simply directing the user to the Axle Ignition authorization URL in a new window and
-  setting up a route to handle the redirection parameters, or initialize the session within an iframe modal and listen for Window `MessageEvent` using `window.addEventListener`. See our guide on [Ignition Status Handling](/api-reference/ignition/ignition-status-handling) for more details.
+  setting up a route to handle the redirection parameters, or initialize the session within an iframe modal and listen for Window `MessageEvent` using `window.addEventListener`. See our guide on [Ignition events](/guides/ignition-events) for more details.
 
 <Check>
 **Congrats!**
@@ -255,6 +258,6 @@ curl --request GET \
 <Check>
 **Well Done!**
 
-Be sure to visit the full 📖 API Reference to learn more about each endpoint and resource!
+Be sure to visit the full [📖 API Reference](/api-reference) to learn more about each endpoint and resource!
 
 </Check>
