@@ -11,7 +11,7 @@ Once an insurance policy is connected through an Ignition session, Axle can moni
   contact the Axle team if you would like to enable this feature!
 </Info>
 
-## Webhook Events
+## Webhooks
 
 <Tip>
   You must specify a `webhookUri` when generating an Ignition token to receive
@@ -36,19 +36,19 @@ A `POST` request will be sent to the `webhookUri` with the following body. All e
 }
 ```
 
-### policy.updated
+### policy.modified
 
 When elements on the insurance policy are updated (see [Policy](/api-reference/policies/policy) for more details).
 
 ```json Additional data parameters (example)
 {
-  "update": {
-    "isActive": {
-      "__old": true,
-      "__new": false
+  "changes": [
+    {
+      "type": "UPDATE",
+      "key": "isActive",
+      "value": false,
+      "oldValue": true
     }
-  },
-  "formattedUpdate": "<Diff-like output that can be used for display>",
-  "policy": <Axle Policy object>
+  ]
 }
 ```
