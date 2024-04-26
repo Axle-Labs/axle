@@ -53,7 +53,11 @@
       "pages": [
         {
           "group": "Quickstart",
-          "pages": ["guides/quickstart", "guides/ignition-events"]
+          "pages": [
+            "guides/quickstart",
+            "guides/initialize-ignition",
+            "guides/ignition-events"
+          ]
         },
         "guides/platform-integration",
         "guides/sandbox",

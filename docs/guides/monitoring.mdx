@@ -8,57 +8,58 @@ description: "Receive proactive notifications for updates to an insurance policy
   the Axle team if you would like to enable this feature!
 </Warning>
 
-#### How it works
+<Steps>
+  <Step title="Configure Ignition to receive webhooks" titleSize="h3">
+    Ensure that the request made to generate an Ignition token includes the webhook URL where you would like to receive notifications.
 
-### Step 1: Configure Ignition to receive webhooks
+    ```bash Request Sample: cURL
+    curl --request POST \
+      --url https://api.axle.insure/ignition \
+      --header 'Content-Type: application/json' \
+      --header 'x-client-id: cli_mZj6YGXhQyQnccN97aXbq' \
+      --header 'x-client-secret: RZM-5BErZuChKqycbCS1O' \
+      --data '{
+      "webhookUri": "https://example.com/webhook"
+    }'
+    ```
 
-Ensure that the request made to generate an Ignition token includes the webhook URL where you would like to receive notifications.
+    <Tip>
+      Notifications can also be sent to your organization via other communication
+      channels such as email or Slack. Please contact the Axle team to configure
+      which events should be sent to each channel. All events will be sent via
+      webhook if a `webhookUri` is provided.
+    </Tip>
 
-```bash Request Sample: cURL
-curl --request POST \
-  --url https://api.axle.insure/ignition \
-  --header 'Content-Type: application/json' \
-  --header 'x-client-id: cli_mZj6YGXhQyQnccN97aXbq' \
-  --header 'x-client-secret: RZM-5BErZuChKqycbCS1O' \
-  --data '{
-  "webhookUri": "https://example.com/webhook"
-}'
-```
+  </Step>
+  <Step title="Process Account and Policy events" titleSize="h3">
+    Notifications will be triggered by the following events and will need to be processed by your application.
 
-<Tip>
-  Notifications can also be sent to your organization via other communication
-  channels such as email or Slack. Please contact the Axle team to configure
-  which events should be sent to each channel. All events will be sent via
-  webhook if a `webhookUri` is provided.
-</Tip>
+    - [Account events](/guides/account-events)
+      - `account.modified`: Updates made to identifying details for the insurance account (e.g., name, email, phone)
+      - `account.disconnected`: The account and any connected policies are no longer being monitored by Axle
+    - [Policy events](/guides/policy-events)
+      - `policy.modified`: Updates made to insurance policy, such as policy cancellation or change in coverages
 
-### Step 2: Process Account and Policy events
+  </Step>
+  <Step title="Retrieve Account or Policy object" titleSize="h3">
+    For security, Account and Policy events do not include the entire Account and Policy objects, but include a `ref` to identify which Account or Policy is impacted by this event. You can retrieve the object via this identifier and the `accessToken` stored in your application.
 
-Notifications will be triggered by the following events and will need to be processed by your application.
+    <Info>
+      Axle will continue refreshing the Account and Policy objects even if these
+      events are not triggered. Refer to the `refreshedAt` date on the Account and
+      Policy to determine when the data was last successfully retrieved from the
+      insurance carrier.
+    </Info>
 
-- [Account events](/guides/account-events)
-  - `account.modified`: Updates made to identifying details for the insurance account (e.g., name, email, phone)
-  - `account.disconnected`: The account and any connected policies are no longer being monitored by Axle
-- [Policy events](/guides/policy-events)
-  - `policy.modified`: Updates made to insurance policy, such as policy cancellation or change in coverages
+  </Step>
+  <Step title="Validate against requirements and contact user if action is required" titleSize="h3">
+    - `account.disconnected`: Ask user to complete new Axle session. See [Account events](/guides/account-events) for additional guidance on messaging.
+    - `policy.modified`: Validate updated policy against your application's requirements. If policy does not meet requirements, ask user to complete new Axle session.
 
-### Step 3: Retrieve Account or Policy object
+    <Info>
+      Note: If the user reconnects the same insurance account and policy, Axle will
+      merge the updated information with any existing Account or Policy objects.
+    </Info>
 
-For security, Account and Policy events do not include the entire Account and Policy objects, but include a `ref` to identify which Account or Policy is impacted by this event. You can retrieve the object via this identifier and the `accessToken` stored in your application.
-
-<Info>
-  Axle will continue refreshing the Account and Policy objects even if these
-  events are not triggered. Refer to the `refreshedAt` date on the Account and
-  Policy to determine when the data was last successfully retrieved from the
-  insurance carrier.
-</Info>
-
-### Step 4: Validate against requirements and contact user if action is required
-
-- `account.disconnected`: Ask user to complete new Axle session. See [Account events](/guides/account-events) for additional guidance on messaging.
-- `policy.modified`: Validate updated policy against your application's requirements. If policy does not meet requirements, ask user to complete new Axle session.
-
-<Info>
-  Note: If the user reconnects the same insurance account and policy, Axle will
-  merge the updated information with any existing Account or Policy objects.
-</Info>
+  </Step>
+</Steps>

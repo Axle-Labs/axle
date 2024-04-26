@@ -13,18 +13,18 @@ tokens, and making API requests against the Axle API.
 Axle provides a consistent, single point integration to connect
 your users' insurance accounts to your application. To do so, Axle closely
 follows the OAuth 2.0 Authorization Code flow which begins when your user wants
-to link their insurance account to your application.
+to connect their insurance account to your application.
 
 <Warning>
-  Never send requests from your client to the Axle API. Establishing a session
-  server side allows us to create a secure session without exposing your Axle
-  API credentials.
+  Never send requests from your application's client to the Axle API. Generating
+  an Ignition token from your application's protected services will avoid
+  exposing your Axle API credentials.
 </Warning>
 
 ### Step 1: Generate an Ignition token
 
 Make a `POST` request to `/ignition`. In return, you'll retrieve an ignitionToken which
-you'll need to pass to your app's client. This token will be used to initialize
+you'll need to pass to your application's client. This token will be used to initialize
 Ignition and allows us to create secure, trackable session with your user.
 
 ```bash Request Sample: cURL
@@ -74,14 +74,14 @@ authentication session for the user to link their account:
 <Check>
 **Congrats!**
 
-At this stage the user will now be able to securely link their insurance account
+At this stage the user will now be able to securely connect their insurance account
 to Axle 🎉.
 
 </Check>
 
 ### Step 3: Exchange tokens
 
-Once the user successfully links their account, you'll receive an authorization
+Once the user successfully connects their account, you'll receive an authorization
 code as a query parameter at the `redirectUri` you provided in step 1 or in the body of the Window `MessageEvent`.
 
 However, data sent by a client - especially via URLs - is generally considered
@@ -136,7 +136,7 @@ can now leverage the Axle API to access their insurance data 🎉🎉!
 ### Step 5: Retrieve the Account
 
 Now that we have an `accessToken`, we can retrieve the Account object for the
-user's linked account by making a `GET` request to `accounts/{id}` with
+user's connected account by making a `GET` request to `accounts/{id}` with
 the `accessToken` passed in the `x-access-token` header. By passing the `expand` parameter, we can also can retrieve all Policy objects available on the account:
 
 ```bash Request Sample: cURL
