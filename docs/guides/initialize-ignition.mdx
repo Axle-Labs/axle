@@ -102,13 +102,27 @@ Once you have generated an Ignition token, you can guide the user to complete Ax
 </html>
 ```
 
-### Mobile: Display Ignition in native webview
+### Mobile: Display Ignition in native view
 
-- On iOS, open the constructed `ignitionUri` within the natively supported `ASWebAuthentication`
-  session ([full documentation](https://developer.apple.com/documentation/authenticationservices/authenticating_a_user_through_a_web_service))
-- On Android, we suggest using `Chrome Custom Tabs` ([full documentation](https://developer.chrome.com/docs/android/custom-tabs/integration-guide/)) to create an in-app session and Android App Links ([full documentation](https://developer.android.com/training/app-links)) to deep-link back into your application.
-
-See [Ignition events](/guides/ignition-events) for more
+<Steps>
+  <Step title="Open webview">
+    - On iOS, open the constructed `ignitionUri` within the natively supported
+    `ASWebAuthentication` session ([full
+    documentation](https://developer.apple.com/documentation/authenticationservices/authenticating_a_user_through_a_web_service)).
+    - On Android, open the constructed `ignitionUri` within `Chrome Custom Tabs`
+    ([full
+    documentation](https://developer.chrome.com/docs/android/custom-tabs/integration-guide/))
+    to create an in-app session and Android App Links ([full
+    documentation](https://developer.android.com/training/app-links)) to
+    deep-link back into your application.
+  </Step>
+  <Step title="Process Ignition event">
+    Process each Ignition event that is returned to your application's client.
+    For example, when a user completes Ignition, process the event with
+    `status=complete` by sending the `authCode` to your application's protected
+    services to be exchanged for an `accessToken`.
+  </Step>
+</Steps>
 
 <Check>
 **Congrats!**

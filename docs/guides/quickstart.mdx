@@ -6,7 +6,7 @@ information from your users' insurance policies. Here at Axle, we're champions f
 
 This is where Ignition - Axle's consumer facing consent widget - comes into
 play. This guide will walk you through setting up Ignition, obtaining access
-tokens, and making API requests against the Axle API.
+tokens, and making requests against the Axle API.
 
 #### How it works
 
@@ -16,9 +16,9 @@ follows the OAuth 2.0 Authorization Code flow which begins when your user wants
 to connect their insurance account to your application.
 
 <Warning>
-  Never send requests from your application's client to the Axle API. Generating
-  an Ignition token from your application's protected services will avoid
-  exposing your Axle API credentials.
+  Never send requests from your application's client to the Axle API. Making
+  requests from your application's protected services will avoid exposing your
+  sensitive Axle API credentials.
 </Warning>
 
 ### Step 1: Generate an Ignition token
@@ -56,46 +56,35 @@ curl --request POST \
 }
 ```
 
-### Step 2: Initialize Ignition
+### Step 2: Initialize Ignition and process Ignition events
 
-Next, construct an Axle Ignition authorization URL using
-`https://ignition.axle.insure/?token={ignitionToken}` for production and
-`https://ignition.sandbox.axle.insure/?token={ignitionToken}` for development.
+Here are some common ways you can present Ignition to your application's users:
 
-Now that you've constructed an Axle authorization URL you can open an Ignition
-authentication session for the user to link their account:
+- **Recommended:** display Ignition at the right step within your application's user experience (such as before booking a rental or closing a loan application) via an iframe or webview
+- Send Ignition URL in an asychronous user communication (such as email or push notification)
 
-- On iOS, we suggest leveraging Apple's natively supported `ASWebAuthentication`
-  session ([full documentation](https://developer.apple.com/documentation/authenticationservices/authenticating_a_user_through_a_web_service))
-- On Android, we suggest using `Chrome Custom Tabs` ([full documentation](https://developer.chrome.com/docs/android/custom-tabs/integration-guide/)) to create an in-app session and Android App Links ([full documentation](https://developer.android.com/training/app-links)) to deep-link back into your application.
-- On web, we suggest simply directing the user to the Axle Ignition authorization URL in a new window and
-  setting up a route to handle the redirection parameters, or initialize the session within an iframe modal and listen for Window `MessageEvent` using `window.addEventListener`. See our guide on [Ignition events](/guides/ignition-events) for more details.
+<Tip>
+  For guidance on specific implementations based on your application's
+  requirements, refer to our [Initialize Ignition](/guides/initialize-ignition)
+  guide.
+</Tip>
 
-<Check>
-**Congrats!**
-
-At this stage the user will now be able to securely connect their insurance account
-to Axle 🎉.
-
-</Check>
+Then, process events generated during the course of the Ignition session. See our [Ignition events](/guides/ignition-events) guide for each Ignition event.
 
 ### Step 3: Exchange tokens
 
 Once the user successfully connects their account, you'll receive an authorization
-code as a query parameter at the `redirectUri` you provided in step 1 or in the body of the Window `MessageEvent`.
+code (`authCode`) as an Ignition event via redirect parameters, Window MessageEvent, or webhook.
 
-However, data sent by a client - especially via URLs - is generally considered
-insecure. That's where the OAuth 2.0 Authorization Code grant comes into play.
-We'll exchange the short-lived `authCode` for a long-lived `accessToken` server
-side.
+However, for additional security (particularly if the Ignition event is delivered to your application's client), you'll need to exchange the short-lived `authCode` for a long-lived `accessToken` in your application's protected services.
 
 <Note>
-  `authCodes` expire after 10 minutes so be sure you're exchanging codes in real
-  time.
+  Each `authCode` expires after 10 minutes so be sure you're exchanging codes in
+  real time.
 </Note>
 
 To do so, make a `POST` request with your `authCode` to `token/exchange`. In
-return you'll receive an `accessToken` and an `accountId`.
+return you'll receive an `accessToken`, `account` identifier, and list of `policy` identifiers.
 
 ```bash Request Sample: cURL
 curl --request POST \
@@ -121,19 +110,17 @@ curl --request POST \
 
 ### Step 4: Store access credentials
 
-Store the `accessToken` and `accountId` received in step 4 in your database -
-they'll be used to access account and policy information for the user going
-forward.
+Store the `accessToken`, `account` identifier, and list of `policy` identifiers received in step 4 in your database - these values be used to access account and policy information for the user going forward.
 
 <Check>
 **Congrats!**
 
-You have now received an accessToken that represents consent from the user and
+You have now received an `accessToken` that represents consent from the user and
 can now leverage the Axle API to access their insurance data 🎉🎉!
 
 </Check>
 
-### Step 5: Retrieve the Account
+### Step 5: Retrieve the Account and associated Policies
 
 Now that we have an `accessToken`, we can retrieve the Account object for the
 user's connected account by making a `GET` request to `accounts/{id}` with
