@@ -51,13 +51,10 @@
     {
       "group": "Guides",
       "pages": [
+        "guides/quickstart",
         {
-          "group": "Quickstart",
-          "pages": [
-            "guides/quickstart",
-            "guides/initialize-ignition",
-            "guides/ignition-events"
-          ]
+          "group": "Axle Ignition",
+          "pages": ["guides/initialize-ignition", "guides/ignition-events"]
         },
         "guides/platform-integration",
         "guides/sandbox",
