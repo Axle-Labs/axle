@@ -96,8 +96,13 @@ Once you have generated an Ignition token, you can guide the user to complete Ax
     </script>
     <style>
       .ignition {
-        height: 100vh;
-        width: 100vw;
+        z-index: 999; /* Bring modal to front of page */
+        position: fixed;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 100%;
+        border: none;
       }
     </style>
   </head>
