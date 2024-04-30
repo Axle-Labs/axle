@@ -8,11 +8,11 @@ description: "The Axle sandbox can be used to test your integration of Axle's AP
   Axle team!
 </Info>
 
-# Testing Ignition completions in the sandbox
+## Testing Ignition completions in the sandbox
 
-## Result: Link 
+### Result: `link`
 
-### Using test credentials to complete Login
+#### Using test credentials to complete Login
 
 1. Once an `Ignition` session has been generated ([more details can be found here](/api-reference/ignition/start-ignition)), select one of the test credentials based on which Axle scenario you would like to test. These credentials can be used for any carrier listed.
 2. Input credentials into login page to simulate connecting to an insurance account for the selected carrier.
@@ -20,9 +20,9 @@ description: "The Axle sandbox can be used to test your integration of Axle's AP
 
 Congrats! Now you can access sample [Account](/api-reference/accounts/account) or [Policy](/api-reference/policies/policy) objects after exchanging the generated `authCode` for an `accessToken`. See our [Quickstart](/guides/quickstart) guide for more details.
 
-### Test credentials
+#### Test credentials
 
-#### Simple `auto`
+**Simple `auto`**
 
 The following credentials will connect to an account with several active `auto` policies.
 
@@ -31,7 +31,7 @@ username: username
 password: password
 ```
 
-#### Minimum `auto`
+**Minimum `auto`**
 
 The following credentials will connect to an account with several `auto` policies, one of which has **inactive** status and one which satisfies only the minimum required policy coverage in most states.
 
@@ -40,7 +40,7 @@ username: user-auto-state-minimum
 password: pass-auto-state-minimum
 ```
 
-#### Simple `home`
+**Simple `home`**
 
 The following credentials will connect to an account with several active `home` policies.
 
@@ -49,7 +49,7 @@ username: user-home
 password: pass-home
 ```
 
-#### Error
+**Error**
 
 The following credentials will fail to connect to the Axle service, resulting in an `errored` status for the Ignition session.
 
@@ -58,7 +58,7 @@ username: user-error
 password: pass-error
 ```
 
-## Result: Manual
+### Result: `manual`
 
 You can complete Ignition sessions manually by selecting "My carrier is not listed" on the carrier selection page and then uploading any document of the allowed types (defaults to `pdf`, `jpg`, `jpeg`, `png`). 
 
@@ -66,7 +66,7 @@ You can complete Ignition sessions manually by selecting "My carrier is not list
   Your Axle `client` will be configured in the sandbox to mirror what will be used by your application's production environment. Contact the Axle team if you would like to make any changes, such as enabling "manual" Ignition completions. 
 </Tip>
 
-### Sending test documents through Axle's Document AI 
+#### Sending test documents through Axle's Document AI 
 
 <Info>
   The Axle team is currently working on providing the right sandbox experience to test Document AI. You can continue testing via the existing manual process, but stay tuned for updates! 

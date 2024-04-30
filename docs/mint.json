@@ -57,7 +57,6 @@
           "pages": ["guides/initialize-ignition", "guides/ignition-events"]
         },
         "guides/platform-integration",
-        "guides/sandbox",
         {
           "group": "Monitoring",
           "pages": [
@@ -65,7 +64,8 @@
             "guides/account-events",
             "guides/policy-events"
           ]
-        }
+        },
+        "guides/sandbox"
       ]
     },
     {
