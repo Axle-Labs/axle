@@ -71,3 +71,16 @@ You can complete Ignition sessions manually by selecting "My carrier is not list
 <Info>
   The Axle team is currently working on providing the right sandbox experience to test Document AI. You can continue testing via the existing manual process, but stay tuned for updates! 
 </Info>
+
+## Testing monitoring notifications in the sandbox
+
+After completing an Ignition session and exchanging the `authCode` for an `accessToken`, you can trigger an Account event through [`POST /sandbox/account/{accountId}/event`](/api-reference/sandbox/trigger-account-event) or Policy event through [`POST /sandbox/policies/{policyId}/event`](/api-reference/sandbox/trigger-policy-event). 
+
+The following Account and Policy events are supported:
+- account.modified
+- account.disconnected
+- policy.modified
+
+<Tip>
+  You can also test notifications sent to other communication channels such as email or Slack by making a request to the same Axle API routes. Reach out to the Axle team to ensure your `client` is properly configured!
+</Tip>
