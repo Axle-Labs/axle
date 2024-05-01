@@ -108,6 +108,13 @@
             "api-reference/platform/create-client",
             "api-reference/platform/get-clients"
           ]
+        },
+        {
+          "group": "Sandbox",
+          "pages": [
+            "api-reference/sandbox/trigger-account-event",
+            "api-reference/sandbox/trigger-policy-event"
+          ]
         }
       ]
     }
