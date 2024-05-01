@@ -418,16 +418,19 @@ paths:
                 properties:
                   success:
                     $ref: "#/components/schemas/Success"
+                  data:
+                    type: object
                 required:
                   - success
+                  - data
       deprecated: false
       tags:
         - Sandbox
   /sandbox/policies/{id}/event:
     post:
-      summary: Trigger an Account event
+      summary: Trigger an Policy event
       description: |-
-        The Account event will be sent to the `webhookUri` specified when generating an Ignition token. 
+        The Policy event will be sent to the `webhookUri` specified when generating an Ignition token. 
 
         Refer to the [Sandbox](/guides/sandbox) guide for more details.
       operationId: MonitoringNotifications
@@ -463,8 +466,11 @@ paths:
                 properties:
                   success:
                     $ref: "#/components/schemas/Success"
+                  data:
+                    type: object
                 required:
                   - success
+                  - data
       deprecated: false
       tags:
         - Sandbox
