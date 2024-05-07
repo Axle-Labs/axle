@@ -60,39 +60,53 @@ password: pass-error
 
 ### Result: `manual`
 
-You can complete Ignition sessions manually by selecting "My carrier is not listed" on the carrier selection page and then uploading any document of the allowed types (defaults to `pdf`, `jpg`, `jpeg`, `png`). 
+You can complete Ignition sessions manually by selecting "My carrier is not listed" on the carrier selection page and then uploading any document of the allowed types (defaults to `pdf`, `jpg`, `jpeg`, `png`).
 
 <Tip>
-  Your Axle `client` will be configured in the sandbox to mirror what will be used by your application's production environment. Contact the Axle team if you would like to make any changes, such as enabling "manual" Ignition completions. 
+  Your Axle `client` will be configured in the sandbox to mirror what will be
+  used by your application's production environment. Contact the Axle team if
+  you would like to make any changes, such as enabling "manual" Ignition
+  completions.
 </Tip>
 
-#### Sending test documents through Axle's Document AI 
+#### Sending test documents through Axle's Document AI
 
-If your Axle `client` is configured to used Document AI, you can use the following test documents to complete Ignition sessions and receive the expected document response. 
-<Card title="Auto policy">
-  <Tabs>
-    <Tab title="Identification (ID) card">
-      ![title](/path/image.jpg)
-    </Tab>
-    <Tab title="Declarations page">
-      ![title](/path/image.jpg)
-    </Tab>
-  </Tabs>
-</Card>
+If your Axle `client` is configured to used Document AI, you can use the following test documents to complete Ignition sessions and receive the expected Policy response.
 
-<Info>
-  The Axle team is currently working on providing the right sandbox experience to test Document AI. You can continue testing via the existing manual process, but stay tuned for updates! 
-</Info>
+<Tabs>
+  <Tab title="Auto policy">
+    <Card
+      title="Identification (ID) card"
+      icon="file"
+      href="https://axle-labs-assets.s3.amazonaws.com/docs/id-card.png"
+    ></Card>
+    <Card
+      title="Declarations page"
+      icon="file"
+      href="https://axle-labs-assets.s3.amazonaws.com/docs/declarations-page.pdf"
+    ></Card>
+  </Tab>
+  <Tab title="Home policy">
+    <Info>
+      The Axle team is currently working on providing the right sandbox
+      experience to test Document AI for home policies. You can continue testing
+      via the existing manual process, but stay tuned for updates!
+    </Info>
+  </Tab>
+</Tabs>
 
 ## Testing monitoring notifications in the sandbox
 
-After completing an Ignition session and exchanging the `authCode` for an `accessToken`, you can trigger an Account event through [`POST /sandbox/account/{accountId}/event`](/api-reference/sandbox/trigger-account-event) or Policy event through [`POST /sandbox/policies/{policyId}/event`](/api-reference/sandbox/trigger-policy-event). 
+After completing an Ignition session and exchanging the `authCode` for an `accessToken`, you can trigger an Account event through [`POST /sandbox/account/{accountId}/event`](/api-reference/sandbox/trigger-account-event) or Policy event through [`POST /sandbox/policies/{policyId}/event`](/api-reference/sandbox/trigger-policy-event).
 
 The following Account and Policy events are supported:
+
 - account.modified
 - account.disconnected
 - policy.modified
 
 <Tip>
-  You can also test notifications sent to other communication channels such as email or Slack by making a request to the same Axle API routes. Reach out to the Axle team to ensure your `client` is properly configured!
+  You can also test notifications sent to other communication channels such as
+  email or Slack by making a request to the same Axle API routes. Reach out to
+  the Axle team to ensure your `client` is properly configured!
 </Tip>
