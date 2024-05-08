@@ -4,11 +4,11 @@ info:
   contact: {}
   version: "0.1"
 servers:
-  - url: "https://api.axle.insure"
-    variables: {}
-    description: Production
   - description: Sandbox
     url: "https://sandbox.axle.insure"
+  - description: Production
+    url: "https://api.axle.insure"
+    variables: {}
 security:
   - ApiKeyAuth: []
 paths:
