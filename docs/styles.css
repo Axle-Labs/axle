@@ -1,0 +1,27 @@
+@font-face {
+  font-family: "Suisse Intl";
+  src: url(https://uploads-ssl.webflow.com/62c9a8ebe81984320aaa6d60/63870e3e7d02c82500d5b032_SuisseIntl-Regular.woff2)
+      format("woff2"),
+    url(https://uploads-ssl.webflow.com/62c9a8ebe81984320aaa6d60/63870e3e7d02c82500d5b032_SuisseIntl-Regular.woff)
+      format("woff");
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Suisse Intl";
+  src: url(https://uploads-ssl.webflow.com/62c9a8ebe81984320aaa6d60/63870ec9d6797e86085b84fa_SuisseIntl-SemiBold.woff2)
+      format("woff2"),
+    url(https://uploads-ssl.webflow.com/62c9a8ebe81984320aaa6d60/63870ec9d6797e86085b84fa_SuisseIntl-SemiBold.woff)
+      format("woff");
+  font-weight: 600;
+  font-style: normal;
+}
+
+body {
+  font-family: "Suisse Intl", "Helvetica", "Arial", sans-serif;
+  font-feature-settings: "salt";
+  -o-font-feature-settings: "salt";
+  -moz-font-feature-settings: "salt";
+  -webkit-font-feature-settings: "salt";
+}
