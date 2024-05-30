@@ -246,8 +246,16 @@ List of documents (such as declaration pages and policy agreements) associated w
 
         </ResponseField>
 
+        <ResponseField name="issuedDate" type="string" >
+          If available, ISO 8601 timestamp at which the document was generated or issued by the carrier.
+        </ResponseField>
+
+        <ResponseField name="effectiveDate" type="string" >
+          If available, ISO 8601 timestamp at which the document becomes active or goes into effect.
+        </ResponseField>
+
         <ResponseField name="createdAt" type="string" >
-          Unique identifier of Property afforded coverage for specified Third Party.
+          ISO 8601 timestamp at which the document was fetched or shared via Axle.
         </ResponseField>
 
     </Expandable>
@@ -384,6 +392,8 @@ List of documents (such as declaration pages and policy agreements) associated w
       "name": "Declaration Page",
       "type": ["declaration-page"],
       "url": "<signed-url>",
+      "issuedDate": "2022-01-01T00:00:00.000Z",
+      "effectiveDate": "2022-01-02T00:00:00.000Z",
       "createdAt": "2022-01-01T00:00:00.000Z"
     }
   ],
@@ -488,6 +498,8 @@ List of documents (such as declaration pages and policy agreements) associated w
       "name": "Declaration Page",
       "type": ["declaration-page"],
       "url": "<signed-url>",
+      "issuedDate": "2022-01-01T00:00:00.000Z",
+      "effectiveDate": "2022-01-02T00:00:00.000Z",
       "createdAt": "2022-01-01T00:00:00.000Z"
     },
   ],
