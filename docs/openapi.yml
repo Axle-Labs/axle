@@ -253,7 +253,6 @@ paths:
       operationId: ValidatePolicy
       parameters:
         - $ref: "#/components/parameters/x-client-id"
-        - $ref: "#/components/parameters/x-client-secret"
         - $ref: "#/components/parameters/x-destination-client-id"
         - $ref: "#/components/parameters/x-access-token"
       requestBody:
@@ -275,11 +274,6 @@ paths:
                         enum:
                           - "policy-effective"
                           - "rental-collision-damage-coverage"
-                      input:
-                        anyOf:
-                          - type: string
-                          - type: number
-                        description: "The input value to use for the validation check."
                     required:
                       - "code"
 
@@ -296,8 +290,106 @@ paths:
                   success:
                     $ref: "#/components/schemas/Success"
                   data:
-                    type: string
-                    description: The result of the validation checks.
+                    type: object
+                    properties:
+                      status:
+                        type: string
+                        description: "The result of the validation checks."
+
+                        enum:
+                          - "clear"
+                          - "concern"
+                      summary:
+                        type: object
+                        description: "A summary of the validation checks."
+                        properties:
+                          policy-effective:
+                            $ref: "#/components/schemas/ValidationStatus"
+                            description: "The result of the policy-effective validation check."
+                          rental-collision-damage-coverage:
+                            $ref: "#/components/schemas/ValidationStatus"
+                            description: "The result of the rental-collision-damage-coverage validation check."
+                      checks:
+                        type: object
+                        description: "A detailed report of the validation checks."
+                        properties:
+                          policy-effective:
+                            type: object
+                            description: "The result of the policy-effective validation check."
+                            properties:
+                              status:
+                                $ref: "#/components/schemas/ValidationStatus"
+                              metadata:
+                                type: object
+                                description: "Additional metadata about the validation check."
+                                properties:
+                                  effectiveDate:
+                                    type: string
+                                    description: "The effective date of the policy."
+                                  expirationDate:
+                                    type: string
+                                    description: "The expiration date of the policy."
+                                  currentDate:
+                                    type: string
+                                    description: "The current date."
+                          rental-collision-damage-coverage:
+                            type: object
+                            description: "The result of the rental-collision-damage-coverage validation check."
+                            properties:
+                              status:
+                                $ref: "#/components/schemas/ValidationStatus"
+                              breakdown:
+                                type: object
+                                description: "A breakdown of the validation check."
+                                properties:
+                                  collision-exists:
+                                    type: object
+                                    description: "A check which determines whether or not the policy has collision coverage."
+                                    properties:
+                                      status:
+                                        $ref: "#/components/schemas/ValidationStatus"
+                                      metadata:
+                                        type: object
+                                        properties:
+                                          coverage:
+                                            type: object
+                                            properties:
+                                              property:
+                                                type: string
+                                                description: "The property associated with the collision coverage."
+                                              limitPerAccident:
+                                                type: number
+                                                description: "The limit per accident of the collision coverage."
+                                              deductible:
+                                                type: number
+                                                description: "The deductible of the collision coverage."
+                                  collision-coverage-extends-to-rental:
+                                    type: object
+                                    description: "A check which determines whether or not this auto policy is likely to extend collision coverage to a rental vehicle."
+                                    properties:
+                                      status:
+                                        $ref: "#/components/schemas/ValidationStatus"
+                                      metadata:
+                                        type: object
+                                        properties:
+                                          carrier:
+                                            type: string
+                                            description: "The insurance carrier of the policy."
+                                          state:
+                                            type: string
+                                            description: "The state of the policy."
+                                  property-damage-covers-rental-collision:
+                                    type: object
+                                    description: "A check which determines whether or not a regulation exists which would allow property damage coverage to cover collision damage on this policy."
+                                    properties:
+                                      status:
+                                        $ref: "#/components/schemas/ValidationStatus"
+                                      metadata:
+                                        type: object
+                                        properties:
+                                          state:
+                                            type: string
+                                            description: "The state of the policy."
 
   /carriers/{id}:
     get:
@@ -1145,6 +1237,15 @@ components:
         updatedAt:
           type: string
           description: ISO 8601 timestamp at which the Account connection status was updated.
+    ValidationStatus:
+      title: ValidationStatus
+      type: string
+      description: Indicates whether the validation checks were successful.
+      enum:
+        - clear
+        - concern
+        - caution
+        - unknown
   parameters:
     x-client-id:
       name: x-client-id

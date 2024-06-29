@@ -5,9 +5,22 @@ description: "The Validation Engine is used to perform a list of validations on 
 
 ## Validations
 
-A validation is an individual check run against a policy to ensure that it meets a certain requirement. For example, the `policy-effective` validation compares the effective and expiration dates on the policy to today’s date, and returns `clear` if the policy is currently effective or `concern` if it seems to be expired.
+A validation is an individual check run against a
+policy to ensure that it meets a certain requirement. For example, the
+`policy-effective` validation compares the effective and expiration dates on the
+policy to today’s date, and returns `clear` if the policy is currently effective
+or `concern` if it seems to be expired.
 
 Some validations are more complex, providing additional insight which is not contained on the policy, like `rental-covered-for-collision` , which can tell you whether this policy is likely to provide coverage to a driver for collision damage to a rental vehicle.
+
+Every validation reports one of the following statuses after running the check:
+
+| Status    | Description                                                                                                                                                                                |
+| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `clear`   | The validation has passed entirely, and deemed the policy `clear` for any issues relating to this validation                                                                               |
+| `concern` | The validation has not passed for this policy                                                                                                                                              |
+| `caution` | The validation is not entirely `clear` or `concern`, and falls somewhere between the two. When making the top level validation determination, we consider `caution` to be a failure state. |
+| `unknown` | Not enough data was available to determine the outcome of this validation                                                                                                                  |
 
 ## Validation List
 
@@ -83,17 +96,14 @@ While many insurance agreements _do_ extend collision coverage to their insureds
       "collision-coverage-extends-to-rental": {
         "status": "caution",
         "metadata": {
-          "matchedResources": [
-            {"entity": "form", "state": "NY", "name": "travelers-NY-F90A", "url": "https://.."}
-          ]
+          "carrier": "state-farm",
+          "state": "NY"
         }
       },
       "property-damage-covers-rental-collision": {
         "status": "clear",
         "metadata": {
-          "matchedResources": [
-            {"entity": "regulation", "state": "NY", "name": "Insurance (ISC) Chapter 28, Article 34, Section 3440", "text": "ABCD...", "url": "https://..."}
-          ]
+          "state": "NY"
         }
       }
     }
@@ -106,3 +116,60 @@ While many insurance agreements _do_ extend collision coverage to their insureds
 
   </Accordion>
 </AccordionGroup>
+
+## Validation Response
+
+When you call the validation api, every validation you requested will be run, and you'll recieve a response with an overall status determination of either `clear` or `concern`.
+
+- `clear` means that the policy succeded in passing all validations
+- `concern` means that one or more validations failed or had a status other than `clear`
+
+The response also contains two other fields:
+
+- `summary` - An object containing the names of all validations on the policy and their statuses
+- `validations` - An object containing the validaiton response object for each of the validations run.
+
+<CodeGroup>
+```json Clear Response
+{
+  "status": "clear",
+  "summary": {
+    "policy-effective": "clear",
+    "rental-covered-for-collision": "clear",
+  },
+  "validations": {
+    "policy-effective":{
+      "status": "clear",
+      "metadata": {...},
+    },
+    "rental-covered-for-collision": {
+      "status": "clear",
+      "breakdown": {...},
+      "metadata": {...}
+    }
+  }
+}
+```
+
+```json Concern API Response
+{
+  "status": "concern",
+  "summary": {
+    "policy-effective": "clear",
+    "rental-covered-for-collision": "concern",
+  },
+  "validations": {
+    "policy-effective":{
+      "status": "clear",
+      "metadata": {...},
+    },
+    "rental-covered-for-collision": {
+      "status": "concern",
+      "breakdown": {...},
+      "metadata": {...}
+    }
+  }
+}
+```
+
+</CodeGroup>
