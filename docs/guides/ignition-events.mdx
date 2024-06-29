@@ -1,15 +1,15 @@
 ---
-title: "Ignition Status Handling"
+title: "Events"
 description:
-  "This guide will walk you through the various statuses that occur during an
+  "This guide will walk you through the various events that occur during an
   Ignition session."
 ---
 
 Axle’s Ignition session is the main interface that allows your customers to connect to their insurance accounts and authorize access to scoped data from their insurance policies.
 
-Please first review our Quickstart guide and API docs on how to start an Ignition session, if you have not already.
+Please first review our [Quickstart](/guides/quickstart) guide and API docs on how to start an Ignition session, if you have not already.
 
-## Configure an Ignition session for status handling
+## Configure an Ignition session for event handling
 
 Your `POST` request to `/ignition` can include the following request
 body:
@@ -44,7 +44,7 @@ Example: `https://ignition.axle.insure/?origin=http://example.com`
 
 </Note>
 
-## Redirect and Window MessageEvent Parameters
+## Redirect and Window MessageEvent parameters
 
 On Ignition status change, the following parameters will be shared via URL to the `redirectUri` provided and in the Window `MessageEvent`.
 
@@ -108,13 +108,13 @@ When Axle is unable to retrieve account or policy information from a selected ca
   be used to handle Ignition status through redirect or Window MessageEvent.
 </Warning>
 
-## Webhook Events
+## Webhooks
 
 If an optional `webhookUri` is provided, a `POST` request will be sent to the `webhookUri` with the following body. The individual parameters included within `data` are the same as those listed above for the corresponding status, with the addition of `user` and `metadata` shared via the Ignition request body:
 
 ```json Example webhook request body
 {
-  "id": "<webhook_id>",
+  "id": "<event_id>",
   "type": "ignition.completed",
   "data": {
     "client": "<client-id>",

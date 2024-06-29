@@ -2,13 +2,15 @@ openapi: 3.0.0
 info:
   title: Axle API
   contact: {}
-  version: "1.0"
+  version: "0.1"
 servers:
-  - url: "https://api.axle.insure"
-    variables: {}
-    description: Production
   - description: Sandbox
     url: "https://sandbox.axle.insure"
+  - description: Production
+    url: "https://api.axle.insure"
+    variables: {}
+security:
+  - ApiKeyAuth: []
 paths:
   /ignition:
     post:
@@ -19,7 +21,6 @@ paths:
       operationId: StartIgnition
       parameters:
         - $ref: "#/components/parameters/x-client-id"
-        - $ref: "#/components/parameters/x-client-secret"
         - $ref: "#/components/parameters/x-destination-client-id"
         - $ref: "#/components/parameters/x-encrypted-data"
       requestBody:
@@ -95,7 +96,6 @@ paths:
       operationId: ExchangeToken
       parameters:
         - $ref: "#/components/parameters/x-client-id"
-        - $ref: "#/components/parameters/x-client-secret"
         - $ref: "#/components/parameters/x-destination-client-id"
       requestBody:
         description: ""
@@ -112,7 +112,7 @@ paths:
                   type: string
                   description:
                     The authorization code obtained after a user successfully
-                    links their account via Ignition. Returned as a query
+                    connects their account via Ignition. Returned as a query
                     parameter at the redirectUri.
               required:
                 - authCode
@@ -164,7 +164,6 @@ paths:
       operationId: GetAccount
       parameters:
         - $ref: "#/components/parameters/x-client-id"
-        - $ref: "#/components/parameters/x-client-secret"
         - $ref: "#/components/parameters/x-access-token"
         - $ref: "#/components/parameters/x-destination-client-id"
         - $ref: "#/components/parameters/expand"
@@ -195,7 +194,6 @@ paths:
       operationId: GetPolicy
       parameters:
         - $ref: "#/components/parameters/x-client-id"
-        - $ref: "#/components/parameters/x-client-secret"
         - $ref: "#/components/parameters/x-destination-client-id"
         - $ref: "#/components/parameters/x-access-token"
         - $ref: "#/components/parameters/expand"
@@ -220,21 +218,17 @@ paths:
     get:
       summary: Get Policy Report
       description:
-        "The Get Policy Report method returns a PDF report of the requested Policy object, including high-level
+        "The Get Policy Report method returns a PDF or image report of the requested Policy object, including high-level
         policy information (e.g., policy number) and any children objects (e.g.,
-        Coverages) associated with the Policy.
-
-
-        **Please note, this route is currently only available in the sandbox environment.**
-        "
+        Coverages) associated with the Policy."
       operationId: GetPolicyReport
       parameters:
         - $ref: "#/components/parameters/x-client-id"
-        - $ref: "#/components/parameters/x-client-secret"
         - $ref: "#/components/parameters/x-destination-client-id"
         - $ref: "#/components/parameters/x-access-token"
         - $ref: "#/components/parameters/expand"
         - $ref: "#/components/parameters/mode"
+        - $ref: "#/components/parameters/format"
       responses:
         "200":
           description: ""
@@ -312,7 +306,6 @@ paths:
       operationId: GetCarrier
       parameters:
         - $ref: "#/components/parameters/x-client-id"
-        - $ref: "#/components/parameters/x-client-secret"
       responses:
         "200":
           description: ""
@@ -337,7 +330,6 @@ paths:
       operationId: GetCarriers
       parameters:
         - $ref: "#/components/parameters/x-client-id"
-        - $ref: "#/components/parameters/x-client-secret"
       responses:
         "200":
           description: ""
@@ -365,7 +357,6 @@ paths:
       operationId: GetDestinationClients
       parameters:
         - $ref: "#/components/parameters/x-client-id"
-        - $ref: "#/components/parameters/x-client-secret"
         - $ref: "#/components/parameters/expand"
       responses:
         "200":
@@ -394,7 +385,6 @@ paths:
       operationId: CreateDestinationClient
       parameters:
         - $ref: "#/components/parameters/x-client-id"
-        - $ref: "#/components/parameters/x-client-secret"
       requestBody:
         description: ""
         content:
@@ -441,6 +431,102 @@ paths:
       deprecated: false
       tags:
         - Clients
+  /sandbox/accounts/{id}/event:
+    post:
+      summary: Trigger Account event
+      description: |-
+        The Account event will be sent to the `webhookUri` specified when generating an Ignition token. 
+
+        Refer to the [Sandbox](/guides/sandbox) guide for more details.
+      operationId: MonitoringNotifications
+      parameters:
+        - $ref: "#/components/parameters/x-client-id"
+        - $ref: "#/components/parameters/x-destination-client-id"
+        - $ref: "#/components/parameters/x-access-token"
+      requestBody:
+        description: ""
+        content:
+          application/json:
+            schema:
+              description: ""
+              type: object
+              x-examples:
+                example-1:
+                  type: policy.modified
+              properties:
+                type:
+                  type: string
+                  description: The Account or Policy event type you would like to trigger.
+              required:
+                - type
+        required: true
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                description: ""
+                type: object
+                properties:
+                  success:
+                    $ref: "#/components/schemas/Success"
+                  data:
+                    type: object
+                required:
+                  - success
+                  - data
+      deprecated: false
+      tags:
+        - Sandbox
+  /sandbox/policies/{id}/event:
+    post:
+      summary: Trigger Policy event
+      description: |-
+        The Policy event will be sent to the `webhookUri` specified when generating an Ignition token. 
+
+        Refer to the [Sandbox](/guides/sandbox) guide for more details.
+      operationId: MonitoringNotifications
+      parameters:
+        - $ref: "#/components/parameters/x-client-id"
+        - $ref: "#/components/parameters/x-destination-client-id"
+        - $ref: "#/components/parameters/x-access-token"
+      requestBody:
+        description: ""
+        content:
+          application/json:
+            schema:
+              description: ""
+              type: object
+              x-examples:
+                example-1:
+                  type: policy.modified
+              properties:
+                type:
+                  type: string
+                  description: The Account or Policy event type you would like to trigger.
+              required:
+                - type
+        required: true
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                description: ""
+                type: object
+                properties:
+                  success:
+                    $ref: "#/components/schemas/Success"
+                  data:
+                    type: object
+                required:
+                  - success
+                  - data
+      deprecated: false
+      tags:
+        - Sandbox
 
 components:
   schemas:
@@ -672,23 +758,6 @@ components:
       required:
         - report
         - policy
-    DestinationClient:
-      title: Destination Client
-      type: object
-      example:
-        id: "cli_xxxxxxxxxxxx"
-        entity: "unique-entity-name"
-      x-internal: false
-      properties:
-        id:
-          type: string
-          description: The client ID of the destination client.
-        entity:
-          type: string
-          description: The unique entity of the destination client.
-      required:
-        - id
-        - entity
     Address:
       title: Address
       type: object
@@ -1062,16 +1131,6 @@ components:
       description: Indicates whether the operation was performed successfully.
       x-internal: false
       example: true
-    Error:
-      title: Error
-      type: object
-      x-internal: false
-      properties:
-        success:
-          $ref: "#/components/schemas/Success"
-        message:
-          type: string
-          description: "Provides a reason for why the operation failed, if available."
     Connection:
       title: Connection
       type: object
@@ -1094,15 +1153,6 @@ components:
       schema:
         type: string
       description: Your client ID. This will be shared with you during onboarding.
-    x-client-secret:
-      name: x-client-secret
-      in: header
-      required: true
-      schema:
-        type: string
-      description:
-        Your secret API key. This will be shared with you during onboarding and should
-        be considered sensitive - it’s a password after all!
     x-destination-client-id:
       name: x-destination-client-id
       in: header
@@ -1151,38 +1201,33 @@ components:
       schema:
         type: string
       description: The unique ID for the requested carrier. Returned in Account and Policy objects as `carrier`.
-    refresh:
-      name: refresh
-      in: query
-      required: false
-      schema:
-        type: boolean
-      description:
-        Set to *true* if you would like to request an update. Defaults to
-        *false*.
     expand:
       name: expand
       in: query
       required: false
       schema:
         type: boolean
-      description: Set to *true* if you would like to expand related entities (e.g., account, policy, client). Defaults to *false*.
+      description: Set to `true` if you would like to expand related entities (e.g., account, policy, client). Defaults to `false`.
     mode:
       name: mode
       in: query
       required: false
       schema:
         type: string
-      description: "Specify desired return type of the report. Options: `url` for a signedUrl or `base64` for the full file returned in base64 encoding. Defaults to `url`."
-    type:
-      name: type
+      description: "Specify desired return mode of the report. Options: `url` for a signedUrl or `base64` for the full file returned in base64 encoding. Defaults to `url`."
+    format:
+      name: format
       in: query
       required: false
       schema:
         type: string
-      description:
-        'Set to "relink-account" to start Ignition session to re-authenticate
-        user. Must also provide `account`. '
-
+      description: "Specify desired return format of the report. Options: `pdf` or `jpeg`. Defaults to `pdf`."
   responses: {}
-  securitySchemes: {}
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-client-secret
+      description:
+        Your secret API key. This will be shared with you during onboarding and should
+        be considered sensitive - it’s a password after all! Your secret will be matched with your client ID to authenticate your requests.

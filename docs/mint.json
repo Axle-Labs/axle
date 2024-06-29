@@ -5,7 +5,8 @@
     "dark": "/logo/dark.svg"
   },
   "api": {
-    "baseUrl": ["https://api.axle.insure", "https://sandbox.axle.insure"]
+    "baseUrl": ["https://api.axle.insure", "https://sandbox.axle.insure"],
+    "maintainOrder": true
   },
   "favicon": "/favicon-lg.png",
   "colors": {
@@ -51,7 +52,19 @@
       "group": "Guides",
       "pages": [
         "guides/quickstart",
+        {
+          "group": "Axle Ignition",
+          "pages": ["guides/initialize-ignition", "guides/ignition-events"]
+        },
         "guides/platform-integration",
+        {
+          "group": "Monitoring",
+          "pages": [
+            "guides/monitoring",
+            "guides/account-events",
+            "guides/policy-events"
+          ]
+        },
         "guides/sandbox"
       ]
     },
@@ -61,10 +74,7 @@
         "api-reference/overview",
         {
           "group": "Ignition",
-          "pages": [
-            "api-reference/ignition/start-ignition",
-            "api-reference/ignition/ignition-status-handling"
-          ]
+          "pages": ["api-reference/ignition/start-ignition"]
         },
         {
           "group": "Tokens",
@@ -100,13 +110,21 @@
             "api-reference/platform/create-client",
             "api-reference/platform/get-clients"
           ]
+        },
+        {
+          "group": "Sandbox",
+          "pages": [
+            "api-reference/sandbox/trigger-account-event",
+            "api-reference/sandbox/trigger-policy-event"
+          ]
         }
       ]
     }
   ],
   "footerSocials": {
-    "twitter": "https://twitter.com/axlelabs",
+    "x": "https://x.com/axlelabs",
     "linkedin": "https://www.linkedin.com/company/axle-labs/",
     "website": "https://www.axle.insure/"
-  }
+  },
+  "openapi": "/openapi.yml"
 }

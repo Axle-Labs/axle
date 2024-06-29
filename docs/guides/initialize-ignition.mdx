@@ -1,0 +1,146 @@
+---
+title: "Initialize"
+description: "This guide will help you understand how to display Axle's Ignition session to your users."
+---
+
+Once you have generated an Ignition token, you can guide the user to complete Axle's Ignition session for the user to share their insurance information.
+
+<Tip>
+  Using a clear call to action alongside a description of why you are requesting
+  a user's insurance information will increase the open rate of Ignition. 
+  
+  We also recommend including a link our [consumers](https://www.axle.insure/consumers) page in case your users have additional questions. Reach out to the Axle team for any guidance on how to
+  design the best experience. We would love to help!
+</Tip>
+
+### Open Ignition in new window
+
+<Steps>
+  <Step title="Open Ignition in new window">
+    Add link to the the constructed `ignitionUri` using an anchor tag or
+    other mechanism. 
+    
+    ```HTML 
+    <a
+      href="https://ignition.axle.insure/?token={ignitionToken}"
+      target="_blank"
+    >
+      Share your insurance via Axle
+    </a>
+    ```
+
+  </Step>
+  <Step title="Process Ignition completion">Once a user completes the Ignition session, capture the `authCode` by either handling the parameters after Ignition redirects back to your application using the specified `redirectUri` or processing the `ignition.completed` webhook event.</Step>
+</Steps>
+
+<Tip>
+  This method is best used for **asynchronous** user interactions such as via
+  email, SMS, push notification, etc. that do not require immediate user action
+  after insurance verification.
+</Tip>
+
+### Web: Display Ignition in iframe
+
+<Steps>
+  <Step title="Open iframe">
+    Initialize the constructed `ignitionUri` within an iframe modal.
+    <Note>
+      If you would like to receive `MessageEvent` messages to your main application Window from Ignition, you must specify an `origin` as a URL parameter when initalizing Ignition. The origin should not include any path, just the base domain as a URI.
+
+      Example: `https://ignition.axle.insure/?origin=http://example.com`
+
+    </Note>
+
+    <Tip>
+      Axle recommends setting up an iframe in your application's client that is full viewport width and height, as Ignition is optimized for responsiveness across all viewports.
+
+      For the best experience, you can set the background color and opacity (allowing a peek at your application's views or components) of Ignition. Contact the Axle team to enable this configuration!
+
+    </Tip>
+
+  </Step>
+  <Step title="Listen for MessageEvent">Implement `window.addEventListener` to listen for Window `MessageEvent`. For added security, verify the origin of the message is the Axle Ignition base domain (e.g., `https://ignition.axle.insure`)</Step>
+  <Step title="Process Ignition event">
+    Process each Ignition event in your application's client. For example, when a user completes Ignition, process the event with `status=complete` by sending the `authCode` to your application's protected
+    services to be exchanged for an `accessToken`.
+  </Step>
+</Steps>
+
+```HTML Page with iframe and eventListener (example)
+<html>
+  <head>
+    <script>
+      window.addEventListener("message", (message) => {
+        if (event.origin === "https://ignition.axle.insure") {
+          switch (message.data.status) {
+            case "complete":
+              console.log("Received completed message from Axle Ignition...", message.data);
+              onCompleted(message.data.authCode);
+              break;
+            case "exit":
+              console.log("Received exited message from Axle Ignition...", message.data);
+              onExited(message.data.step);
+              break;
+            case "error":
+              console.log("Received errored message from Axle Ignition...", message.data);
+              onErrored(message.data.message);
+              break;
+            default:
+              console.log("Received unknown message from Axle Ignition...");
+              break;
+          }
+        } else {
+          // Ignore or handle messages from other origins
+        }
+      });
+    </script>
+    <style>
+      .ignition {
+        z-index: 999; /* Bring modal to front of page */
+        position: fixed;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 100%;
+        border: none;
+      }
+    </style>
+  </head>
+  <body>
+    <iframe
+      src="https://ignition.axle.insure/?token=ign_GZQkqPDF7JSY8vJnSU9LP&origin=http://example.com"
+      class="ignition"
+    ></iframe>
+  </body>
+</html>
+```
+
+### Mobile: Display Ignition in native view
+
+<Steps>
+  <Step title="Open webview">
+    - On iOS, open the constructed `ignitionUri` within the natively supported
+    `ASWebAuthentication` session ([full
+    documentation](https://developer.apple.com/documentation/authenticationservices/authenticating_a_user_through_a_web_service)).
+    - On Android, open the constructed `ignitionUri` within `Chrome Custom Tabs`
+    ([full
+    documentation](https://developer.chrome.com/docs/android/custom-tabs/integration-guide/))
+    to create an in-app session and Android App Links ([full
+    documentation](https://developer.android.com/training/app-links)) to
+    deep-link back into your application.
+  </Step>
+  <Step title="Process Ignition event">
+    Process each Ignition event that is returned to your application's client.
+    For example, when a user completes Ignition, process the event with
+    `status=complete` by sending the `authCode` to your application's protected
+    services to be exchanged for an `accessToken`.
+  </Step>
+</Steps>
+
+<Check>
+**Congrats!**
+
+At this stage the user will now be able to securely connect their insurance account
+via Axle 🎉.
+
+</Check>
