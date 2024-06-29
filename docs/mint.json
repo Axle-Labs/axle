@@ -82,7 +82,9 @@
           "pages": [
             "api-reference/policies/policy",
             "api-reference/policies/get-policy",
-            "api-reference/policies/get-policy-report"
+            "api-reference/policies/get-policy-report",
+            "api-reference/policies/validation-engine",
+            "api-reference/policies/validate-policy"
           ]
         },
         {

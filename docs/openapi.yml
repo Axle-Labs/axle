@@ -252,6 +252,58 @@ paths:
         - Policies
     parameters:
       - $ref: "#/components/parameters/policy"
+  /policies/{id}/validate:
+    "post":
+      summary: Validate Policy
+      description: "The Validate Policy method returns a the result of a series of validation checks on the requested policy object."
+      operationId: ValidatePolicy
+      parameters:
+        - $ref: "#/components/parameters/x-client-id"
+        - $ref: "#/components/parameters/x-client-secret"
+        - $ref: "#/components/parameters/x-destination-client-id"
+        - $ref: "#/components/parameters/x-access-token"
+      requestBody:
+        description: ""
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                checks:
+                  type: array
+                  description: "A list of validation checks to perform on the policy object."
+                  items:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                        description: "The type of validation check to perform."
+                        enum:
+                          - "policy-effective"
+                          - "rental-collision-damage-coverage"
+                      input:
+                        anyOf:
+                          - type: string
+                          - type: number
+                        description: "The input value to use for the validation check."
+                    required:
+                      - "code"
+
+            example: { "checks": [{ "code": "policy-effective" }] }
+        required: true
+      responses:
+        "200":
+          "description": ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    $ref: "#/components/schemas/Success"
+                  data:
+                    type: string
+                    description: The result of the validation checks.
 
   /carriers/{id}:
     get:
@@ -1131,5 +1183,6 @@ components:
       description:
         'Set to "relink-account" to start Ignition session to re-authenticate
         user. Must also provide `account`. '
+
   responses: {}
   securitySchemes: {}

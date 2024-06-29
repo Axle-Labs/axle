@@ -1,0 +1,108 @@
+---
+title: "Policy Validation Guide"
+description: "The Validation Engine is used to perform a list of validations on a policy in order to determine if it meets your business’s requirements."
+---
+
+## Validations
+
+A validation is an individual check run against a policy to ensure that it meets a certain requirement. For example, the `policy-effective` validation compares the effective and expiration dates on the policy to today’s date, and returns `clear` if the policy is currently effective or `concern` if it seems to be expired.
+
+Some validations are more complex, providing additional insight which is not contained on the policy, like `rental-covered-for-collision` , which can tell you whether this policy is likely to provide coverage to a driver for collision damage to a rental vehicle.
+
+## Validation List
+
+<AccordionGroup>
+  <Accordion title="Policy Effective">
+  ### `policy-effective`
+
+Checks whether the policy dates indicate that the policy is effective on today’s date.
+
+#### Responses
+
+| Status    | Cause                                                                                          |
+| --------- | ---------------------------------------------------------------------------------------------- |
+| `clear`   | Today’s date falls in the date range listed on the policy                                      |
+| `caution` | Today’s date falls on either the policy effective date or the expiration date                  |
+| `concern` | Today’s date falls either before the policy effective date or after the policy expiration date |
+| `unknown` | Effective date and/or expiration date are not available.                                       |
+
+#### Output Schema
+
+```typescript Output Schema
+"policy-effective": {
+	"status": "clear",
+	"metadata": {
+		"expDate": "2024-12-25T20:00:00.000Z"
+		"effDate": "2023-12-25T00:00:00.000Z"
+		"today": "2024-06-25T01:19:02:000Z"
+	},
+},
+```
+
+</Accordion>
+  <Accordion title="Rental Vehicle Covered For Collision Damage">
+    ### `rental-covered-for-collision`
+
+Checks whether the policy is likely to have coverage for collision damage based on the collision coverage available on the policy and the policy terms of insurance agreements similar to the one used by this policy.
+
+There are two different ways that a rental customer’s personal insurance policy my cover collision damage to a rental vehicle.
+
+1. Their policy includes collision coverage and personal collision coverage extends to a rental vehicle.
+2. Their policy is registered in a state in which policies are required to cover collision damage under their property damage terms.
+
+If either of these are true, then the policy is considered `clear` for `rental-covered-for-collision`
+
+In order to determine if a policy meets either of these criteria, we match the insurance agreement for this policy to similar insurance agreements we’ve collected from the same insurance carrier and the same state, along with any relevant state regulations and synthesize these resources to come up with a determination about the likelihood of this policy’s coverage.
+
+While many insurance agreements _do_ extend collision coverage to their insureds when operating a rental vehicle, there are many situations in which this is not the case, and we’ve built a proprietary artificial intelligence validation engine which has allowed us to match a given policy to similar insuring agreements to determine if this policy is likely to extend collision coverage to a rental vehicle.
+
+<Info>LEGAL DISCLAIMER TO BE INSERTED HERE ABOUT RENTAL COVER RESULTS</Info>
+
+| Status    | Cause                                                                                                                                                                                    |
+| --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `clear`   | The policy would cover an insured for collision damage to their rental either because of their personal collision coverage or because of property damage coverage required by the state. |
+| `caution` | If the policy is matched to a set of forms which includes conflicting answers about coverage, we return `caution` to indicate that the policy may go either way                          |
+| `concern` | The policy is unlikely to have coverage for collision damage to a rental                                                                                                                 |
+| `unknown` | We do not have the data available to make a confident recommendation about whether or not the given policy would cover collision damage to a rental vehicle                              |
+
+#### Output Schema
+
+```typescript Output Schema
+"rental-covered-for-collision": {
+  "status": "clear",
+  "breakdown": {
+    "collision-exists": {
+      "value": "clear",
+      "metadata": {
+        "collision-coverage": {
+          "property": "prp_125940125",
+          "limitPerAccident": 10000,
+          "deductible": 500
+        }
+      }
+      "collision-coverage-extends-to-rental": {
+        "status": "caution",
+        "metadata": {
+          "matchedResources": [
+            {"entity": "form", "state": "NY", "name": "travelers-NY-F90A", "url": "https://.."}
+          ]
+        }
+      },
+      "property-damage-covers-rental-collision": {
+        "status": "clear",
+        "metadata": {
+          "matchedResources": [
+            {"entity": "regulation", "state": "NY", "name": "Insurance (ISC) Chapter 28, Article 34, Section 3440", "text": "ABCD...", "url": "https://..."}
+          ]
+        }
+      }
+    }
+  },
+  "metadata": {
+    "message": "The policy should cover collision damage to a rental vehicle, because (policy holder is covered by state regulation in NY/ policy has collision coverage and policy agreement indicates that collision extends to rental)",
+  }
+}
+```
+
+  </Accordion>
+</AccordionGroup>
