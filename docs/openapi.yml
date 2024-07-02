@@ -395,17 +395,10 @@ paths:
         content:
           application/json:
             schema:
-              description: ""
+              description: "The Account object attributes you would like to change. For list of all possible attributes refer to [Account](/api-reference/accounts/account)"
               type: object
-              x-examples:
-                example-1:
-                  type: policy.modified
-              properties:
-                type:
-                  type: string
-                  description: The Account or Policy event type you would like to trigger.
               required:
-                - type
+                - Account
         required: true
       responses:
         "200":
@@ -443,17 +436,10 @@ paths:
         content:
           application/json:
             schema:
-              description: ""
+              description: "The Policy object attributes you would like to change. For list of all possible attributes refer to [Policy](/api-reference/policies/policy)"
               type: object
-              x-examples:
-                example-1:
-                  type: policy.modified
-              properties:
-                type:
-                  type: string
-                  description: The Account or Policy event type you would like to trigger.
               required:
-                - type
+                - Policy
         required: true
       responses:
         "200":
