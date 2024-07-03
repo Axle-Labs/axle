@@ -437,7 +437,7 @@ paths:
             schema:
               description: "The Policy object attributes you would like to change. For list of all possible attributes refer to [Policy](/api-reference/policies/policy)"
               type: object
-              $ref: "#/components/schemas/PolicySanbox"
+              $ref: "#/components/schemas/PolicySandbox"
         required: true
       responses:
         "200":
@@ -536,7 +536,7 @@ components:
     AccountSandbox:
       title: Account
       type: object
-      description: An Account object where all of the fields are non-required. This object is used in Trigger Account event that allows user to modify every attribute of the Account object
+      description: An Account object where all the fields are not required. This object is used in Trigger Account Event that allows testing of Axle monitoring events.
       x-examples:
         example:
           firstName: John
@@ -568,11 +568,6 @@ components:
           type: string
           description: Primary email address of insurance account owner.
           nullable: true
-        policies:
-          type: array
-          description: List of unique identifiers of Policy objects associated with the Account.
-          items:
-            type: string
         connection:
           $ref: "#/components/schemas/ConnectionSandbox"
     Policy:
@@ -600,6 +595,7 @@ components:
             - auto
             - motorcycle
             - home
+            - condo
           example: "auto"
         carrier:
           type: string
@@ -712,10 +708,10 @@ components:
         - createdAt
         - modifiedAt
         - refreshedAt
-    PolicySanbox:
+    PolicySandbox:
       title: Policy
       type: object
-      description: A Policy object where all of the fields are non-required. This object is used in Trigger Policy event that allows user to modify every attribute of the Policy object
+      description: A Policy object where all of the fields are not required. This object is used in Trigger Policy Event that allows testing of Axle monitoring events.
       x-tags:
         - Accounts
       properties:
@@ -727,6 +723,7 @@ components:
             - auto
             - motorcycle
             - home
+            - condo
           example: "auto"
         carrier:
           type: string

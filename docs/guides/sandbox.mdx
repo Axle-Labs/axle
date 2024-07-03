@@ -105,17 +105,17 @@ After completing an Ignition session and exchanging the `authCode` for an `acces
   the Axle team to ensure your `client` is properly configured!
 </Tip>
 
-The following [Account events](/api-reference/sandbox/trigger-account-event) and [Policy events](/api-reference/sandbox/trigger-policy-event) are supported:
+The following [Account events](/guides/account-events) and [Policy events](guides/policy-events) are supported:
 
 **account.modified**
 
-You can modify Account attributes to simulate `account.modified` event. The following example will change `email`, `firstName` and `phone` attributes on an existing account object.
+You can modify Account attributes to simulate an `account.modified` event. The following example will change `email`, `firstName`, and `phone` attributes on an existing Account.
 
 ```
 {
   "email": "updatedEmail@axle.insure",
   "firstName": "Jane",
-  "phone" "4041230101"
+  "phone" "+14041230101"
 }
 ```
 
@@ -126,29 +126,33 @@ You can test `account.disconnected` event by setting the connection status to on
 ```
 {
   "connection": {
-      "status": "credentials-expired" 
+      "status": "credentials-expired"
   }
 }
 ```
 
 <Info>
-     When account has been set as `disconnected`, user needs to complete new Axle session. If the user reconnects the same insurance account and policy, Axle will
-      merge the updated information with any existing Account or Policy objects. More info on `account.disconnected` can be found [here](/guides/account-events#account-disconnected).
+  When account has been set as `disconnected`, your user will need to complete
+  an Axle Ignition session to reconnect it. If the user reconnects the same
+  insurance account and policy, Axle will merge the updated information with any
+  existing Account or Policy objects. More info on `account.disconnected` can be
+  found [here](/guides/account-events#account-disconnected).
 </Info>
 
 **policy.modified**
 
-You can modify Account attributes to simulate `policy.modified` event. The following example will set Policy as inactive (e.g. expirationDate in the past) and update an address. 
+You can modify Policy attributes to simulate a `policy.modified` event. The following example will set Policy as inactive (e.g., the policy has been cancelled) as well as update the Policy address.
 
 ```
 {
   "isActive": false,
   "address": {
-      "addressLine1": "New street",
+      "addressLine1": "New Street",
       "addressLine2": "New Apt",
       "city": "Atlanta",
       "postalCode": "30315",
-      "state": "Georgia"
+      "state": "GA",
+      "country: "USA"
   }
 }
 ```
