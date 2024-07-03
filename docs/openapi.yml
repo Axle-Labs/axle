@@ -539,19 +539,13 @@ components:
       description: An Account object where all of the fields are non-required. This object is used in Trigger Account event that allows user to modify every attribute of the Account object
       x-examples:
         example:
-          id: acc_gM2wn_gaqUv76ZljeVXOv
           firstName: John
           lastName: Smith
           email: john.smith@grr.la
           carrier: state-farm
-          policies:
-            - pol_CbxGmGWnp9bGAFCC-eod2
+          phone: +14045551234
           connection:
             status: "active"
-            updatedAt: "2022-01-01T00:00:00.000Z"
-          createdAt: "2022-01-01T00:00:00.000Z"
-          modifiedAt: "2022-01-01T00:00:00.000Z"
-          refreshedAt: "2022-01-01T00:00:00.000Z"
       x-tags:
         - Accounts
       properties:
