@@ -395,17 +395,9 @@ paths:
         content:
           application/json:
             schema:
-              description: ""
+              description: "The Account object attributes you would like to change. For list of all possible attributes refer to [Account](/api-reference/accounts/account)"
               type: object
-              x-examples:
-                example-1:
-                  type: policy.modified
-              properties:
-                type:
-                  type: string
-                  description: The Account or Policy event type you would like to trigger.
-              required:
-                - type
+              $ref: "#/components/schemas/AccountSandbox"
         required: true
       responses:
         "200":
@@ -443,17 +435,9 @@ paths:
         content:
           application/json:
             schema:
-              description: ""
+              description: "The Policy object attributes you would like to change. For list of all possible attributes refer to [Policy](/api-reference/policies/policy)"
               type: object
-              x-examples:
-                example-1:
-                  type: policy.modified
-              properties:
-                type:
-                  type: string
-                  description: The Account or Policy event type you would like to trigger.
-              required:
-                - type
+              $ref: "#/components/schemas/PolicySandbox"
         required: true
       responses:
         "200":
@@ -549,6 +533,43 @@ components:
         - createdAt
         - modifiedAt
         - refreshedAt
+    AccountSandbox:
+      title: Account
+      type: object
+      description: An Account object where all the fields are not required. This object is used in Trigger Account Event that allows testing of Axle monitoring events.
+      x-examples:
+        example:
+          firstName: John
+          lastName: Smith
+          email: john.smith@grr.la
+          carrier: state-farm
+          phone: +14045551234
+          connection:
+            status: "active"
+      x-tags:
+        - Accounts
+      properties:
+        carrier:
+          type: string
+          description: Insurance carrier that is the source for the Account data.
+        firstName:
+          type: string
+          description: First name of insurance account owner.
+          nullable: true
+        lastName:
+          type: string
+          description: Last name of insurance account owner.
+          nullable: true
+        phone:
+          type: string
+          description: Primary phone number of insurance account owner.
+          nullable: true
+        email:
+          type: string
+          description: Primary email address of insurance account owner.
+          nullable: true
+        connection:
+          $ref: "#/components/schemas/ConnectionSandbox"
     Policy:
       title: Policy
       type: object
@@ -574,6 +595,7 @@ components:
             - auto
             - motorcycle
             - home
+            - condo
           example: "auto"
         carrier:
           type: string
@@ -686,6 +708,103 @@ components:
         - createdAt
         - modifiedAt
         - refreshedAt
+    PolicySandbox:
+      title: Policy
+      type: object
+      description: A Policy object where all of the fields are not required. This object is used in Trigger Policy Event that allows testing of Axle monitoring events.
+      x-tags:
+        - Accounts
+      properties:
+        type:
+          type: string
+          description: Type of insurance policy that the Policy object represents.
+          nullable: true
+          enum:
+            - auto
+            - motorcycle
+            - home
+            - condo
+          example: "auto"
+        carrier:
+          type: string
+          description: Insurance carrier that is the source for the Policy data.
+          example: "state-farm"
+        policyNumber:
+          type: string
+          nullable: true
+          description: Identifier of the policy, as specified by the insurance carrier.
+          example: "123456789"
+        isActive:
+          type: boolean
+          nullable: true
+          description: Active status of the policy, as specified by the insurance carrier.
+          example: true
+        effectiveDate:
+          type: string
+          nullable: true
+          description: ISO 8601 timestamp of current term effective date of the policy, as specified by the insurance carrier.
+          example: "2022-10-22T04:00:00.000Z"
+        expirationDate:
+          type: string
+          nullable: true
+          description: ISO 8601 timestamp of current term expiration date of the policy, as specified by the insurance carrier.
+          example: "2023-10-22T04:00:00.000Z"
+        premium:
+          type: number
+          nullable: true
+          description: "Total policy premium, as specified by the insurance carrier. *Note: only available for `type=home` policies*"
+          example: 999.99
+        address:
+          description: Primary address associated with the policy.
+          $ref: "#/components/schemas/Address"
+        coverages:
+          type: array
+          description: List of coverage types and levels offered by the policy.
+          items:
+            $ref: "#/components/schemas/Coverage"
+          example:
+            - code: BI
+              label: Bodily Injury
+              limitPerPerson: 250000
+              limitPerAccident: 500000
+              property: prp_uSdzLVpi8c76H7kl6AQ-F
+            - code: PD
+              label: Property Damage
+              limitPerAccident: 100000
+              property: prp_uSdzLVpi8c76H7kl6AQ-F
+            - code: COMP
+              label: Comprehensive
+              deductible: 375
+              property: prp_uSdzLVpi8c76H7kl6AQ-F
+            - code: COLL
+              label: Collision
+              deductible: 375
+              property: prp_uSdzLVpi8c76H7kl6AQ-F
+            - code: UMBI
+              label: Uninsured Bodily Injury
+              limitPerPerson: 100000
+              limitPerAccident: 300000
+              property: prp_uSdzLVpi8c76H7kl6AQ-F
+        properties:
+          type: array
+          description: List of properties (such as a vehicle or dwelling) afforded coverage by the policy.
+          items:
+            $ref: "#/components/schemas/Property"
+        insureds:
+          type: array
+          description: List of entities (such as an individuals or businesses) afforded direct coverage by the policy.
+          items:
+            $ref: "#/components/schemas/Insured"
+        thirdParties:
+          type: array
+          description: List of external parties with interest in the policy.
+          items:
+            $ref: "#/components/schemas/ThirdParty"
+        documents:
+          type: array
+          description: List of documents (such as declaration pages and policy agreements) associated with the policy.
+          items:
+            $ref: "#/components/schemas/Document"
     PolicyReport:
       title: Policy Report
       type: object
@@ -1088,10 +1207,27 @@ components:
           description: The Account connection status represents if Axle can actively request new Account and Policy data from the insurance carrier.
           enum:
             - active
-            - authentication-required
+            - credentials-expired
+            - mfa-expired
+            - account-disabled
+            - account-inaccessible
         updatedAt:
           type: string
           description: ISO 8601 timestamp at which the Account connection status was updated.
+    ConnectionSandbox:
+      title: Connection
+      type: object
+      x-internal: false
+      properties:
+        status:
+          type: string
+          description: The Account connection status represents if Axle can actively request new Account and Policy data from the insurance carrier. The ConnectionSandbox schema doesn't have updatedAt attribute
+          enum:
+            - active
+            - credentials-expired
+            - mfa-expired
+            - account-disabled
+            - account-inaccessible
   parameters:
     x-client-id:
       name: x-client-id
