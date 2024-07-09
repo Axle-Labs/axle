@@ -272,12 +272,12 @@ paths:
                         type: string
                         description: "The type of validation check to perform."
                         enum:
-                          - "policy-effective"
+                          - "policy-active"
                           - "rental-collision-damage-coverage"
                     required:
                       - "code"
 
-            example: { "checks": [{ "code": "policy-effective" }] }
+            example: { "checks": [{ "code": "policy-active" }] }
         required: true
       responses:
         "200":
@@ -295,15 +295,15 @@ paths:
                       status:
                         type: string
                         description: "The result of the validation checks."
-
                         enum:
-                          - "clear"
-                          - "concern"
+                          - "pass"
+                          - "fail"
+                          - "caution"
                       summary:
                         type: object
                         description: "A summary of the validation checks."
                         properties:
-                          policy-effective:
+                          policy-active:
                             $ref: "#/components/schemas/ValidationStatus"
                             description: "The result of the policy-effective validation check."
                           rental-collision-damage-coverage:
@@ -313,9 +313,9 @@ paths:
                         type: object
                         description: "A detailed report of the validation checks."
                         properties:
-                          policy-effective:
+                          policy-active:
                             type: object
-                            description: "The result of the policy-effective validation check."
+                            description: "The result of the policy-active validation check."
                             properties:
                               status:
                                 $ref: "#/components/schemas/ValidationStatus"
@@ -338,6 +338,12 @@ paths:
                             properties:
                               status:
                                 $ref: "#/components/schemas/ValidationStatus"
+                              message-code:
+                                type: string
+                                description: "The message code associated with the validation check."
+                              message:
+                                type: string
+                                description: "The message associated with the validation check."
                               breakdown:
                                 type: object
                                 description: "A breakdown of the validation check."
@@ -1242,8 +1248,8 @@ components:
       type: string
       description: Indicates whether the validation checks were successful.
       enum:
-        - clear
-        - concern
+        - pass
+        - fail
         - caution
         - unknown
   parameters:

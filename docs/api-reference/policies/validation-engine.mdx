@@ -7,43 +7,43 @@ description: "The Validation Engine is used to perform a list of validations on 
 
 A validation is an individual check run against a
 policy to ensure that it meets a certain requirement. For example, the
-`policy-effective` validation compares the effective and expiration dates on the
-policy to today’s date, and returns `clear` if the policy is currently effective
+`policy-active` validation checks if the policy is currently active and returns `pass` if it is, and `fail` if it is not.
 or `concern` if it seems to be expired.
 
 Some validations are more complex, providing additional insight which is not contained on the policy, like `rental-covered-for-collision` , which can tell you whether this policy is likely to provide coverage to a driver for collision damage to a rental vehicle.
 
 Every validation reports one of the following statuses after running the check:
 
-| Status    | Description                                                                                                                                                                                |
-| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `clear`   | The validation has passed entirely, and deemed the policy `clear` for any issues relating to this validation                                                                               |
-| `concern` | The validation has not passed for this policy                                                                                                                                              |
-| `caution` | The validation is not entirely `clear` or `concern`, and falls somewhere between the two. When making the top level validation determination, we consider `caution` to be a failure state. |
-| `unknown` | Not enough data was available to determine the outcome of this validation                                                                                                                  |
+| Status    | Description                                                                                                                                                                                      |
+| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `pass`    | The validation has passed entirely                                                                                                                                                               |
+| `fail`    | The policy has been determined to be invalid on this validation                                                                                                                                  |
+| `caution` | The validation is not entirely `pass` or `fail` and falls somewhere between the two. It's likely that you'll want to engage in a manual review, or handle this according to your risk tolerance. |
+| `unknown` | Not enough data was available to determine the outcome of this validation                                                                                                                        |
+
+When making the top level validation determination, the presence of a caution
 
 ## Validation List
 
 <AccordionGroup>
-  <Accordion title="Policy Effective">
-  ### `policy-effective`
+  <Accordion title="Policy Active">
+  ### `policy-active`
 
-Checks whether the policy dates indicate that the policy is effective on today’s date.
+Checks whether the policy is currently active.
 
 #### Responses
 
-| Status    | Cause                                                                                          |
-| --------- | ---------------------------------------------------------------------------------------------- |
-| `clear`   | Today’s date falls in the date range listed on the policy                                      |
-| `caution` | Today’s date falls on either the policy effective date or the expiration date                  |
-| `concern` | Today’s date falls either before the policy effective date or after the policy expiration date |
-| `unknown` | Effective date and/or expiration date are not available.                                       |
+| Status    | Cause                                                                 |
+| --------- | --------------------------------------------------------------------- |
+| `pass`    | The policy is currently active                                        |
+| `fail`    | The policy is not currently active                                    |
+| `unknown` | Not enough information was available to determine the policy's status |
 
 #### Output Schema
 
 ```typescript Output Schema
-"policy-effective": {
-	"status": "clear",
+"policy-active": {
+	"status": "pass",
 	"metadata": {
 		"expDate": "2024-12-25T20:00:00.000Z"
 		"effDate": "2023-12-25T00:00:00.000Z"
@@ -63,7 +63,7 @@ There are two different ways that a rental customer’s personal insurance polic
 1. Their policy includes collision coverage and personal collision coverage extends to a rental vehicle.
 2. Their policy is registered in a state in which policies are required to cover collision damage under their property damage terms.
 
-If either of these are true, then the policy is considered `clear` for `rental-covered-for-collision`
+If either of these are true, then the `rental-covered-for-collision` validation returns `pass`.
 
 In order to determine if a policy meets either of these criteria, we match the insurance agreement for this policy to similar insurance agreements we’ve collected from the same insurance carrier and the same state, along with any relevant state regulations and synthesize these resources to come up with a determination about the likelihood of this policy’s coverage.
 
@@ -73,19 +73,31 @@ While many insurance agreements _do_ extend collision coverage to their insureds
 
 | Status    | Cause                                                                                                                                                                                    |
 | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `clear`   | The policy would cover an insured for collision damage to their rental either because of their personal collision coverage or because of property damage coverage required by the state. |
-| `caution` | If the policy is matched to a set of forms which includes conflicting answers about coverage, we return `caution` to indicate that the policy may go either way                          |
-| `concern` | The policy is unlikely to have coverage for collision damage to a rental                                                                                                                 |
+| `pass`    | The policy would cover an insured for collision damage to their rental either because of their personal collision coverage or because of property damage coverage required by the state. |
+| `fail`    | The policy is unlikely to have coverage for collision damage to a rental                                                                                                                 |
+| `caution` | If the policy is matched to a set of forms which includes conflicting answers about coverage, we return `fail` to indicate that the policy may go either way                             |
 | `unknown` | We do not have the data available to make a confident recommendation about whether or not the given policy would cover collision damage to a rental vehicle                              |
+
+For this insight, we also return a message and message code, which can be used to explain to the user why the policy is or isn't likely to cover collision damage to a rental vehicle.
+| Message Code | Validation Status | Message |
+| ------------ | ------- | ----- |
+| coll-extends-to-rental | `pass` | The policy has collision coverage and the matching policy agreements indicate that collision coverage extends to rental vehicles |
+| pd-covers-rental-collision | `pass` | The policy is registered in a state in which policies are required to cover collision damage under their property damage terms |
+| coll-extends-to-rental-with-conflict | `caution` | The policy has collision coverage, but the matching policy agreements have conflicting answers about whether collision coverage extends to rental vehicles |
+| coll-extends-to-rental-with-unknown | `unknown` | The policy has collision coverage, but we do not have enough information to determine if the policy extends collision coverage to rental vehicles |
+| coll-does-not-extend-to-rental | `fail` | The policy has collision coverage, but the matching policy agreements indicate that collision coverage does not extend to rental vehicles |
+| coll-not-present | `fail` | The policy does not have collision coverage, and therefore cannot extend collision coverage to rental vehicles |
 
 #### Output Schema
 
 ```typescript Output Schema
 "rental-covered-for-collision": {
-  "status": "clear",
+  "status": "pass",
+  "message-code": "...",
+  "message": "...",
   "breakdown": {
     "collision-exists": {
-      "value": "clear",
+      "value": "pass",
       "metadata": {
         "collision-coverage": {
           "property": "prp_125940125",
@@ -94,14 +106,14 @@ While many insurance agreements _do_ extend collision coverage to their insureds
         }
       }
       "collision-coverage-extends-to-rental": {
-        "status": "caution",
+        "status": "pass",
         "metadata": {
           "carrier": "state-farm",
           "state": "NY"
         }
       },
       "property-damage-covers-rental-collision": {
-        "status": "clear",
+        "status": "pass",
         "metadata": {
           "state": "NY"
         }
@@ -109,7 +121,6 @@ While many insurance agreements _do_ extend collision coverage to their insureds
     }
   },
   "metadata": {
-    "message": "The policy should cover collision damage to a rental vehicle, because (policy holder is covered by state regulation in NY/ policy has collision coverage and policy agreement indicates that collision extends to rental)",
   }
 }
 ```
@@ -119,10 +130,11 @@ While many insurance agreements _do_ extend collision coverage to their insureds
 
 ## Validation Response
 
-When you call the validation api, every validation you requested will be run, and you'll recieve a response with an overall status determination of either `clear` or `concern`.
+When you call the validation api, every validation you requested will be run, and you'll recieve a response with an overall status determination of either `pass`, `fail`, or `caution`.
 
-- `clear` means that the policy succeded in passing all validations
-- `concern` means that one or more validations failed or had a status other than `clear`
+- `pass` means that the policy succeded in passing all validations
+- `fail` means that one or more validations failed
+- `caution` means that one or more validations had a status of `caution` and that we recommend a manual review of the policy
 
 The response also contains two other fields:
 
@@ -132,18 +144,18 @@ The response also contains two other fields:
 <CodeGroup>
 ```json Clear Response
 {
-  "status": "clear",
+  "status": "pass",
   "summary": {
-    "policy-effective": "clear",
-    "rental-covered-for-collision": "clear",
+    "policy-active": "pass",
+    "rental-covered-for-collision": "pass",
   },
   "validations": {
-    "policy-effective":{
-      "status": "clear",
+    "policy-active":{
+      "status": "pass",
       "metadata": {...},
     },
     "rental-covered-for-collision": {
-      "status": "clear",
+      "status": "pass",
       "breakdown": {...},
       "metadata": {...}
     }
@@ -153,18 +165,18 @@ The response also contains two other fields:
 
 ```json Concern API Response
 {
-  "status": "concern",
+  "status": "fail",
   "summary": {
-    "policy-effective": "clear",
-    "rental-covered-for-collision": "concern",
+    "policy-active": "pass",
+    "rental-covered-for-collision": "fail",
   },
   "validations": {
-    "policy-effective":{
-      "status": "clear",
+    "policy-active":{
+      "status": "pass",
       "metadata": {...},
     },
     "rental-covered-for-collision": {
-      "status": "concern",
+      "status": "fail",
       "breakdown": {...},
       "metadata": {...}
     }
