@@ -1132,6 +1132,8 @@ components:
         type:
           - "declaration-page"
         url: "<signed-url>"
+        issuedDate: "2022-01-01T00:00:00.000Z"
+        effectiveDate: "2022-01-02T00:00:00.000Z"
         createdAt: "2022-01-01T00:00:00.000Z"
       properties:
         source:
@@ -1155,6 +1157,12 @@ components:
         url:
           type: string
           description: URL for document access. Note, the URL is signed and has an expiry of 10 minutes.
+        issuedDate:
+          type: string
+          description: If available, ISO 8601 timestamp at which the document was generated or issued by the carrier.
+        effectiveDate:
+          type: string
+          description: If available, ISO 8601 timestamp at which the document becomes active or goes into effect.
         createdAt:
           type: string
           description: ISO 8601 timestamp at which the document was fetched or shared via Axle.
