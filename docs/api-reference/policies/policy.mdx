@@ -246,8 +246,12 @@ List of documents (such as declaration pages and policy agreements) associated w
 
         </ResponseField>
 
+        <ResponseField name="key" type="string" >
+          Unique identifier (formatted as filename) for the document.
+        </ResponseField>
+
         <ResponseField name="createdAt" type="string" >
-          Unique identifier of Property afforded coverage for specified Third Party.
+          ISO 8601 timestamp at which the document was fetched or shared via Axle.
         </ResponseField>
 
     </Expandable>
@@ -384,6 +388,7 @@ List of documents (such as declaration pages and policy agreements) associated w
       "name": "Declaration Page",
       "type": ["declaration-page"],
       "url": "<signed-url>",
+      "key": "doc_jd73dw6fn02sj28.pdf",
       "createdAt": "2022-01-01T00:00:00.000Z"
     }
   ],
@@ -488,6 +493,7 @@ List of documents (such as declaration pages and policy agreements) associated w
       "name": "Declaration Page",
       "type": ["declaration-page"],
       "url": "<signed-url>",
+      "key": "doc_jd73dw6fn02sj28.pdf"
       "createdAt": "2022-01-01T00:00:00.000Z"
     },
   ],

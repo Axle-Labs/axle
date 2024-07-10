@@ -1132,6 +1132,7 @@ components:
         type:
           - "declaration-page"
         url: "<signed-url>"
+        key: "doc_jd73dw6fn02sj28.pdf"
         createdAt: "2022-01-01T00:00:00.000Z"
       properties:
         source:
@@ -1154,10 +1155,13 @@ components:
               - policy-agreement
         url:
           type: string
-          description: URL for document access. Note, the URL is signed and has an expiry of 10 minutes.
+          description: URL for document access. Note, the URL is signed and has an expiry of 60 minutes.
         createdAt:
           type: string
           description: ISO 8601 timestamp at which the document was fetched or shared via Axle.
+        key:
+          type: string
+          description: Unique identifier (formatted as filename) for the document.
       required:
         - source
         - name
