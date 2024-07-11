@@ -1132,6 +1132,7 @@ components:
         type:
           - "declaration-page"
         url: "<signed-url>"
+        id: "doc_jd73dw6fn02sj28.pdf"
         issuedDate: "2022-01-01T00:00:00.000Z"
         effectiveDate: "2022-01-02T00:00:00.000Z"
         createdAt: "2022-01-01T00:00:00.000Z"
@@ -1156,7 +1157,7 @@ components:
               - policy-agreement
         url:
           type: string
-          description: URL for document access. Note, the URL is signed and has an expiry of 10 minutes.
+          description: URL for document access. Note, the URL is signed and has an expiry of 60 minutes.
         issuedDate:
           type: string
           description: If available, ISO 8601 timestamp at which the document was generated or issued by the carrier.
@@ -1166,6 +1167,9 @@ components:
         createdAt:
           type: string
           description: ISO 8601 timestamp at which the document was fetched or shared via Axle.
+        id:
+          type: string
+          description: Unique identifier (formatted as filename) for the document.
       required:
         - source
         - name
