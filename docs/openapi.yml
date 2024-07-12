@@ -249,7 +249,7 @@ paths:
   /policies/{id}/validate:
     "post":
       summary: Validate Policy
-      description: "The Validate Policy method returns a the result of a series of validation checks on the requested policy object."
+      description: "The Validate Policy method returns a the result of a series of validation checks on the requested policy object. For details about each validation and their return types, see the [Policy Validation Guide](/guides/validation-engine)"
       operationId: ValidatePolicy
       parameters:
         - $ref: "#/components/parameters/x-client-id"
@@ -321,7 +321,7 @@ paths:
                                 $ref: "#/components/schemas/ValidationStatus"
                               metadata:
                                 type: object
-                                description: "Additional metadata about the validation check."
+                                description: "Additional metadata about the validation."
                                 properties:
                                   effectiveDate:
                                     type: string
@@ -338,65 +338,15 @@ paths:
                             properties:
                               status:
                                 $ref: "#/components/schemas/ValidationStatus"
-                              message-code:
-                                type: string
-                                description: "The message code associated with the validation check."
                               message:
-                                type: string
-                                description: "The message associated with the validation check."
+                                type: object
+                                description: "The object containing the message code and human-readable message"
                               breakdown:
                                 type: object
                                 description: "A breakdown of the validation check."
-                                properties:
-                                  collision-exists:
-                                    type: object
-                                    description: "A check which determines whether or not the policy has collision coverage."
-                                    properties:
-                                      status:
-                                        $ref: "#/components/schemas/ValidationStatus"
-                                      metadata:
-                                        type: object
-                                        properties:
-                                          coverage:
-                                            type: object
-                                            properties:
-                                              property:
-                                                type: string
-                                                description: "The property associated with the collision coverage."
-                                              limitPerAccident:
-                                                type: number
-                                                description: "The limit per accident of the collision coverage."
-                                              deductible:
-                                                type: number
-                                                description: "The deductible of the collision coverage."
-                                  collision-coverage-extends-to-rental:
-                                    type: object
-                                    description: "A check which determines whether or not this auto policy is likely to extend collision coverage to a rental vehicle."
-                                    properties:
-                                      status:
-                                        $ref: "#/components/schemas/ValidationStatus"
-                                      metadata:
-                                        type: object
-                                        properties:
-                                          carrier:
-                                            type: string
-                                            description: "The insurance carrier of the policy."
-                                          state:
-                                            type: string
-                                            description: "The state of the policy."
-                                  property-damage-covers-rental-collision:
-                                    type: object
-                                    description: "A check which determines whether or not a regulation exists which would allow property damage coverage to cover collision damage on this policy."
-                                    properties:
-                                      status:
-                                        $ref: "#/components/schemas/ValidationStatus"
-                                      metadata:
-                                        type: object
-                                        properties:
-                                          state:
-                                            type: string
-                                            description: "The state of the policy."
-
+                              metadata:
+                                type: object
+                                description: "Additional metadata about the validation."
   /carriers/{id}:
     get:
       summary: Get Carrier

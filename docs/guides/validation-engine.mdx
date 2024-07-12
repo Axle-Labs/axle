@@ -1,27 +1,24 @@
 ---
-title: "Policy Validation Guide"
-description: "The Validation Engine is used to perform a list of validations on a policy in order to determine if it meets your business’s requirements."
+title: "Policy Validation"
+description: "Perform a set of validations on a policy to determine if your application's requirements are met."
 ---
 
 ## Validations
 
 A validation is an individual check run against a
-policy to ensure that it meets a certain requirement. For example, the
-`policy-active` validation checks if the policy is currently active and returns `pass` if it is, and `fail` if it is not.
-or `concern` if it seems to be expired.
+policy to ensure that it meets a certain requirement or set of requirements. For example, the
+`policy-active` validation checks if the policy is currently active and returns `pass` if the `isActive` field of the policy is `true`, and `fail` if it is `false`. If `isActive` is unvailable or `null`, this validaiton will return `unknown`.
 
-Some validations are more complex, providing additional insight which is not contained on the policy, like `rental-covered-for-collision` , which can tell you whether this policy is likely to provide coverage to a driver for collision damage to a rental vehicle.
+Some validations are more complex, providing additional insight not found on the policy, like `rental-covered-for-collision`, which provides guidance on whether this policy affords coverage for collision damage when an insured is driving a rental vehicle.
 
-Every validation reports one of the following statuses after running the check:
+Each validation resolves to one of the following statuses:
 
-| Status    | Description                                                                                                                                                                                      |
-| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `pass`    | The validation has passed entirely                                                                                                                                                               |
-| `fail`    | The policy has been determined to be invalid on this validation                                                                                                                                  |
-| `caution` | The validation is not entirely `pass` or `fail` and falls somewhere between the two. It's likely that you'll want to engage in a manual review, or handle this according to your risk tolerance. |
-| `unknown` | Not enough data was available to determine the outcome of this validation                                                                                                                        |
-
-When making the top level validation determination, the presence of a caution
+| Status    | Description                                                                                                           |
+| --------- | --------------------------------------------------------------------------------------------------------------------- |
+| `pass`    | The policy meets all requirements of the validation                                                                   |
+| `fail`    | The policy does not meet all the requirements of the validation                                                       |
+| `caution` | The policy only partially meets the requiremenets of the validation or the validation returns an inconclsive outcome. |
+| `unknown` | Not enough data was available to determine the outcome of this validation                                             |
 
 ## Validation List
 
@@ -33,23 +30,21 @@ Checks whether the policy is currently active.
 
 #### Responses
 
-| Status    | Cause                                                                 |
-| --------- | --------------------------------------------------------------------- |
-| `pass`    | The policy is currently active                                        |
-| `fail`    | The policy is not currently active                                    |
-| `unknown` | Not enough information was available to determine the policy's status |
+| Status    | Cause                                        |
+| --------- | -------------------------------------------- |
+| `pass`    | The policy is currently active               |
+| `fail`    | The policy is not currently active           |
+| `unknown` | The `isActive` field is unvailable or `null` |
 
 #### Output Schema
 
 ```typescript Output Schema
 "policy-active": {
-	"status": "pass",
-	"metadata": {
-		"expDate": "2024-12-25T20:00:00.000Z"
-		"effDate": "2023-12-25T00:00:00.000Z"
-		"today": "2024-06-25T01:19:02:000Z"
-	},
-},
+  "status": "pass",
+  "metadata": {
+    "isActive": true
+  }
+}
 ```
 
 </Accordion>
@@ -93,17 +88,23 @@ For this insight, we also return a message and message code, which can be used t
 ```typescript Output Schema
 "rental-covered-for-collision": {
   "status": "pass",
-  "message-code": "...",
-  "message": "...",
+  "message": {
+    "code": "...",
+    "displayText": "..."
+  }
   "breakdown": {
     "collision-exists": {
       "value": "pass",
       "metadata": {
-        "collision-coverage": {
-          "property": "prp_125940125",
-          "limitPerAccident": 10000,
-          "deductible": 500
-        }
+        "coverages": [
+          {
+            "code": "COLL",
+            "label": "Collision",
+            "deductible": 375,
+            "property": "prp_uSdzLVpi8c76H7kl6AQ-F"
+          },
+          ...
+        ]
       }
       "collision-coverage-extends-to-rental": {
         "status": "pass",
