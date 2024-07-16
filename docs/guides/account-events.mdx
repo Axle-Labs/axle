@@ -42,11 +42,11 @@ When identifying details on the Account change. Refer to [Account](/api-referenc
 
 ### account.disconnected
 
-When Account `connection.status` is changed to "inactive", meaning Axle is no longer able to monitor the policies present on the account.
+When Account `connection.status` is no longer "active", meaning Axle is no longer able to monitor the policies present on the account.
 
 ```json Additional data parameters (example)
 {
-  "code": "credentials-expired | mfa-expired | account-disabled | account-inaccessible"
+  "status": "credentials-expired | mfa-expired | account-disabled | account-inaccessible"
 }
 ```
 
