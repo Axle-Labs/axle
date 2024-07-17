@@ -1,0 +1,66 @@
+---
+title: "Document AI"
+description: "Use Axle's Document AI to transform unstructured data into structured data."
+---
+
+### Overview
+
+Our asynchronous document analysis uses generative AI to extract information from a declarations page or ID card and convert it
+into a Policy object. [Analyze Document](/api-references/documents/analyze-document) uses webhooks to notify the client when the document analysis process is complete. If the document
+analysis was successful, an auth code and the policy id are included in the webhook payload. The auth code can be exchanged for an access token,
+which can be used to retrieve the Policy object.
+
+<Steps>
+  <Step title="Make a request to our Analyze Document API" titleSize="h3">
+    See [Analyze Document](/api-references/documents/analyze-document) for
+    details on how to invoke our document analysis process.
+
+    ```bash Request Sample
+
+    curl --request POST \
+    --url https://api.axle.insure/documents/analyze \
+    --header 'Content-Type: application/json' \
+    --header 'x-client-id: cli_mZj6YGXhQyQnccN97aXbq' \
+    --header 'x-client-secret: RZM-5BErZuChKqycbCS1O' \
+    --data '{
+    "webhookUri": "https://example.com/insurance/webhook"
+    }
+
+    ```
+
+  </Step>
+  <Step title="Process Analyze Document event" titleSize="h3">
+    Once the document analysis completes, an `POST` request will be sent to 
+    the webhookUri that was passed in to Analyze Document request body. The webhook
+    payload will include the below:
+
+    ```json Example webhook request body
+    {
+    "id": "<event_id>",
+    "type": "document-analysis.completed",
+    "data": {
+        "client": "<client-id>",
+        "token": "ign_Z4ni-JHBvkn9PlKJHPEwk",
+        ...{ parameters }
+    },
+    "createdAt": "2024-01-01T00:00:00.000Z"
+    }
+    ```
+
+| Type                        | Data                                                                |
+| --------------------------- | ------------------------------------------------------------------- |
+| document-analysis.completed | client : String, token : String, authCode: String, policyId: String |
+| document-analysis.errored   | client : String, token : String                                     |
+
+  </Step>
+  <Step title="Exchange the auth code for an access token" titleSize="h3">
+    If the document analysis was successful, the auth code in the webhook payload can be exchanged for an
+    access token. See [Exchange Token](/api-references/tokens/exchange-token) for details
+    on how to exchange an auth code for an access token.
+  </Step>
+  <Step title="Invoke Get Policy to retrieve the Policy object" titleSize="h3">
+    Using the access token and policy id, call [Get Policy](/api-references/policies/get-policy)
+    to fetch the Policy object.
+  </Step>
+</Steps>
+```

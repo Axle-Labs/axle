@@ -458,6 +458,47 @@ paths:
       deprecated: false
       tags:
         - Sandbox
+  /documents/analyze:
+    post:
+      summary: Analyze Document
+      description:
+        "Initiate an asynchronous document analysis to extract the Policy object from a declarations page or ID card.
+        The process will immediately return a 202 status code to indicate the analysis has begun. \n Upon completion, a webhook event is sent to the `webhookUri` specified in the request body.
+        The webhook payload will include an auth code which can be exchanged for an [access token](/api-reference/tokens/exchange-token) to retrieve the Policy object."
+      operationId: AnalyzeDocument
+      parameters:
+        - $ref: "#/components/parameters/x-client-id"
+      requestBody:
+        description: ""
+        content:
+          application/json:
+            schema:
+              description: ""
+              type: object
+              properties:
+                documentUrl:
+                  type: string
+                  description: The URL that hosts the document to be analyzed
+                webhookUri:
+                  type: string
+                  description:
+                    The URI we should send the auth code to once the document analyis is complete. Once the auth code has been retrieved,
+                    call the `/token/exchange` endpoint to retrieve the Policy object.
+        required: true
+      responses:
+        "202":
+          description: "The immediate response from the server indicating the document analysis has begun."
+          content:
+            application/json:
+              schema:
+                description: ""
+                type: object
+                properties:
+                  success:
+                    $ref: "#/components/schemas/Success"
+      deprecated: false
+      tags:
+        - Documents
 
 components:
   schemas:

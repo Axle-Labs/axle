@@ -65,7 +65,8 @@
             "guides/policy-events"
           ]
         },
-        "guides/sandbox"
+        "guides/sandbox",
+        "guides/document-ai"
       ]
     },
     {
@@ -94,6 +95,10 @@
             "api-reference/policies/get-policy",
             "api-reference/policies/get-policy-report"
           ]
+        },
+        {
+          "group": "Documents",
+          "pages": ["api-reference/documents/analyze-document"]
         },
         {
           "group": "Carriers",
