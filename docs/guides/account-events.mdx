@@ -52,54 +52,58 @@ When Account `connection.status` is no longer "active", meaning Axle is no longe
 
 <Card title="credentials-expired">
   <Tabs>
-    <Tab title="Recommended messaging">
-      Your insurance account cannot be access by Axle due to expired
-      credentials. Please complete Axle via [Ignition URI] to reconnect your
-      account.
-    </Tab>
     <Tab title="Common causes">
       The user has changed their login credentials or their insurance account
       requires a periodic update of their login credentials.
+    </Tab>
+    <Tab title="Recommended messaging">
+      Your insurance account cannot be access by Axle due to expired or changed
+      credentials. Please complete Axle via [Ignition URI] to reconnect your
+      account.
     </Tab>
   </Tabs>
 </Card>
 
 <Card title="mfa-expired">
   <Tabs>
-    <Tab title="Recommended messaging">
-      Your insurance account requires additional multi-factor authentication
-      (MFA). Please complete Axle via [Ignition URI] to reconnect your account.
-    </Tab>
     <Tab title="Common causes">
       The user's insurance account is has re-triggered multi-factor
       authentication, requiring additional authentication for Axle to regain
       access.
+    </Tab>
+    <Tab title="Recommended messaging">
+      Your insurance account requires additional multi-factor authentication
+      (MFA). Please complete Axle via [Ignition URI] to reconnect your account.
     </Tab>
   </Tabs>
 </Card>
 
 <Card title="account-disabled">
   <Tabs>
-    <Tab title="Recommended messaging">
-      Your insurance account is no longer available. Please complete Axle via
-      [Ignition URI] to connect a different account.
-    </Tab>
     <Tab title="Common causes">
       The user's insurance account has been disabled by the insurance carrier
       due to inactivity or policy expiration.
+    </Tab>
+    <Tab title="Recommended messaging">
+      Your insurance account is no longer available. Please complete Axle via
+      [Ignition URI] after re-enabling your account or to connect a different
+      account.
     </Tab>
   </Tabs>
 </Card>
 
 <Card title="account-inaccessible">
   <Tabs>
+    <Tab title="Common causes">
+      The user's insurance account unexpectedly cannot be accessed by Axle. The
+      Axle team has been notified and will immediately escalate for resolution.
+      This process may not be immediate; therefore, it is recommended to set a
+      policy of at least one month before reaching out to the user to reconnect
+      their account.
+    </Tab>
     <Tab title="Recommended messaging">
       Your insurance account can no longer be accessed by Axle. Please retry
       connecting your account through Axle via [Ignition URI].
-    </Tab>
-    <Tab title="Common causes">
-      The insurance account unexpectedly cannot be accessed by Axle. The Axle
-      team has been notified and will investigate.
     </Tab>
   </Tabs>
 </Card>
