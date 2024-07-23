@@ -463,7 +463,7 @@ paths:
       summary: Analyze Document
       description:
         "Initiate an asynchronous document analysis to extract the Policy object from a declarations page or ID card.
-        The process will immediately return a 202 status code to indicate the analysis has begun. \n Upon completion, a webhook event is sent to the `webhookUri` specified in the request body.
+        The process will return a 202 status code to indicate the analysis has begun. \n Upon completion, a webhook event is sent to the `webhookUri` specified in the request body.
         The webhook payload will include an auth code which can be exchanged for an [access token](/api-reference/tokens/exchange-token) to retrieve the Policy object."
       operationId: AnalyzeDocument
       parameters:
