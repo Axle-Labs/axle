@@ -1,0 +1,78 @@
+---
+title: "Proxy Ignition"
+description: "As an alternative to initializing Ignition, proxy insurance information on behalf of your user to Axle for processing and/or verification."
+---
+
+### Overview
+
+Axle’s Ignition session is the main interface that allows your users to connect to their insurance accounts and authorize access to scoped data from their insurance policies.
+However, sometimes insurance information is shared to you on behalf of your user, such as when an insurance carrier or agent sends documents via mail directly to the policy lienholder.
+
+In these cases, you can "proxy" an Ignition session, effectively sharing information on behalf of your user instead of initializing Ignition for the user to complete it themself. Axle will then process and/or verify this information, depending on the use case.
+
+<Warning>
+  When proxying an Ignition session, you are implying that you have received
+  consent from user to share their insurance information with Axle, as persuant
+  to Axle's [Privacy Policy](https://www.axle.insure/legal/privacy-policy) and
+  [End User Terms](https://www.axle.insure/legal/end-user-terms).
+</Warning>
+
+### Process Ignition events
+
+    Once the submitted insurance information has been processed and/or verified, an `POST` request will be sent to
+    the `webhookUri` specified when generating an Ignition session.
+
+    The webhook payload will include the following, based on event type:
+
+| Type             | Data                                                                               |
+| ---------------- | ---------------------------------------------------------------------------------- |
+| ignition.proxied | client : String, token : String, user: Object, metadata: Object, authCode : String |
+| ignition.errored | client : String, token : String, user: Object, metadata: Object, message : String  |
+
+<Tabs>
+  <Tab title="Process `ignition.proxied`">
+    Continue from Step 3 in the [Quickstart](/guides/quickstart) guide. In
+    summary, you will need to exchange the short-lived `authCode` specified for
+    an `accessToken`, which can then be used to retrieve Axle Account and Policy
+    objects.
+  </Tab>
+  <Tab title="Process `ignition.errored`">
+    Each use case will specify different `message`, which can be used to
+    determine next steps. Unless specified, retrying the Proxy Ignition request
+    with the same submitted insurance information will not result in a different
+    outcome.
+  </Tab>
+</Tabs>
+
+### Supported use cases
+
+<Info>
+  Currently, only certain use cases are supported by this the Ignition proxy
+  operation. Please reach out to the Axle team if you would Axle to consider
+  supporting new use cases.
+</Info>
+
+<Card title="Process auto policy document received from carrier into Axle Policy" icon="square-1" horizontal="true">
+
+Leverage Axle's Document AI to extract information from an auto policy document, such as a declarations page, policy renewal, ID card, or new business binder, and process it into an Axle Policy object. If the document processing was successful, an `ignition.proxied` event is triggered.
+<br />
+In the request body, you must provide a name for the document (such as the unique identifier of the document in your system), the source of the document (either `user` or `carrier`), and a url that can used to access the document. For security, it is recommended to use a url with an expiry, such as an AWS S3 signed url, as Axle will process this document immediately.
+
+```json Example request body
+{
+  "policy": {
+    "documents": [
+      {
+        "source": "carrier",
+        "name": "DOC_ABC",
+        "url": "https://your-document-bucket.s3.amazonaws.com/declarations-page.pdf"
+      }
+    ]
+  }
+}
+```
+
+See [Proxy Ignition](/api-references/ignition/proxy-ignition) API reference for
+more details on how to invoke the Proxy Ignition endpoint.
+
+</Card>
