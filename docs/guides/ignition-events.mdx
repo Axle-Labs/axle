@@ -5,17 +5,17 @@ description:
   Ignition session."
 ---
 
-Axle’s Ignition session is the main interface that allows your customers to connect to their insurance accounts and authorize access to scoped data from their insurance policies.
+Axle’s Ignition session is the main interface that allows your users to connect to their insurance accounts and authorize access to scoped data from their insurance policies.
 
-Please first review our [Quickstart](/guides/quickstart) guide and API docs on how to start an Ignition session, if you have not already.
+Please first review the [Quickstart](/guides/quickstart) guide and API docs on how to start an Ignition session, if you have not already.
 
 ## Configure an Ignition session for event handling
 
 Your `POST` request to `/ignition` can include the following request
 body:
 
-- Optional: `redirectUri` - the URL we'll redirect the user to upon completion, exit, or error outcomes of the Ignition session, defaults to no redirect
-- Optional: `webhookUri` - the URL we'll send events to as the user proceeds through the Ignition session, defaults to no webhook events
+- Optional: `redirectUri` - the URL Axle Ignition will redirect the user to upon completion, exit, or error outcomes of the Ignition session, defaults to no redirect
+- Optional: `webhookUri` - the URL Axle will send events to as the user proceeds through the Ignition session, defaults to no webhook events
 - Optional: `user` - optional user to attach, please refer to [startIgnition](/api-reference/ignition/start-ignition) for more details
 - Optional: `metadata` - optional Ignition session metadata, please refer to [startIgnition](/api-reference/ignition/start-ignition) for more details
 
@@ -110,9 +110,9 @@ When Axle is unable to retrieve account or policy information from a selected ca
 
 ## Webhooks
 
-If an optional `webhookUri` is provided, a `POST` request will be sent to the `webhookUri` with the following body. The individual parameters included within `data` are the same as those listed above for the corresponding status, with the addition of `user` and `metadata` shared via the Ignition request body:
+If an optional `webhookUri` is provided, a `POST` request will be sent to the `webhookUri` with the following payload. The individual parameters included within `data` are the same as those listed above for the corresponding status, with the addition of `user` and `metadata` shared via the Ignition request body:
 
-```json Example webhook request body
+```json Example webhook payload
 {
   "id": "<event_id>",
   "type": "ignition.completed",

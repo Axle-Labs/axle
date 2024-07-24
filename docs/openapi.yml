@@ -16,8 +16,8 @@ paths:
     post:
       summary: Start Ignition
       description:
-        Start an Ignition session. Returns the ignitionUri to direct the user to
-        authenticate.
+        Generate an Ignition session. Returns an ignitionToken and ignitionUri to direct the user to
+        share their insurance information.
       operationId: StartIgnition
       parameters:
         - $ref: "#/components/parameters/x-client-id"
@@ -33,10 +33,10 @@ paths:
               properties:
                 redirectUri:
                   type: string
-                  description: The URI we should direct the user to after authenticating successfully or exiting the Ignition session.
+                  description: The URI Ignition should direct the user to after authenticating successfully or exiting the Ignition session.
                 webhookUri:
                   type: string
-                  description: The URI we should send updates about this session or the resulting Account or Policy objects.
+                  description: The URI Axle should send updates about this session or the resulting Account or Policy objects.
                 user:
                   $ref: "#/components/schemas/User"
                 metadata:
@@ -71,7 +71,7 @@ paths:
                     properties:
                       ignitionUri:
                         type: string
-                        description: The URL that hosts the Ignition session. This URL can be navigated to in an iframe, webview, or a separate page. See [Quickstart](/guides/quickstart) for more details.
+                        description: The URL that hosts the Ignition session. This URL can be navigated to in an iframe, webview, or a separate page. See [Initialize Ignition](/guides/initialize-ignition) for more details.
                       ignitionToken:
                         type: string
                         description: The unique ID for the Ignition session.
@@ -418,6 +418,8 @@ paths:
       deprecated: false
       tags:
         - Sandbox
+    parameters:
+      - $ref: "#/components/parameters/account"
   /sandbox/policies/{id}/event:
     post:
       summary: Trigger Policy event
@@ -458,6 +460,51 @@ paths:
       deprecated: false
       tags:
         - Sandbox
+    parameters:
+      - $ref: "#/components/parameters/policy"
+  /ignition/{ignitionToken}/proxy:
+    post:
+      summary: Proxy Ignition
+      description:
+        "Proxy insurance information on behalf of your user to Axle for processing and/or verification. This endpoint should ONLY be used when insurance information is gathered when the user is not present (such as a document received from an insurance carrier via mail).
+        \n For more details on supported operations, see the [Proxy Ignition](/guides/proxy-ignition) guide."
+      operationId: ProxyIgnition
+      parameters:
+        - $ref: "#/components/parameters/x-client-id"
+      requestBody:
+        description: ""
+        content:
+          application/json:
+            schema:
+              description: ""
+              type: object
+              properties:
+                operation:
+                  type: string
+                  description: The proxy operation to be completed.
+                  enum:
+                    - process-document
+                  example: "process-document"
+                input:
+                  type: object
+                  description: The input provided will be unique to the proxy type specified.
+        required: true
+      responses:
+        "200":
+          description: "The insurance information was shared successfully and Axle has begun processing the information."
+          content:
+            application/json:
+              schema:
+                description: ""
+                type: object
+                properties:
+                  success:
+                    $ref: "#/components/schemas/Success"
+      deprecated: false
+      tags:
+        - Ignition
+    parameters:
+      - $ref: "#/components/parameters/ignitionToken"
 
 components:
   schemas:
@@ -1271,6 +1318,13 @@ components:
       description:
         The unique ID for the requested account. Returned as part of the Token
         Exchange flow in exchangeToken.
+    ignitionToken:
+      name: ignitionToken
+      in: path
+      required: true
+      schema:
+        type: string
+      description: The unique ID for the Ignition session.
     x-access-token:
       name: x-access-token
       in: header

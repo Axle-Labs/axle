@@ -5,14 +5,14 @@ description: "Integrate Axle's API into your platform, to provide instant insura
 
 ## What is a platform?
 
-Our platform partners are typically software companies that provide many services to their customers, and want to offer Axle as a feature of their platform.
-For example, a dealership management system might be a platform with many dealerships as customers.
-These dealerships want to use Axle to verify insurance information for their own customers, but may not want to setup Axle themselves.
-They're already acccustomed to using a certain dealership management system, so we want to make it easy for them to use Axle through that system.
+- Our platform partners are typically software providers that provide many services to their customers, and want to offer Axle as a feature or add-on  of their platform.
+- For example, a dealership management system might be a platform with many dealerships as customers. 
+  - These dealerships want to use Axle to verify insurance information for their own users, but may not want to setup Axle themselves.
+  - As they are already accustomed to using certain systems, it will be easier for them to use Axle if it is embedded into those systems.
 
 ## How does a platform use Axle?
 
-In the Axle system, we refer to a platform's customers as `destination clients`.
+In the Axle system, a platform's customers are referred to as `destination clients`.
 The platform is responsible for onboarding destination clients to Axle, and then can make requests to Axle's APIs on behalf of the destination client.
 
 Platforms can configure a new destination client using the [`POST /platform/clients`](/api-reference/platform/create-client) endpoint.
@@ -32,7 +32,7 @@ the platform should also provide the destination client `id` in the additional `
 
 ### Capture interest in Axle
 
-Setup a landing page or self-service mechanism to capture interest in instant insurance information through Axle by your customers, partners, or any other dependent services.
+Setup a landing page or self-service mechanism to capture interest in instant insurance verification through Axle by your customers, partners, or any other dependent services.
 
 ### Register a destination client with Axle
 
@@ -41,7 +41,7 @@ Once a service has expressed interest in leveraging Axle, use the [`POST /platfo
 When registering a new client, you'll be asked for the following information:
 
 - `displayName`: A human-friendly name for the destination client. This will be used in Ignition and in the Axle dashboard.
-- `entity`: A url-friendly name for the destination client. These must be unique in the Axle system, so we recommend using a combination of your platform's name and the destination client's name.
+- `entity`: A url-friendly name for the destination client. These must be unique in the Axle system, so it is recommended to use a combination of your platform's name and the destination client's name.
 
 <Info>
   Your new destination client will inherit the Ignition and notification
@@ -56,7 +56,7 @@ If you do happen to lose the destination client `id`, you can retrieve it using 
 
 ### Make requests on behalf of destination client
 
-You can now authorize requests to Axle's core APIs on behalf of this destination client by providing the `x-destination-client-id` header. The following routes can be authorized on behalf of the destination client:
+You can now authorize requests to Axle's core APIs on behalf of this destination client by providing the `x-destination-client-id` header. The following endpoints can be authorized on behalf of the destination client:
 
 <CardGroup cols={2}>
   <Snippet file="core-endpoints.mdx" />
@@ -66,7 +66,7 @@ For more details and advice about how to integrate these API calls with your ser
 
 ### Handle redirect, Window MessageEvent, or webhook Ignition events
 
-All events include a `client` parameter with the destination client `id`, so you can easily associate an event with the correct destination client. Please refer to our guides on [Ignition events](/guides/ignition-events) and [Account](/guides/account-events) or [Policy](/guides/policy-events) events for more details.
+All events include a `client` parameter with the destination client `id`, so you can easily associate an event with the correct destination client. Please refer to the guides on [Ignition events](/guides/ignition-events) and [Account](/guides/account-events) or [Policy](/guides/policy-events) events for more details.
 
 <Check>
 **Well Done!**

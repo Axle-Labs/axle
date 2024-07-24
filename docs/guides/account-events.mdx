@@ -19,9 +19,9 @@ Once an insurance account is connected through an Ignition session, Axle can mon
   for more details.
 </Tip>
 
-A `POST` request will be sent to the `webhookUri` with the following body. All events will include `client`, `ref` (Account object identifier), `user` (optionally specified when generating Ignition token), and `metadata` (optionally specified when generating Ignition token).
+A `POST` request will be sent to the `webhookUri` with the following payload. All events will include `client`, `ref` (Account object identifier), `user` (optionally specified when generating Ignition token), and `metadata` (optionally specified when generating Ignition token).
 
-```json Example webhook request body
+```json Example webhook payload
 {
   "id": "<event_id>",
   "type": "account.modified",
