@@ -46,7 +46,7 @@ Individual fields may return null values when the carrier data source supports t
   - `null`: The carrier data source supports the field, but no information is
   present for the selected Account or Policy. 
   - `undefined`: The carrier data
-  source supports the field and data is available that specifies that the field
+  source supports the field, and data is available that specifies that the field
   does not exist on the Account or Policy.
 </Tip>
 
@@ -57,7 +57,7 @@ Example Policy:
 	"...",
 	"policyNumber": "123456789",
 	"isActive": true,
-	"effectiveDate": null,
+	"effectiveDate": null, // No information was available from carrier data source
 	"expirationDate": "2023-10-22T04:00:00.000Z",
 	"address": {
 		"addressLine1": "123 Main St.",
@@ -69,12 +69,12 @@ Example Policy:
 	},
 	"coverages": [
 		{
-      "code": "PD",
-      "label": "Property Damage",
-      "limitPerAccident": null, // No information was available from carrier data source
-      "deductible": undefined, // The carrier data source specifies that here is no deductible present for this coverage
+			"code": "PD",
+			"label": "Property Damage",
+			"limitPerAccident": null, // No information was available from carrier data source
+			"deductible": undefined, // The carrier data source specifies that there is no deductible present for this coverage
 			"property": "prp_83sD63h82bbeu2Dgn"
-    },
+    	},
 		"..."
 	],
 	"..."
