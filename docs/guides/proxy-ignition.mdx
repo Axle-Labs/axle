@@ -74,7 +74,7 @@ Leverage Axle's Document AI to extract information from an policy document, such
 
 In the request body, you must provide the following: 
 - operation: `process-document`
-- metadata: 
+- input: 
   - `name` for the document (such as the unique identifier of the document in your system)
   - `source` of the document (either `user` or `carrier`)
   - `url` that can used to access the document. For security, it is recommended to use a url with an expiry, such as an AWS S3 signed url, as Axle will process this document immediately.
@@ -82,7 +82,7 @@ In the request body, you must provide the following:
 ```json Example request body
 {
   "operation": "process-document",
-  "metadata": {
+  "input": {
     "name": "DOC_ABC",
     "source": "carrier",
     "url": "https://your-document-bucket.s3.amazonaws.com/declarations-page.pdf"

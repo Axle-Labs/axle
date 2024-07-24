@@ -479,15 +479,15 @@ paths:
               description: ""
               type: object
               properties:
-                type:
+                operation:
                   type: string
-                  description: The type of proxy to be completed.
+                  description: The proxy operation to be completed.
                   enum:
                     - process-document
                   example: "process-document"
-                metadata:
+                input:
                   type: object
-                  description: The metadata provided will be unique to the proxy type specified.
+                  description: The input provided will be unique to the proxy type specified.
         required: true
       responses:
         "200":
