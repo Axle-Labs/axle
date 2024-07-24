@@ -467,7 +467,7 @@ paths:
       summary: Proxy Ignition
       description:
         "Proxy insurance information on behalf of your user to Axle for processing and/or verification. This endpoint should ONLY be used when insurance information is gathered when the user is not present (such as a document received from an insurance carrier via mail).
-        \n For more details on supported use cases, see the [Proxy Ignition](/guides/proxy-ignition) guide."
+        \n For more details on supported operations, see the [Proxy Ignition](/guides/proxy-ignition) guide."
       operationId: ProxyIgnition
       parameters:
         - $ref: "#/components/parameters/x-client-id"
@@ -479,15 +479,15 @@ paths:
               description: ""
               type: object
               properties:
-                policy:
+                type:
+                  type: string
+                  description: The type of proxy to be completed.
+                  enum:
+                    - process-document
+                  example: "process-document"
+                metadata:
                   type: object
-                  description: The URL that hosts the document to be analyzed.
-                  properties:
-                    documents:
-                      type: array
-                      description: "List of documents (such as declaration pages) to be processed. Note: only one document per Ignition is supported at this time."
-                      items:
-                        $ref: "#/components/schemas/Document"
+                  description: The metadata provided will be unique to the proxy type specified.
         required: true
       responses:
         "200":
