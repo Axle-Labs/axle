@@ -25,7 +25,7 @@ to connect their insurance account to your application.
 
 Make a `POST` request to `/ignition`. In return, you'll retrieve an ignitionToken which
 you'll need to pass to your application's client. This token will be used to initialize
-Ignition and allows us to create secure, trackable session with your user.
+Ignition and allows us to create secure, trackable session with your user. Ignition tokens do not expire.
 
 ```bash Request Sample: cURL
 curl --request POST \

@@ -17,7 +17,7 @@ paths:
       summary: Start Ignition
       description:
         Generate an Ignition session. Returns an ignitionToken and ignitionUri to direct the user to
-        share their insurance information.
+        share their insurance information. The ignition session will never expire.
       operationId: StartIgnition
       parameters:
         - $ref: "#/components/parameters/x-client-id"
