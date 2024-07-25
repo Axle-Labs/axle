@@ -16,8 +16,8 @@ paths:
     post:
       summary: Start Ignition
       description:
-        Start an Ignition session. Returns the ignitionUri to direct the user to
-        authenticate.
+        Generate an Ignition session. Returns an ignitionToken and ignitionUri to direct the user to
+        share their insurance information.
       operationId: StartIgnition
       parameters:
         - $ref: "#/components/parameters/x-client-id"
@@ -33,10 +33,10 @@ paths:
               properties:
                 redirectUri:
                   type: string
-                  description: The URI we should direct the user to after authenticating successfully or exiting the Ignition session.
+                  description: The URI Ignition should direct the user to after authenticating successfully or exiting the Ignition session.
                 webhookUri:
                   type: string
-                  description: The URI we should send updates about this session or the resulting Account or Policy objects.
+                  description: The URI Axle should send updates about this session or the resulting Account or Policy objects.
                 user:
                   $ref: "#/components/schemas/User"
                 metadata:
@@ -71,7 +71,7 @@ paths:
                     properties:
                       ignitionUri:
                         type: string
-                        description: The URL that hosts the Ignition session. This URL can be navigated to in an iframe, webview, or a separate page. See [Quickstart](/guides/quickstart) for more details.
+                        description: The URL that hosts the Ignition session. This URL can be navigated to in an iframe, webview, or a separate page. See [Initialize Ignition](/guides/initialize-ignition) for more details.
                       ignitionToken:
                         type: string
                         description: The unique ID for the Ignition session.
@@ -496,17 +496,9 @@ paths:
         content:
           application/json:
             schema:
-              description: ""
+              description: "The Account object attributes you would like to change. For list of all possible attributes refer to [Account](/api-reference/accounts/account)"
               type: object
-              x-examples:
-                example-1:
-                  type: policy.modified
-              properties:
-                type:
-                  type: string
-                  description: The Account or Policy event type you would like to trigger.
-              required:
-                - type
+              $ref: "#/components/schemas/AccountSandbox"
         required: true
       responses:
         "200":
@@ -527,6 +519,8 @@ paths:
       deprecated: false
       tags:
         - Sandbox
+    parameters:
+      - $ref: "#/components/parameters/account"
   /sandbox/policies/{id}/event:
     post:
       summary: Trigger Policy event
@@ -544,17 +538,9 @@ paths:
         content:
           application/json:
             schema:
-              description: ""
+              description: "The Policy object attributes you would like to change. For list of all possible attributes refer to [Policy](/api-reference/policies/policy)"
               type: object
-              x-examples:
-                example-1:
-                  type: policy.modified
-              properties:
-                type:
-                  type: string
-                  description: The Account or Policy event type you would like to trigger.
-              required:
-                - type
+              $ref: "#/components/schemas/PolicySandbox"
         required: true
       responses:
         "200":
@@ -575,6 +561,51 @@ paths:
       deprecated: false
       tags:
         - Sandbox
+    parameters:
+      - $ref: "#/components/parameters/policy"
+  /ignition/{ignitionToken}/proxy:
+    post:
+      summary: Proxy Ignition
+      description:
+        "Proxy insurance information on behalf of your user to Axle for processing and/or verification. This endpoint should ONLY be used when insurance information is gathered when the user is not present (such as a document received from an insurance carrier via mail).
+        \n For more details on supported operations, see the [Proxy Ignition](/guides/proxy-ignition) guide."
+      operationId: ProxyIgnition
+      parameters:
+        - $ref: "#/components/parameters/x-client-id"
+      requestBody:
+        description: ""
+        content:
+          application/json:
+            schema:
+              description: ""
+              type: object
+              properties:
+                operation:
+                  type: string
+                  description: The proxy operation to be completed.
+                  enum:
+                    - process-document
+                  example: "process-document"
+                input:
+                  type: object
+                  description: The input provided will be unique to the proxy type specified.
+        required: true
+      responses:
+        "200":
+          description: "The insurance information was shared successfully and Axle has begun processing the information."
+          content:
+            application/json:
+              schema:
+                description: ""
+                type: object
+                properties:
+                  success:
+                    $ref: "#/components/schemas/Success"
+      deprecated: false
+      tags:
+        - Ignition
+    parameters:
+      - $ref: "#/components/parameters/ignitionToken"
 
 components:
   schemas:
@@ -650,6 +681,43 @@ components:
         - createdAt
         - modifiedAt
         - refreshedAt
+    AccountSandbox:
+      title: Account
+      type: object
+      description: An Account object where all the fields are not required. This object is used in Trigger Account Event that allows testing of Axle monitoring events.
+      x-examples:
+        example:
+          firstName: John
+          lastName: Smith
+          email: john.smith@grr.la
+          carrier: state-farm
+          phone: +14045551234
+          connection:
+            status: "active"
+      x-tags:
+        - Accounts
+      properties:
+        carrier:
+          type: string
+          description: Insurance carrier that is the source for the Account data.
+        firstName:
+          type: string
+          description: First name of insurance account owner.
+          nullable: true
+        lastName:
+          type: string
+          description: Last name of insurance account owner.
+          nullable: true
+        phone:
+          type: string
+          description: Primary phone number of insurance account owner.
+          nullable: true
+        email:
+          type: string
+          description: Primary email address of insurance account owner.
+          nullable: true
+        connection:
+          $ref: "#/components/schemas/ConnectionSandbox"
     Policy:
       title: Policy
       type: object
@@ -675,6 +743,7 @@ components:
             - auto
             - motorcycle
             - home
+            - condo
           example: "auto"
         carrier:
           type: string
@@ -787,6 +856,103 @@ components:
         - createdAt
         - modifiedAt
         - refreshedAt
+    PolicySandbox:
+      title: Policy
+      type: object
+      description: A Policy object where all of the fields are not required. This object is used in Trigger Policy Event that allows testing of Axle monitoring events.
+      x-tags:
+        - Accounts
+      properties:
+        type:
+          type: string
+          description: Type of insurance policy that the Policy object represents.
+          nullable: true
+          enum:
+            - auto
+            - motorcycle
+            - home
+            - condo
+          example: "auto"
+        carrier:
+          type: string
+          description: Insurance carrier that is the source for the Policy data.
+          example: "state-farm"
+        policyNumber:
+          type: string
+          nullable: true
+          description: Identifier of the policy, as specified by the insurance carrier.
+          example: "123456789"
+        isActive:
+          type: boolean
+          nullable: true
+          description: Active status of the policy, as specified by the insurance carrier.
+          example: true
+        effectiveDate:
+          type: string
+          nullable: true
+          description: ISO 8601 timestamp of current term effective date of the policy, as specified by the insurance carrier.
+          example: "2022-10-22T04:00:00.000Z"
+        expirationDate:
+          type: string
+          nullable: true
+          description: ISO 8601 timestamp of current term expiration date of the policy, as specified by the insurance carrier.
+          example: "2023-10-22T04:00:00.000Z"
+        premium:
+          type: number
+          nullable: true
+          description: "Total policy premium, as specified by the insurance carrier. *Note: only available for `type=home` policies*"
+          example: 999.99
+        address:
+          description: Primary address associated with the policy.
+          $ref: "#/components/schemas/Address"
+        coverages:
+          type: array
+          description: List of coverage types and levels offered by the policy.
+          items:
+            $ref: "#/components/schemas/Coverage"
+          example:
+            - code: BI
+              label: Bodily Injury
+              limitPerPerson: 250000
+              limitPerAccident: 500000
+              property: prp_uSdzLVpi8c76H7kl6AQ-F
+            - code: PD
+              label: Property Damage
+              limitPerAccident: 100000
+              property: prp_uSdzLVpi8c76H7kl6AQ-F
+            - code: COMP
+              label: Comprehensive
+              deductible: 375
+              property: prp_uSdzLVpi8c76H7kl6AQ-F
+            - code: COLL
+              label: Collision
+              deductible: 375
+              property: prp_uSdzLVpi8c76H7kl6AQ-F
+            - code: UMBI
+              label: Uninsured Bodily Injury
+              limitPerPerson: 100000
+              limitPerAccident: 300000
+              property: prp_uSdzLVpi8c76H7kl6AQ-F
+        properties:
+          type: array
+          description: List of properties (such as a vehicle or dwelling) afforded coverage by the policy.
+          items:
+            $ref: "#/components/schemas/Property"
+        insureds:
+          type: array
+          description: List of entities (such as an individuals or businesses) afforded direct coverage by the policy.
+          items:
+            $ref: "#/components/schemas/Insured"
+        thirdParties:
+          type: array
+          description: List of external parties with interest in the policy.
+          items:
+            $ref: "#/components/schemas/ThirdParty"
+        documents:
+          type: array
+          description: List of documents (such as declaration pages and policy agreements) associated with the policy.
+          items:
+            $ref: "#/components/schemas/Document"
     PolicyReport:
       title: Policy Report
       type: object
@@ -1114,6 +1280,9 @@ components:
         type:
           - "declaration-page"
         url: "<signed-url>"
+        id: "doc_jd73dw6fn02sj28.pdf"
+        issuedDate: "2022-01-01T00:00:00.000Z"
+        effectiveDate: "2022-01-02T00:00:00.000Z"
         createdAt: "2022-01-01T00:00:00.000Z"
       properties:
         source:
@@ -1136,10 +1305,19 @@ components:
               - policy-agreement
         url:
           type: string
-          description: URL for document access. Note, the URL is signed and has an expiry of 10 minutes.
+          description: URL for document access. Note, the URL is signed and has an expiry of 60 minutes.
+        issuedDate:
+          type: string
+          description: If available, ISO 8601 timestamp at which the document was generated or issued by the carrier.
+        effectiveDate:
+          type: string
+          description: If available, ISO 8601 timestamp at which the document becomes active or goes into effect.
         createdAt:
           type: string
           description: ISO 8601 timestamp at which the document was fetched or shared via Axle.
+        id:
+          type: string
+          description: Unique identifier (formatted as filename) for the document.
       required:
         - source
         - name
@@ -1189,10 +1367,27 @@ components:
           description: The Account connection status represents if Axle can actively request new Account and Policy data from the insurance carrier.
           enum:
             - active
-            - authentication-required
+            - credentials-expired
+            - mfa-expired
+            - account-disabled
+            - account-inaccessible
         updatedAt:
           type: string
           description: ISO 8601 timestamp at which the Account connection status was updated.
+    ConnectionSandbox:
+      title: Connection
+      type: object
+      x-internal: false
+      properties:
+        status:
+          type: string
+          description: The Account connection status represents if Axle can actively request new Account and Policy data from the insurance carrier. The ConnectionSandbox schema doesn't have updatedAt attribute
+          enum:
+            - active
+            - credentials-expired
+            - mfa-expired
+            - account-disabled
+            - account-inaccessible
     ValidationStatus:
       title: ValidationStatus
       type: string
@@ -1233,6 +1428,13 @@ components:
       description:
         The unique ID for the requested account. Returned as part of the Token
         Exchange flow in exchangeToken.
+    ignitionToken:
+      name: ignitionToken
+      in: path
+      required: true
+      schema:
+        type: string
+      description: The unique ID for the Ignition session.
     x-access-token:
       name: x-access-token
       in: header

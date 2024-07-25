@@ -18,7 +18,7 @@ description: "The Axle sandbox can be used to test your integration of Axle's AP
 2. Input credentials into login page to simulate connecting to an insurance account for the selected carrier.
 3. If applicable, complete the Ignition session by selecting a policy that you would like to test against.
 
-Congrats! Now you can access sample [Account](/api-reference/accounts/account) or [Policy](/api-reference/policies/policy) objects after exchanging the generated `authCode` for an `accessToken`. See our [Quickstart](/guides/quickstart) guide for more details.
+Congrats! Now you can access sample [Account](/api-reference/accounts/account) or [Policy](/api-reference/policies/policy) objects after exchanging the generated `authCode` for an `accessToken`. See the [Quickstart](/guides/quickstart) guide for more details.
 
 #### Test credentials
 
@@ -99,14 +99,60 @@ If your Axle `client` is configured to used Document AI, you can use the followi
 
 After completing an Ignition session and exchanging the `authCode` for an `accessToken`, you can trigger an Account event through [`POST /sandbox/account/{accountId}/event`](/api-reference/sandbox/trigger-account-event) or Policy event through [`POST /sandbox/policies/{policyId}/event`](/api-reference/sandbox/trigger-policy-event).
 
-The following Account and Policy events are supported:
-
-- account.modified
-- account.disconnected
-- policy.modified
-
 <Tip>
   You can also test notifications sent to other communication channels such as
-  email or Slack by making a request to the same Axle API routes. Reach out to
-  the Axle team to ensure your `client` is properly configured!
+  email or Slack by making a request to the same Axle API endpoints. Reach out
+  to the Axle team to ensure your `client` is properly configured!
 </Tip>
+
+The following [Account events](/guides/account-events) and [Policy events](guides/policy-events) are supported:
+
+**account.modified**
+
+You can modify Account attributes to simulate an `account.modified` event. The following example will change `email`, `firstName`, and `phone` attributes on an existing Account.
+
+```
+{
+  "email": "updatedEmail@axle.insure",
+  "firstName": "Jane",
+  "phone" "+14041230101"
+}
+```
+
+**account.disconnected**
+
+You can test `account.disconnected` event by setting the connection status to one of the "inactive" states. Refer to Account object for all the available [cases](/api-reference/accounts/account).
+
+```
+{
+  "connection": {
+      "status": "credentials-expired"
+  }
+}
+```
+
+<Info>
+  When account has been set as `disconnected`, your user will need to complete
+  an Axle Ignition session to reconnect it. If the user reconnects the same
+  insurance account and policy, Axle will merge the updated information with any
+  existing Account or Policy objects. More info on `account.disconnected` can be
+  found [here](/guides/account-events#account-disconnected).
+</Info>
+
+**policy.modified**
+
+You can modify Policy attributes to simulate a `policy.modified` event. The following example will set Policy as inactive (e.g., the policy has been cancelled) as well as update the Policy address.
+
+```
+{
+  "isActive": false,
+  "address": {
+      "addressLine1": "New Street",
+      "addressLine2": "New Apt",
+      "city": "Atlanta",
+      "postalCode": "30315",
+      "state": "GA",
+      "country: "USA"
+  }
+}
+```

@@ -48,7 +48,9 @@ description: "An Account represents an account with an insurance
 
       <ResponseField name="status" type="string" >
         The Account connection status represents if Axle can actively request new Account and Policy data from the insurance carrier.
-        <br />Available options: `active` `authentication-required`
+
+        Connection status `inactive` used when the Account was created from an Ignition completion with result `manual`. See [Account events](/guides/account-events) for more details on the other statuses.
+        <br />Available options: `active`, `credentials-expired`, `mfa-expired`, `account-disabled`, `account-inaccessible`, `inactive`
       </ResponseField>
 
       <ResponseField name="updatedAt" type="string" >

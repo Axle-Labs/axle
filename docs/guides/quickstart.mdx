@@ -41,7 +41,7 @@ curl --request POST \
 
 <Info>
   You can specify fields when generating an Ignition token to handle Ignition
-  events (see our guide on [Ignition events](/guides/ignition-events) for more
+  events (see the guide on [Ignition events](/guides/ignition-events) for more
   details) as well as attach user information or other metadata (see [Start
   Ignition](/api-reference/ignition/start-ignition) for more details).
 </Info>
@@ -65,11 +65,11 @@ Here are some common ways you can present Ignition to your application's users:
 
 <Tip>
   For guidance on specific implementations based on your application's
-  requirements, refer to our [Initialize Ignition](/guides/initialize-ignition)
+  requirements, refer to the [Initialize Ignition](/guides/initialize-ignition)
   guide.
 </Tip>
 
-Then, process events generated during the course of the Ignition session. See our [Ignition events](/guides/ignition-events) guide for each Ignition event.
+Then, process events generated during the course of the Ignition session. See the [Ignition events](/guides/ignition-events) guide for each Ignition event.
 
 ### Step 3: Exchange tokens
 
@@ -122,9 +122,9 @@ can now leverage the Axle API to access their insurance data 🎉🎉!
 
 ### Step 5: Retrieve the Account and associated Policies
 
-Now that we have an `accessToken`, we can retrieve the Account object for the
+Now that you have an `accessToken`, you can retrieve the Account object for the
 user's connected account by making a `GET` request to `accounts/{id}` with
-the `accessToken` passed in the `x-access-token` header. By passing the `expand` parameter, we can also can retrieve all Policy objects available on the account:
+the `accessToken` passed in the `x-access-token` header. By passing the `expand` parameter, you can also can retrieve all Policy objects available on the account:
 
 ```bash Request Sample: cURL
 curl --request GET \

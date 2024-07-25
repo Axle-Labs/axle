@@ -29,7 +29,7 @@ Axle API requests are authenticated using an client-id and client-secret (API ke
 
 - x-client-id — unique identifier for client
 - x-client-secret — api key for client (sensitive)
-- x-destination-client-id — unique identifier for the destination client (optional field used by platform integrations on select routes)
+- x-destination-client-id — unique identifier for the destination client (optional field used by platform integrations on select endpoints)
 
 <Check>Contact the Axle team to acquire these keys.</Check>
 
@@ -40,11 +40,14 @@ When making API requests, API keys must match the base URL environment (see abov
 Individual fields may return null values when the carrier data source supports the field, but no information is present for the selected Account or Policy.
 
 <Tip>
-  *Optional* fields, such as `Policy.coverages["BI"].property` or `Policy.coverages["UMPD"].deductible` may return `null` or `undefined` 
+  *Optional* fields, such as `Policy.coverages["BI"].property` or
+  `Policy.coverages["UMPD"].deductible` may return `null` or `undefined`
   
-  - `null` - The carrier data source supports the field, but no information is present for the selected Account or Policy. 
-  
-  - `undefined` - The carrier data source supports the field and data is available that specifies that the field does not exist on the Account or Policy.
+  - `null`: The carrier data source supports the field, but no information is
+  present for the selected Account or Policy. 
+  - `undefined`: The carrier data
+  source supports the field, and data is available that specifies that the field
+  does not exist on the Account or Policy.
 </Tip>
 
 Example Policy:
@@ -54,7 +57,7 @@ Example Policy:
 	"...",
 	"policyNumber": "123456789",
 	"isActive": true,
-	"effectiveDate": null,
+	"effectiveDate": null, // No information was available from carrier data source
 	"expirationDate": "2023-10-22T04:00:00.000Z",
 	"address": {
 		"addressLine1": "123 Main St.",
@@ -66,12 +69,12 @@ Example Policy:
 	},
 	"coverages": [
 		{
-      "code": "PD",
-      "label": "Property Damage",
-      "limitPerAccident": null, // No information was available from carrier data source
-      "deductible": undefined, // The carrier data source specifies that here is no deductible present for this coverage
+			"code": "PD",
+			"label": "Property Damage",
+			"limitPerAccident": null, // No information was available from carrier data source
+			"deductible": undefined, // The carrier data source specifies that there is no deductible present for this coverage
 			"property": "prp_83sD63h82bbeu2Dgn"
-    },
+    	},
 		"..."
 	],
 	"..."

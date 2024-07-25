@@ -168,7 +168,7 @@ List of entities (such as an individuals or businesses) afforded direct coverage
         Insurance carriers may represent `firstName` and `lastName` in different ways (such as including middle name in `firstName` or dropping special characters such as `-`).
 
 
-        If your application requires matching your users against policy insureds, we recommend combining `firstName` and `lastName` into a single value and using a "fuzzy" matching algorithm with a strict threshold.
+        If your application requires matching your users against policy insureds, it is recommended to combine `firstName` and `lastName` into a single value and using a "fuzzy" matching algorithm with a strict threshold.
       </Tip>
 
       <ResponseField name="type" type="string">
@@ -221,6 +221,10 @@ List of documents (such as declaration pages and policy agreements) associated w
 
     <Expandable title="Document">
 
+        <ResponseField name="id" type="string" >
+          Unique identifier (formatted as filename) for the document.
+        </ResponseField>
+
         <ResponseField name="source" type="string">
           The source of the document. Available options: `carrier` `user`.
 
@@ -246,8 +250,16 @@ List of documents (such as declaration pages and policy agreements) associated w
 
         </ResponseField>
 
+        <ResponseField name="issuedDate" type="string" >
+          If available, ISO 8601 timestamp at which the document was generated or issued by the carrier.
+        </ResponseField>
+
+        <ResponseField name="effectiveDate" type="string" >
+          If available, ISO 8601 timestamp at which the document becomes active or goes into effect.
+        </ResponseField>
+
         <ResponseField name="createdAt" type="string" >
-          Unique identifier of Property afforded coverage for specified Third Party.
+          ISO 8601 timestamp at which the document was fetched or shared via Axle.
         </ResponseField>
 
     </Expandable>
@@ -380,10 +392,13 @@ List of documents (such as declaration pages and policy agreements) associated w
   ],
   "documents": [
     {
+      "id": "doc_jd73dw6fn02sj28.pdf",
       "source": "carrier",
       "name": "Declaration Page",
       "type": ["declaration-page"],
       "url": "<signed-url>",
+      "issuedDate": "2022-01-01T00:00:00.000Z",
+      "effectiveDate": "2022-01-02T00:00:00.000Z",
       "createdAt": "2022-01-01T00:00:00.000Z"
     }
   ],
@@ -484,10 +499,13 @@ List of documents (such as declaration pages and policy agreements) associated w
   ],
   "documents": [
     {
+      "id": "doc_jd73dw6fn02sj28.pdf",
       "source": "carrier",
       "name": "Declaration Page",
       "type": ["declaration-page"],
       "url": "<signed-url>",
+      "issuedDate": "2022-01-01T00:00:00.000Z",
+      "effectiveDate": "2022-01-02T00:00:00.000Z",
       "createdAt": "2022-01-01T00:00:00.000Z"
     },
   ],
