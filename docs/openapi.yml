@@ -246,6 +246,89 @@ paths:
         - Policies
     parameters:
       - $ref: "#/components/parameters/policy"
+  /policies/{id}/validate:
+    post:
+      summary: Validate Policy
+      description: "The Validate Policy method returns a the result of a series of validation checks on the requested policy object. For details about each validation and their return types, see the [Policy Validation Guide](/guides/validation-engine)"
+      operationId: ValidatePolicy
+      parameters:
+        - $ref: "#/components/parameters/x-client-id"
+        - $ref: "#/components/parameters/x-destination-client-id"
+        - $ref: "#/components/parameters/x-access-token"
+      requestBody:
+        description: ""
+        content:
+          application/json:
+            schema:
+              type: array
+              description: "A list of Validations to perform on the policy object."
+              items:
+                type: object
+                properties:
+                  validation:
+                    type: string
+                    description: "The specified Validation to perform."
+                    enum:
+                      - "policy-active"
+                      - "rental-collision-damage-coverage"
+                required:
+                  - validation
+            example: [{ "validation": "policy-active" }]
+        required: true
+      responses:
+        "200":
+          "description": ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    $ref: "#/components/schemas/Success"
+                  data:
+                    type: object
+                    properties:
+                      status:
+                        type: string
+                        description: "The overall status across all specified Validations."
+                        enum:
+                          - "pass"
+                          - "fail"
+                          - "caution"
+                      summary:
+                        type: object
+                        description: "A summary of the Validation statuses."
+                        properties:
+                          policy-active:
+                            $ref: "#/components/schemas/ValidationStatus"
+                            description: "The status of the policy-effective Validation."
+                          rental-collision-damage-coverage:
+                            $ref: "#/components/schemas/ValidationStatus"
+                            description: "The status of the rental-collision-damage-coverage Validation."
+                      validations:
+                        type: object
+                        description: "A detailed report of the validation checks."
+                        properties:
+                          example-validation:
+                            type: object
+                            description: ""
+                            properties:
+                              status:
+                                $ref: "#/components/schemas/ValidationStatus"
+                              metadata:
+                                type: object
+                                description: "Additional metadata about the Validation."
+                              message:
+                                type: object
+                                description: "An object containing the message code and human-readable message, if needed."
+                              breakdown:
+                                type: object
+                                description: "Detail on contributing Validations, if needed."
+                            required:
+                              - status
+                              - metadata
+    parameters:
+      - $ref: "#/components/parameters/policy"
   /carriers/{id}:
     get:
       summary: Get Carrier
@@ -1287,6 +1370,15 @@ components:
             - mfa-expired
             - account-disabled
             - account-inaccessible
+    ValidationStatus:
+      title: ValidationStatus
+      type: string
+      description: Indicates whether the validation checks were successful.
+      enum:
+        - pass
+        - fail
+        - caution
+        - unknown
   parameters:
     x-client-id:
       name: x-client-id
