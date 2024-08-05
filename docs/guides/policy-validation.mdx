@@ -112,12 +112,13 @@ Evaluates whether the policy is currently active.
 
     Evaluates the likelihood that the policy provides coverage for collision damage when an insured is driving a rental vehicle, based on the collision coverage available on the policy and the policy terms of insurance agreements similar to the one used by this policy.
 
-    There are two ways that a user’s auto insurance policy may cover collision damage to a rental vehicle.
+    There are three ways that a user’s auto insurance policy may cover collision damage to a rental vehicle.
 
     1. Their policy includes collision coverage and personal collision coverage extends to a rental vehicle.
     2. Their policy is registered in a state in which policies are required to cover collision damage to a rental vehicle under property damage liability terms.
+    3. Their policy is registered in a state in which policies are required to cover collision damage to a rental vehicle under an endorsement.
 
-    If either of these are true, then the `rental-covered-for-collision` Rule resolves to `pass`.
+    If any of these are true, then the `rental-covered-for-collision` Rule resolves to `pass`.
 
     #### Rental Coverage Validation AI
 
