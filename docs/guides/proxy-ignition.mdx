@@ -107,6 +107,7 @@ In the request body, you must provide the following:
 If the operation does not succeed, one of the following messages will be returned as part of the `ignition.errored` event, which you can use to determine next steps.
 
 - `Document data is empty.` - The document had no data.
+- `Failed to download the file from the specified url.` - The file could not be downloaded from the specified url. Please ensure that the url directly serves the document.
 - `Please make sure to upload an image or pdf document with your policy information clearly legible.` - The document was not supported by Axle's DocumentAI as it is either the wrong format, not legible, or not an insurance document.
 - `Oops something went wrong. Please try again later.` - An unknown error occured. Retrying may result in a successful operation.
 
