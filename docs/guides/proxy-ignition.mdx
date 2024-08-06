@@ -31,13 +31,19 @@ In these cases, you can "proxy" an Ignition session, effectively sharing informa
       "webhookUri": "https://example.com/webhook"
     }'
     ```
+
   </Step>
   <Step title="Send proxy request" titleSize="h3">
-    Begin the insurance processing and/or verification by selecting a supported [`operation`](/guides/proxy-ignition#supported-operations) along with your users insurance information in the request body. See [Proxy Ignition](/api-reference/ignition/proxy-ignition) API reference for more details on how to invoke the Proxy Ignition endpoint.
+    Select a supported [`operation`](/guides/proxy-ignition#supported-operations) and provide the required insurance information for the operation in the `POST /ignition/{ignitionToken}/proxy` request body. See [Proxy Ignition](/api-reference/ignition/proxy-ignition) API reference for more details on how to invoke the Proxy Ignition endpoint.
+
+    <Info>
+      When Proxy Ignition request is made, Axle will queue the proxy operation immediately. Completion times may vary by operation and current Axle volume, but will be under 24 hours.
+    </Info>
+
   </Step>
   <Step title="Process Ignition events" titleSize="h3">
     Once the submitted insurance information has been processed and/or verified, an `POST` request will be sent to
-    the `webhookUri` specified when generating the Ignition session. See [Ignition events](/guides/ignition-events) for more details on the payloads of each event. 
+    the `webhookUri` specified when generating the Ignition session. See [Ignition events](/guides/ignition-events) for more details on the payloads of each event.
 
     <Tabs>
       <Tab title="ignition.completed">
@@ -57,44 +63,51 @@ In these cases, you can "proxy" an Ignition session, effectively sharing informa
         outcome.
       </Tab>
     </Tabs>
+
   </Step>
 </Steps>
-
-
 
 ### Supported operations
 
 <Info>
-  Currently, only certain operations are supported by this the Ignition proxy
-  operation. Please reach out to the Axle team if you would to request new operations.
+  Currently, only certain Ignition proxy operations are supported. Please reach
+  out to the Axle team if you would like to request new operations.
 </Info>
 
 <Accordion title="Transform insurance carrier policy document into Axle Policy" icon="file">
 Leverage Axle's Document AI to extract information from a policy document, such as a declarations page, policy renewal, ID card, or new business binder, and transform it into an [Axle Policy](/api-reference/policies/policy) object.
 
-In the request body, you must provide the following: 
-- operation: `process-document`
-- input: 
+In the request body, you must provide the following:
+
+- operation: `transform-document`
+- input:
+
   - `name` for the document (such as the unique identifier of the document in your system)
   - `source` of the document (either `user` or `carrier`)
-  - `url` that can used to access the document. For extra security, we recommend using a url with an expiry, such as an AWS S3 signed url. 
+  - `url` that can used to access the document.
 
-<Info>
-When Proxy Ignition request is made, we will process provided document immediately.
-</Info>
+  <Tip>
+    This operation supports documents in the following formats: `pdf`, `jpg`,
+    `jpeg`, and `png`. The url must directly serve the document via a HTTP GET
+    request. For security, it is recommended to use a url with an 24-hour
+    expiry, such as an AWS S3 signed url.
+  </Tip>
 
 ```json Example request body
 {
-  "operation": "process-document",
+  "operation": "transform-document",
   "input": {
     "name": "DOC_ABC",
     "source": "carrier",
     "url": "https://your-document-bucket.s3.amazonaws.com/declarations-page.pdf"
   }
-} 
+}
 ```
 
-If the operation does not succeed, the following `message` will be returned as part of the `ignition.errored`, which you can use to determine next steps. For more information about `onError` event for `ignition.errored`  you can refer to [Ignition events](/guides/ignition-events#onerror)
+If the operation does not succeed, one of the following messages will be returned as part of the `ignition.errored` event, which you can use to determine next steps.
 
-For example, `ignition.errored` might say: “The document could not be processed by Axle. Please submit different document if available". In this case, uploading different type of document (e.g. Excel file was provided) might be necessary to successfully complete the ignition session.
+- `Document data is empty.` - The document had no data.
+- `Please make sure to upload an image or pdf document with your policy information clearly legible.` - The document was not supported by Axle's DocumentAI as it is either the wrong format, not legible, or not an insurance document.
+- `Oops something went wrong. Please try again later.` - An unknown error occured. Retrying may result in a successful operation.
+
 </Accordion>

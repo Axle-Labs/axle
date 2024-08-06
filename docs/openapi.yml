@@ -554,6 +554,7 @@ paths:
       operationId: ProxyIgnition
       parameters:
         - $ref: "#/components/parameters/x-client-id"
+        - $ref: "#/components/parameters/x-destination-client-id"
       requestBody:
         description: ""
         content:
