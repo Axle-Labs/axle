@@ -554,6 +554,7 @@ paths:
       operationId: ProxyIgnition
       parameters:
         - $ref: "#/components/parameters/x-client-id"
+        - $ref: "#/components/parameters/x-destination-client-id"
       requestBody:
         description: ""
         content:
@@ -574,7 +575,7 @@ paths:
         required: true
       responses:
         "200":
-          description: "The insurance information was shared successfully and Axle has begun processing the information."
+          description: "The insurance information was received and Axle has successfully begun processing the information."
           content:
             application/json:
               schema:
