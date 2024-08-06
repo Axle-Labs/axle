@@ -74,12 +74,12 @@ In these cases, you can "proxy" an Ignition session, effectively sharing informa
   out to the Axle team if you would like to request new operations.
 </Info>
 
-<Accordion title="Transform insurance carrier policy document into Axle Policy" icon="file">
+<Accordion title="Process insurance carrier policy document into Axle Policy" icon="file">
 Leverage Axle's Document AI to extract information from a policy document, such as a declarations page, policy renewal, ID card, or new business binder, and transform it into an [Axle Policy](/api-reference/policies/policy) object.
 
 In the request body, you must provide the following:
 
-- operation: `transform-document`
+- operation: `process-document`
 - input:
 
   - `name` for the document (such as the unique identifier of the document in your system)
@@ -95,7 +95,7 @@ In the request body, you must provide the following:
 
 ```json Example request body
 {
-  "operation": "transform-document",
+  "operation": "process-document",
   "input": {
     "name": "DOC_ABC",
     "source": "carrier",
