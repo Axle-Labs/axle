@@ -75,6 +75,12 @@ description: "An Account represents an account with an insurance
   ISO 8601 timestamp at which the Account object was refreshed via Axle. The
   Account object is refreshed only when Axle successfully requests new Account
   data from the insurance carrier.
+
+  <Info>
+    If the `refreshedAt` date does not update daily, we're working on re-establishing the connection with the
+    insurance carrier to retrieve updated account data. Please keep an eye on the `refreshedAt` field to
+    confirm it's active and up-to-date.
+  </Info>
 </ParamField>
 
 <RequestExample>
