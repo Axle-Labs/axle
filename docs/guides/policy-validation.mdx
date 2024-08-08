@@ -1,37 +1,37 @@
 ---
-title: "Policy Validations"
-description: "Perform a set of validations on a policy to determine if your application's requirements are met."
+title: "Policy Validation (Beta)"
+description: "Evaluate a set of Rules against a policy to determine if your application's requirements are met."
 ---
 
 ## Overview
 
-When embedding insurance verification into your application, you may want to evaluate whether a shared insurance policy meets your business' requirements. While creating these validations is made much easier due to Axle's universal Policy object, you can also leverage pre-built Policy Validations. Each supported Validation is an individual check run against the Policy object to determine if it meets a certain requirement or set of requirements.
+When embedding insurance verification into your application, you may want to evaluate whether a shared insurance policy meets your business' requirements. Each supported Rule is an individual check evaluated against the Policy object to determine if the Policy meets a certain requirement or set of requirements.
 
-For example, the `policy-active` Validation checks if the policy is currently active, resolving to `pass` if the `isActive` field of the policy is `true` and `fail` if it is `false`. If `isActive` is `null` (not provided by the insurance carrier), this Validation will resolve to `unknown`.
+For example, the `policy-active` Rule checks if the policy is currently active, evaluating to `pass` if the `isActive` field of the policy is `true` and `fail` if it is `false`. If `isActive` is `null` (not provided by the insurance carrier), this Rule will resolve to `unknown`.
 
-Some Validations are more complex, providing additional insight not found on the Policy object. For example, the `rental-covered-for-collision` Validation provides guidance on whether a policy affords coverage for collision damage when an insured is driving a rental vehicle.
+Some Rules are more complex, providing additional insight not found on the Policy object. For example, the `rental-covered-for-collision` Rule provides guidance on whether a policy affords coverage for collision damage when an insured is driving a rental vehicle.
 
-Each validation resolves to one of the following statuses:
+Each Rule evaluates to one of the following statuses:
 
-| Status    | Description                                                                                                           |
-| --------- | --------------------------------------------------------------------------------------------------------------------- |
-| `pass`    | The policy meets all requirements of the Validation                                                                   |
-| `fail`    | The policy does not meet all the requirements of the Validation                                                       |
-| `caution` | The policy only partially meets the requirements of the Validation or the Validation returns an inconclusive outcome. |
-| `unknown` | Not enough data was available to determine the outcome of the Validation                                              |
+| Status    | Description                                                                                               |
+| --------- | --------------------------------------------------------------------------------------------------------- |
+| `pass`    | The policy meets all requirements of the Rule                                                             |
+| `fail`    | The policy does not meet all the requirements of the Rule                                                 |
+| `caution` | The policy only partially meets the requirements of the Rule or the Rule returns an inconclusive outcome. |
+| `unknown` | Not enough data was available to determine the outcome of the Rule                                        |
 
-## Requesting Policy Validations
+## Requesting Evaluation Rules
 
-You can request that a Policy be evaluated against a specified set of Validations through the [Validate Policy](/api-reference/policies/validate-policy) endpoint. Each validation you requested will be run, and you'll receive a response with an overall status determination of either `pass`, `fail`, or `caution`.
+You can request that a Policy be evaluated against a specified set of Rules through the [Validate Policy](/api-reference/policies/validate-policy) endpoint. Each Rule you requested will be run, and you'll receive a response with an overall status determination of either `pass`, `fail`, or `caution`.
 
-- `pass` means that the policy succeded in passing all specified Validations.
-- `fail` means that one or more specified Validations failed.
-- `caution` means that one or more specified Validations had a status of `caution`. In most cases, it is recommended to complete a manual review of the policy.
+- `pass` means that the policy succeded in passing against all of the specified Rules.
+- `fail` means that one or more specified Rules evaluated to a status of `fail`.
+- `caution` means that one or more specified Rules evaluated to a status of `caution`. In most cases, it is recommended to complete a manual review of the policy.
 
 The response also contains two other fields:
 
-- `summary` - An object containing the names of all Validations on the policy and their resolved statuses.
-- `validations` - An object containing the names of each Validation and their run details.
+- `summary` - An object containing the names of all Rules on the policy and their resolved statuses.
+- `rules` - An object containing the names of each Rules and their run details.
 
 <CodeGroup>
 ```json Overall Status: Pass
@@ -41,7 +41,7 @@ The response also contains two other fields:
     "policy-active": "pass",
     "rental-covered-for-collision": "pass",
   },
-  "validations": {
+  "rules": {
     "policy-active":{
       "status": "pass",
       "metadata": {...},
@@ -62,7 +62,7 @@ The response also contains two other fields:
     "policy-active": "pass",
     "rental-covered-for-collision": "fail",
   },
-  "validations": {
+  "rules": {
     "policy-active":{
       "status": "pass",
       "metadata": {...},
@@ -78,11 +78,11 @@ The response also contains two other fields:
 
 </CodeGroup>
 
-## Supported Validations
+## Supported Rules
 
 <Info>
-  The Axle team is actively working on adding additional supported Validations.
-  Please reach out with any suggestions!
+  The Axle team is actively working on adding additional supported Rules. Please
+  reach out with any suggestions!
 </Info>
 
 <AccordionGroup>
@@ -97,7 +97,7 @@ Evaluates whether the policy is currently active.
 | `fail`    | The policy is not currently active           |
 | `unknown` | The `isActive` field is unvailable or `null` |
 
-```typescript Example Validation
+```typescript Example Rule
 "policy-active": {
   "status": "pass",
   "metadata": {
@@ -112,24 +112,25 @@ Evaluates whether the policy is currently active.
 
     Evaluates the likelihood that the policy provides coverage for collision damage when an insured is driving a rental vehicle, based on the collision coverage available on the policy and the policy terms of insurance agreements similar to the one used by this policy.
 
-    There are two ways that a user’s auto insurance policy may cover collision damage to a rental vehicle.
+    There are three ways that a user’s auto insurance policy may cover collision damage to a rental vehicle.
 
     1. Their policy includes collision coverage and personal collision coverage extends to a rental vehicle.
     2. Their policy is registered in a state in which policies are required to cover collision damage to a rental vehicle under property damage liability terms.
+    3. Their policy is registered in a state in which policies are required to cover collision damage to a rental vehicle under an endorsement.
 
-    If either of these are true, then the `rental-covered-for-collision` Validation resolves to `pass`.
+    If any of these are true, then the `rental-covered-for-collision` Rule resolves to `pass`.
 
     #### Rental Coverage Validation AI
 
     In order to determine if a policy meets these criteria, Axle's Validation AI matches the auto policy to a repository of up-to-date policy agreements (also known as forms) as well as any relevant state regulations, and then synthesizes these resources into a recommendation.
 
     <Warning>
-      The `rental-covered-for-collision` recommendation does not apply the following scenarios:
+      The `rental-covered-for-collision` recommendation may not apply the following scenarios:
       - long term rentals (greater than 30 days)
       - rental of medium or heavy duty vehicles (above 10,000 lbs)
       - use of temporary substitute vehicles (such as replacement or loaner vehicle)
       - use of rental vehicle for TNC, DNC, or other auto business
-      - rentals in the following states or territories: HI, AK, PR
+      - rentals outside of the continental United States
 
       The recommendation made by the Rental Coverage Validation AI should not be treated as legal advice. It is made on a "best-effort" basis. When messaging the recommendation to your application's user,
     </Warning>
@@ -143,16 +144,17 @@ Evaluates whether the policy is currently active.
 
 This Validation also returns a message and message code, which can be used to explain to the user why the policy is or is not likely to cover collision damage to a rental vehicle.
 
-| Message Code                        | Validation Status | Message                                                                                                                                                     |
+| Message Code                        | Evaluation Status | Message                                                                                                                                                     |
 | ----------------------------------- | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | coll-extends-to-rental              | `pass`            | The policy has collision coverage and the matching policy agreements indicate that collision coverage extends to rental vehicles.                           |
 | pd-covers-rental-collision          | `pass`            | The policy is underwritten in a state in which policies are required to cover collision damage under property damage liability terms.                       |
+| endorsement-covers-rental-collision | `pass`            | The policy is underwritten in a state in which policies are required to cover collision damage under an endorsement.                                        |
 | coll-extends-to-rental-with-caution | `caution`         | The policy has collision coverage, but the matching policy agreements have conflicting answers about whether collision coverage extends to rental vehicles. |
 | coll-extends-to-rental-with-unknown | `unknown`         | The policy has collision coverage, but there is not enough information to determine if the policy extends collision coverage to rental vehicles.            |
 | coll-does-not-extend-to-rental      | `fail`            | The policy has collision coverage, but the matching policy agreements indicate that collision coverage does not extend to rental vehicles.                  |
 | coll-not-present                    | `fail`            | The policy does not have collision coverage, and therefore cannot extend collision coverage to rental vehicles.                                             |
 
-```typescript Example Validation
+```typescript Example Rule
 "rental-covered-for-collision": {
   "status": "pass",
   "message": {
@@ -181,6 +183,20 @@ This Validation also returns a message and message code, which can be used to ex
         }
       },
       "property-damage-covers-rental-collision": {
+        "status": "pass",
+        "metadata": {
+          "coverages": [
+            {
+              "code": "PD",
+              "label": "Property Damage",
+              "limitPerAccident": 50000,
+              "property": "prp_uSdzLVpi8c76H7kl6AQ-F"
+            }
+          ],
+          "state": "NY"
+        }
+      },
+      "endorsement-covers-rental-collision": {
         "status": "pass",
         "metadata": {
           "state": "NY"

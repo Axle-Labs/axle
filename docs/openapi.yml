@@ -249,7 +249,7 @@ paths:
   /policies/{id}/validate:
     post:
       summary: Validate Policy
-      description: "The Validate Policy method returns a the result of a series of validation checks on the requested policy object. For details about each validation and their return types, see the [Policy Validation Guide](/guides/validation-engine)"
+      description: "The Validate Policy method returns the result of a evaluating a series of Rules against the requested policy object. For details about each Rule and their return types, see the [Policy Validation Guide](/guides/policy-validation)"
       operationId: ValidatePolicy
       parameters:
         - $ref: "#/components/parameters/x-client-id"
@@ -261,19 +261,19 @@ paths:
           application/json:
             schema:
               type: array
-              description: "A list of Validations to perform on the policy object."
+              description: "A list of Rules to perform on the policy object."
               items:
                 type: object
                 properties:
-                  validation:
+                  rule:
                     type: string
-                    description: "The specified Validation to perform."
+                    description: "A Rule to evaluate."
                     enum:
                       - "policy-active"
                       - "rental-collision-damage-coverage"
                 required:
-                  - validation
-            example: [{ "validation": "policy-active" }]
+                  - rule
+            example: [{ "rule": "policy-active" }]
         required: true
       responses:
         "200":
@@ -290,40 +290,40 @@ paths:
                     properties:
                       status:
                         type: string
-                        description: "The overall status across all specified Validations."
+                        description: "The overall status across all specified Rules."
                         enum:
                           - "pass"
                           - "fail"
                           - "caution"
                       summary:
                         type: object
-                        description: "A summary of the Validation statuses."
+                        description: "A summary of the Rule evaluation statuses."
                         properties:
                           policy-active:
-                            $ref: "#/components/schemas/ValidationStatus"
-                            description: "The status of the policy-effective Validation."
+                            $ref: "#/components/schemas/EvaluationStatus"
+                            description: "The evaluation status of the policy-effective Rule."
                           rental-collision-damage-coverage:
-                            $ref: "#/components/schemas/ValidationStatus"
-                            description: "The status of the rental-collision-damage-coverage Validation."
-                      validations:
+                            $ref: "#/components/schemas/EvaluationStatus"
+                            description: "The evaluation status of the rental-collision-damage-coverage Rule."
+                      rules:
                         type: object
-                        description: "A detailed report of the validation checks."
+                        description: "A detailed report of the Rule evaluation results."
                         properties:
-                          example-validation:
+                          example-rule:
                             type: object
                             description: ""
                             properties:
                               status:
-                                $ref: "#/components/schemas/ValidationStatus"
+                                $ref: "#/components/schemas/EvaluationStatus"
                               metadata:
                                 type: object
-                                description: "Additional metadata about the Validation."
+                                description: "Additional metadata about the Rule."
                               message:
                                 type: object
                                 description: "An object containing the message code and human-readable message, if needed."
                               breakdown:
                                 type: object
-                                description: "Detail on contributing Validations, if needed."
+                                description: "Detail on contributing Rules, if needed."
                             required:
                               - status
                               - metadata
@@ -1371,10 +1371,10 @@ components:
             - mfa-expired
             - account-disabled
             - account-inaccessible
-    ValidationStatus:
-      title: ValidationStatus
+    EvaluationStatus:
+      title: EvaluationStatus
       type: string
-      description: Indicates whether the validation checks were successful.
+      description: Indicates whether the rule evaluations were successful.
       enum:
         - pass
         - fail
