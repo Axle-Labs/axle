@@ -740,7 +740,7 @@ components:
         isActive:
           type: boolean
           nullable: true
-          description: Active status of the policy, as specified by the insurance carrier.
+          description: Active status of the policy, as specified by the insurance carrier. If an Ignition session is completed with result `manual`, this field will be undefined.
           example: true
         effectiveDate:
           type: string
@@ -826,7 +826,6 @@ components:
         - type
         - carrier
         - policyNumber
-        - isActive
         - effectiveDate
         - expirationDate
         - premium
@@ -868,7 +867,7 @@ components:
         isActive:
           type: boolean
           nullable: true
-          description: Active status of the policy, as specified by the insurance carrier.
+          description: Active status of the policy, as specified by the insurance carrier. If an Ignition session is completed with result `manual`, this field will be undefined.
           example: true
         effectiveDate:
           type: string

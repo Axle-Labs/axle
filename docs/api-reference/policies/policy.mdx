@@ -35,8 +35,10 @@ description: "A Policy represents a specific policy associated with an
   Identifier of the policy, as specified by the insurance carrier.
 </ParamField>
 
-<ParamField body="isActive" type="boolean">
-  Active status of the policy, as specified by the insurance carrier.
+<ParamField body="isActive" type="boolean (optional)">
+  Active status of the policy, as specified by the insurance carrier. If an
+  Ignition session is completed with result: `manual`, this field will be
+  undefined.
 </ParamField>
 
 <ParamField body="effectiveDate" type="string">
