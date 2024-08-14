@@ -19,7 +19,7 @@ Once an insurance policy is connected through an Ignition session, Axle can moni
   for more details.
 </Tip>
 
-A `POST` request will be sent to the `webhookUri` with the following payload. All events will include `client`, `ref` (Policy object identifier), `user` (optionally specified when generating Ignition token), and `metadata` (optionally specified when generating Ignition token).
+A `POST` request will be sent to the `webhookUri` with the following payload. All events will include `client`, `account`, `ref` (Policy object identifier), `user` (optionally specified when generating Ignition token), and `metadata` (optionally specified when generating Ignition token).
 
 ```json Example webhook payload
 {
@@ -27,6 +27,7 @@ A `POST` request will be sent to the `webhookUri` with the following payload. Al
   "type": "policy.modified",
   "data": {
     "client": "<client-id>",
+    "account": "<account-id>",
     "ref": "pol_Z4ni-JHBvkn9PlKJHPEwk",
     "user": {},
     "metadata": {},
