@@ -211,3 +211,15 @@ This Validation also returns a message and message code, which can be used to ex
 
   </Accordion>
 </AccordionGroup>
+
+## Testing in Sandbox
+
+All sandbox `Auto` policies currently support policy validation testing, but some have been curated specifically to provide options for testing the various outcomes of the `rental-covered-for-collision` Rule.
+
+The following policies are recommended for testing:
+
+- `pol_sandbox_1` - Returns `pass` for the `rental-covered-for-collision` Rule because the policy has collision coverage and the policy agreements indicate that collision coverage extends to rental vehicles
+- `pol_sandbox_4` - Returns `fail` for the `rental-covered-for-collision` Rule because the policy does not have collision coverage
+- `pol_sandbox_12` - Returns a `caution` status for the `rental-covered-for-collision` Rule because validation engine does not have enough data to determine if the policy is covered
+- `pol_sandbox_13` - Returns an `unknown` status for the `rental-covered-for-collision` Rule because the policy is from a state in which this carrier may or may not cover collision damage to rental vehicles
+- `pol_sandbox_14` - Returns `pass` for the `rental-covered-for-collision` Rule because the policy is from a state in which this carrier is required to cover collision damage to rental vehicles under property damage liablity
