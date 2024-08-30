@@ -154,6 +154,46 @@ paths:
       deprecated: false
       tags:
         - Tokens
+  /token/stopMonitoring:
+    post:
+      summary: Stop Monitoring
+      description: |-
+        Stop monitoring a user's Account. This will remove the object from the Axle monitoring system and will no longer receive updates from the insurance carrier.
+      operationId: StopMonitoring
+      parameters:
+        - $ref: "#/components/parameters/x-client-id"
+        - $ref: "#/components/parameters/x-destination-client-id"
+        - $ref: "#/components/parameters/x-access-token"
+      requestBody:
+        description: ""
+        content:
+          application/json:
+            schema:
+              description: ""
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: The unique identifier for the Account or Policy object to stop monitoring.
+              required:
+                - id
+            example:
+              id: "acc_gM2wn_gaqUv76ZljeVXOv"
+        required: true
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                description: ""
+                type: object
+                properties:
+                  success:
+                    $ref: "#/components/schemas/Success"
+      deprecated: false
+      tags:
+        - Tokens
   /accounts/{id}:
     get:
       summary: Get Account

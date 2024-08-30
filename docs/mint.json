@@ -78,7 +78,10 @@
         },
         {
           "group": "Tokens",
-          "pages": ["api-reference/tokens/exchange-token"]
+          "pages": [
+            "api-reference/tokens/exchange-token",
+            "api-reference/tokens/stop-monitoring"
+          ]
         },
         {
           "group": "Accounts",
