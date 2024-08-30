@@ -41,11 +41,9 @@ Individual fields may return null values when the carrier data source supports t
 
 <Tip>
   *Optional* fields, such as `Policy.coverages["BI"].property` or
-  `Policy.coverages["UMPD"].deductible` may return `null` or `undefined`
-  
-  - `null`: The carrier data source supports the field, but no information is
-  present for the selected Account or Policy. 
-  - `undefined`: The carrier data
+  `Policy.coverages["UMPD"].deductible` may return `null` or `undefined` -
+  `null`: The carrier data source supports the field, but no information is
+  present for the selected Account or Policy. - `undefined`: The carrier data
   source supports the field, and data is available that specifies that the field
   does not exist on the Account or Policy.
 </Tip>
@@ -88,3 +86,9 @@ Get started with Axle's core endpoints:
 <CardGroup cols={2}>
   <Snippet file="core-endpoints.mdx" />
 </CardGroup>
+
+### Rate Limiting
+
+In order to prevent the Axle system from becoming overwhelmed with requests, we have implemented rate limiting on our API endpoints. The thresholds are high enough that we do not expect any legitimate use case to be affected, but if you are experiencing issues, please reach out to us.
+
+If rate limiting does occur, instead of the expected response, you will receive a `429 Too Many Requests` response code.
