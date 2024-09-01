@@ -33,26 +33,25 @@ Axle API requests are authenticated using an client-id and client-secret (API ke
 
 <Check>Contact the Axle team to acquire these keys.</Check>
 
-When making API requests, API keys must match the base URL environment (see above), otherwise a 401-Unauthorized response code will be returned.
+When making API requests, API keys must match the base URL for the intended environment (see above); otherwise, the endpoint will return a `401 Unauthorized`.
 
-### Null values
+### Rate limiting
 
-Individual fields may return null values when the carrier data source supports the field, but no information is present for the selected Account or Policy.
+In order to keep systems secure and prevent misuse, all Axle API endpoints have protective rate limiting. The limits should not impact any expected use of the service, but if you are experiencing issues, please reach out to to the Axle team.
 
-<Tip>
-  *Optional* fields, such as `Policy.coverages["BI"].property` or
-  `Policy.coverages["UMPD"].deductible` may return `null` or `undefined`
-  
-  - `null`: The carrier data source supports the field, but no information is
-  present for the selected Account or Policy. 
-  - `undefined`: The carrier data
-  source supports the field, and data is available that specifies that the field
-  does not exist on the Account or Policy.
-</Tip>
+If rate limiting does occur, instead of the expected response, the endpoint will return `429 Too Many Requests`.
 
-Example Policy:
+### Null or undefined values
 
-```json
+Within the Account or Policy objects, individual fields may return `null` values when the carrier data source supports the field, but no information is present or Axle has determined the information to be incorrect.
+
+Certain fields are _optional_, such as `Policy.coverages["BI"].property` or `Policy.coverages["UMPD"].deductible`. These fields may return `null` or `undefined`:
+
+- `null`: The carrier data source supports the field, but no information is present for the selected Account or Policy.
+- `undefined`: The carrier data source supports the field, and data is available that specifies that the field
+  does not exist on or does not apply to the Account or Policy.
+
+```json Example Policy
 {
 	"...",
 	"policyNumber": "123456789",
@@ -73,6 +72,12 @@ Example Policy:
 			"label": "Property Damage",
 			"limitPerAccident": null, // No information was available from carrier data source
 			"deductible": undefined, // The carrier data source specifies that there is no deductible present for this coverage
+			"property": undefined // The carrier data source specifies that there is coverage does not apply to a single property on the policy
+    	},
+		{
+			"code": "COLL",
+			"label": "Collision",
+			"deductible": null, // No information was available from carrier data source
 			"property": "prp_83sD63h82bbeu2Dgn"
     	},
 		"..."
