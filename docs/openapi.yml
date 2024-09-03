@@ -154,16 +154,15 @@ paths:
       deprecated: false
       tags:
         - Tokens
-  /token/stopMonitoring:
-    post:
-      summary: Stop Monitoring
+  /token/{accessToken}:
+    put:
+      summary: Modify Access
       description: |-
-        Stop monitoring a user's Account. This will remove the object from the Axle monitoring system and will no longer receive updates from the insurance carrier.
-      operationId: StopMonitoring
+        Modify scoped access for a specified access token, via specified operations. For example, operation: `stop-monitoring` will disable Axle monitoring and you will no longer receive notifiations on Account or Policy events.
+      operationId: Update
       parameters:
         - $ref: "#/components/parameters/x-client-id"
         - $ref: "#/components/parameters/x-destination-client-id"
-        - $ref: "#/components/parameters/x-access-token"
       requestBody:
         description: ""
         content:
@@ -172,13 +171,15 @@ paths:
               description: ""
               type: object
               properties:
-                id:
+                operation:
                   type: string
-                  description: The unique identifier for the Account or Policy object to stop monitoring.
+                  description: Modification to access token to be performed.
+                  enum:
+                    - stop-monitoring
               required:
-                - id
+                - operation
             example:
-              id: "acc_gM2wn_gaqUv76ZljeVXOv"
+              operation: "stop-monitoring"
         required: true
       responses:
         "200":

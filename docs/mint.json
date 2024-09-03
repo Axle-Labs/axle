@@ -80,7 +80,7 @@
           "group": "Tokens",
           "pages": [
             "api-reference/tokens/exchange-token",
-            "api-reference/tokens/stop-monitoring"
+            "api-reference/tokens/modify-access"
           ]
         },
         {
