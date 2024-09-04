@@ -74,7 +74,7 @@ description: "Receive proactive notifications for updates to an insurance policy
     - If your application only requires a single insurance policy to be monitored per user, you can specify an `accessToken` when generating a new Ignition token (see [Start Ignition](/api-reference/ignition/start-ignition) for more details), which will trigger Axle to automatically stop monitoring on the current insurance account if the user connects a new account.
 
   </Step>
-  <Step title="If needed, stop monitoring for connected Account for user" titleSize="h3">
-    When monitoring is no longer required for a specific user, such as when a loan is no longer being tracked or a driver is offboarded from a platform, you can de-scope the `accessToken` stored for that user. See [Descope Token](/api-reference/tokens/descope-token) for more details.
+  <Step title="If needed, stop monitoring for user's `accessToken`" titleSize="h3">
+    When monitoring is no longer required for a specific user, such as when a loan is no longer being tracked or a driver is offboarded from a platform, you can de-scope monitoring from the `accessToken` stored for that user. See [Descope Token](/api-reference/tokens/descope-token) for more details.
   </Step>
 </Steps>
