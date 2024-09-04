@@ -4,7 +4,8 @@ description: "Receive proactive notifications for updates to an insurance policy
 ---
 
 <Warning>
-  Monitoring is not enabled by default. It requires user consent and must be enabled for your client to receive account and policy events. Please contact
+  Monitoring is not enabled by default. It requires user consent and must be
+  enabled for your client to receive account and policy events. Please contact
   the Axle team if you would like to enable this feature!
 </Warning>
 
@@ -19,8 +20,11 @@ description: "Receive proactive notifications for updates to an insurance policy
       --header 'x-client-id: cli_mZj6YGXhQyQnccN97aXbq' \
       --header 'x-client-secret: RZM-5BErZuChKqycbCS1O' \
       --data '{
-      "webhookUri": "https://example.com/webhook"
-    }'
+        "webhookUri": "https://example.com/webhook",
+        "user": {
+          "id": "usr_xyz"
+        }
+      }'
     ```
 
     <Tip>
@@ -28,6 +32,14 @@ description: "Receive proactive notifications for updates to an insurance policy
       channels such as email or Slack. Please contact the Axle team to configure
       which events should be sent to each channel. All events will be sent via
       webhook if a `webhookUri` is provided.
+    </Tip>
+
+  </Step>
+  <Step title="Store `accessToken` for future access">
+    The `accessToken` and `account` or `policy` you received via [Exchange Token](/api-reference/tokens/exchange-token) must be stored by your application to access updated Account or Policy objects.
+
+    <Tip>
+      It is recommended to store the `accessToken` alongside your application's user identifier. All Account and Policy events return the `user.id` specified when generating an Ignition token, so this will improve retrievability.
     </Tip>
 
   </Step>
@@ -53,13 +65,16 @@ description: "Receive proactive notifications for updates to an insurance policy
 
   </Step>
   <Step title="Validate against requirements and contact user if action is required" titleSize="h3">
-    - `account.disconnected`: Ask user to complete new Axle session. See [Account events](/guides/account-events) for additional guidance on messaging.
-    - `policy.modified`: Validate updated policy against your application's requirements. If policy does not meet requirements, ask user to complete new Axle session.
+    `policy.modified`: Validate updated Policy against your application's requirements. If policy does not meet requirements, ask user to complete new Axle Ignition session.
+    
+    `account.disconnected`: Ask user to complete new Axle Ignition session. See [Account events](/guides/account-events) for additional guidance on messaging.
 
-    <Info>
-      Note: If the user reconnects the same insurance account and policy, Axle will
-      merge the updated information with any existing Account or Policy objects.
-    </Info>
+    Key considerations:
+    - If the user reconnects the same insurance account and policy, Axle will merge the updated information with any existing Account or Policy objects.
+    - If your application only requires a single insurance policy to be monitored per user, you can specify an `accessToken` when generating a new Ignition token (see [Start Ignition](/api-reference/ignition/start-ignition) for more details), which will trigger Axle to automatically stop monitoring on the current insurance account if the user connects a new account.
 
+  </Step>
+  <Step title="If needed, stop monitoring for user's `accessToken`" titleSize="h3">
+    When monitoring is no longer required for a specific user, such as when a loan is no longer being tracked or a driver is offboarded from a platform, you can de-scope monitoring from the `accessToken` stored for that user. See [Descope Token](/api-reference/tokens/descope-token) for more details.
   </Step>
 </Steps>

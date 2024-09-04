@@ -23,6 +23,7 @@ paths:
         - $ref: "#/components/parameters/x-client-id"
         - $ref: "#/components/parameters/x-destination-client-id"
         - $ref: "#/components/parameters/x-encrypted-data"
+        - $ref: "#/components/parameters/x-access-token-optional"
       requestBody:
         description: ""
         content:
@@ -90,9 +91,9 @@ paths:
     post:
       summary: Exchange Token
       description: |-
-        Exchange an authorization code for an access token. Ignition returns an authCode as a query parameter at the redirectUrl upon successful completion of the Ignition flow.
+        Exchange an authorization code returned by an `ignition.completed` event for an access token. Follow the [Quickstart](/guides/quickstart) or see [Ignition Events](/guides/ignition-events) for more details.
 
-        Auth codes are ephemeral and expire after 10 minutes, while accessTokens do not expire.
+        Auth codes are single-use and expire after 10 minutes, while accessTokens do not expire.
       operationId: ExchangeToken
       parameters:
         - $ref: "#/components/parameters/x-client-id"
@@ -151,6 +152,56 @@ paths:
                 required:
                   - success
                   - data
+      deprecated: false
+      tags:
+        - Tokens
+  /token/descope:
+    post:
+      summary: Descope Token
+      description: |-
+        Reduce scope for a specified access token. For example, de-scoping `monitoring` will disable Axle monitoring and you will no longer receive notifiations on Account or Policy events.
+      operationId: DescopeToken
+      parameters:
+        - $ref: "#/components/parameters/x-client-id"
+        - $ref: "#/components/parameters/x-destination-client-id"
+        - $ref: "#/components/parameters/x-access-token"
+      requestBody:
+        description: ""
+        content:
+          application/json:
+            schema:
+              description: ""
+              type: object
+              properties:
+                scope:
+                  type: string
+                  description: Scope to descope from the access token.
+                  enum:
+                    - monitoring
+              required:
+                - scope
+            example:
+              scope: "monitoring"
+        required: false
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                description: ""
+                type: object
+                properties:
+                  success:
+                    $ref: "#/components/schemas/Success"
+                  data:
+                    type: object
+                    required:
+                      - accessToken
+                    properties:
+                      accessToken:
+                        type: string
+                        description: The token required for access to the requested Account and Policy objects.
       deprecated: false
       tags:
         - Tokens
@@ -1314,7 +1365,7 @@ components:
           firstName: "John"
           lastName: "Smith"
           email: "john@smith.com"
-      description: User to attach to Ignition session. If user is set, unique `id` must be provided.
+      description: User to attach to Ignition session. If user is set, unique `id` must be provided. Will be returned in webhook events.
       properties:
         id:
           type: string
@@ -1423,9 +1474,14 @@ components:
       required: true
       schema:
         type: string
-      description:
-        The access token required for access to the requested Account.
-        Returned as part of the Token Exchange flow in exchangeToken.
+      description: The access token required for access to the requested Account. Returned as part of [Exchange Token](/api-reference/tokens/exchange-token).
+    x-access-token-optional:
+      name: x-access-token
+      in: header
+      required: false
+      schema:
+        type: string
+      description: Optionally provided to pre-authenticate a user that has previously shared insurance information via Axle and may be reconnecting the same insurance account. See [Monitoring](/guides/monitoring) for more details on usage. Returned as part of [Exchange Token](/api-reference/tokens/exchange-token).
     policy:
       name: id
       in: path
