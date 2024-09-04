@@ -23,6 +23,7 @@ paths:
         - $ref: "#/components/parameters/x-client-id"
         - $ref: "#/components/parameters/x-destination-client-id"
         - $ref: "#/components/parameters/x-encrypted-data"
+        - $ref: "#/components/parameters/x-access-token-optional"
       requestBody:
         description: ""
         content:
@@ -154,15 +155,16 @@ paths:
       deprecated: false
       tags:
         - Tokens
-  /token/{accessToken}:
-    put:
-      summary: Modify Access
+  /token/descope:
+    post:
+      summary: Descope Token
       description: |-
-        Modify scoped access for a specified access token, via specified operations. For example, operation: `stop-monitoring` will disable Axle monitoring and you will no longer receive notifiations on Account or Policy events.
-      operationId: Update
+        Reduce scope for a specified access token. For example, de-scoping `monitoring` will disable Axle monitoring and you will no longer receive notifiations on Account or Policy events.
+      operationId: DescopeToken
       parameters:
         - $ref: "#/components/parameters/x-client-id"
         - $ref: "#/components/parameters/x-destination-client-id"
+        - $ref: "#/components/parameters/x-access-token"
       requestBody:
         description: ""
         content:
@@ -171,16 +173,16 @@ paths:
               description: ""
               type: object
               properties:
-                operation:
+                scope:
                   type: string
-                  description: Modification to access token to be performed.
+                  description: Scope to descope from the access token.
                   enum:
-                    - stop-monitoring
+                    - monitoring
               required:
-                - operation
+                - scope
             example:
-              operation: "stop-monitoring"
-        required: true
+              scope: "monitoring"
+        required: false
       responses:
         "200":
           description: ""
@@ -192,6 +194,14 @@ paths:
                 properties:
                   success:
                     $ref: "#/components/schemas/Success"
+                  data:
+                    type: object
+                    required:
+                      - accessToken
+                    properties:
+                      accessToken:
+                        type: string
+                        description: The token required for access to the requested Account and Policy objects.
       deprecated: false
       tags:
         - Tokens
@@ -1372,9 +1382,6 @@ components:
         phone:
           type: string
           description: User's phone number in E.164 format.
-        accessToken:
-          type: string
-          description: Optionally provided to identify a user that has previously shared insurance information via Axle, see [Monitoring](/guides/monitoring) for more details on usage. Returned as part of [Exchange Token](/api-reference/tokens/exchange-token).
       required:
         - "id"
     Success:
@@ -1468,6 +1475,13 @@ components:
       schema:
         type: string
       description: The access token required for access to the requested Account. Returned as part of [Exchange Token](/api-reference/tokens/exchange-token).
+    x-access-token-optional:
+      name: x-access-token
+      in: header
+      required: false
+      schema:
+        type: string
+      description: Optionally provided to pre-authenticate a user that has previously shared insurance information via Axle and may be reconnecting the same insurance account. See [Monitoring](/guides/monitoring) for more details on usage. Returned as part of [Exchange Token](/api-reference/tokens/exchange-token).
     policy:
       name: id
       in: path
