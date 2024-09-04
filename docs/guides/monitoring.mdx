@@ -4,7 +4,8 @@ description: "Receive proactive notifications for updates to an insurance policy
 ---
 
 <Warning>
-  Monitoring is not enabled by default. It requires user consent and must be enabled for your client to receive account and policy events. Please contact
+  Monitoring is not enabled by default. It requires user consent and must be
+  enabled for your client to receive account and policy events. Please contact
   the Axle team if you would like to enable this feature!
 </Warning>
 
@@ -53,12 +54,20 @@ description: "Receive proactive notifications for updates to an insurance policy
 
   </Step>
   <Step title="Validate against requirements and contact user if action is required" titleSize="h3">
-    - `account.disconnected`: Ask user to complete new Axle session. See [Account events](/guides/account-events) for additional guidance on messaging.
-    - `policy.modified`: Validate updated policy against your application's requirements. If policy does not meet requirements, ask user to complete new Axle session.
+    `policy.modified`: Validate updated Policy against your application's requirements. If policy does not meet requirements, ask user to complete new Axle Ignition session.
+    
+    `account.disconnected`: Ask user to complete new Axle Ignition session. See [Account events](/guides/account-events) for additional guidance on messaging.
+
+    Key considerations:
+    - If the user reconnects the same insurance account and policy, Axle will merge the updated information with any existing Account or Policy objects.
+    - If your application only requires a single insurance policy to be monitored per user, you can specify an `accessToken` when generating a new Ignition token (see [Start Ignition](/api-reference/ignition/start-ignition) for more details), which will trigger Axle to automatically stop monitoring on the current insurance account if the user connects a new account.
+
+  </Step>
+  <Step title="If needed, stop monitoring for connected Account for user" titleSize="h3">
+    When monitoring is no longer required for a specific user, such as when a loan is no longer being tracked or a driver is offboarded from a platform, you can modify access for the `accessToken` stored for that user with the operation `stop-monitoring`. See [Modify Access](/api-reference/tokens/modify-access) for more details.
 
     <Info>
-      Note: If the user reconnects the same insurance account and policy, Axle will
-      merge the updated information with any existing Account or Policy objects.
+      Note: Modifying access is currently an one-way operation and can only be reversed by the user completing an Ignition session.
     </Info>
 
   </Step>

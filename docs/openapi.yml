@@ -90,9 +90,9 @@ paths:
     post:
       summary: Exchange Token
       description: |-
-        Exchange an authorization code for an access token. Ignition returns an authCode as a query parameter at the redirectUrl upon successful completion of the Ignition flow.
+        Exchange an authorization code returned by an `ignition.completed` event for an access token. Follow the [Quickstart](/guides/quickstart) or see [Ignition Events](/guides/ignition-events) for more details.
 
-        Auth codes are ephemeral and expire after 10 minutes, while accessTokens do not expire.
+        Auth codes are single-use and expire after 10 minutes, while accessTokens do not expire.
       operationId: ExchangeToken
       parameters:
         - $ref: "#/components/parameters/x-client-id"
@@ -1355,7 +1355,7 @@ components:
           firstName: "John"
           lastName: "Smith"
           email: "john@smith.com"
-      description: User to attach to Ignition session. If user is set, unique `id` must be provided.
+      description: User to attach to Ignition session. If user is set, unique `id` must be provided. Will be returned in webhook events.
       properties:
         id:
           type: string
@@ -1372,6 +1372,9 @@ components:
         phone:
           type: string
           description: User's phone number in E.164 format.
+        accessToken:
+          type: string
+          description: Optionally provided to identify a user that has previously shared insurance information via Axle, see [Monitoring](/guides/monitoring) for more details on usage. Returned as part of [Exchange Token](/api-reference/tokens/exchange-token).
       required:
         - "id"
     Success:
@@ -1464,9 +1467,7 @@ components:
       required: true
       schema:
         type: string
-      description:
-        The access token required for access to the requested Account.
-        Returned as part of the Token Exchange flow in exchangeToken.
+      description: The access token required for access to the requested Account. Returned as part of [Exchange Token](/api-reference/tokens/exchange-token).
     policy:
       name: id
       in: path
