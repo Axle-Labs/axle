@@ -216,10 +216,27 @@ This Validation also returns a message and message code, which can be used to ex
 
 All sandbox `Auto` policies currently support policy validation testing, but some have been curated specifically to provide options for testing the various outcomes of the `rental-covered-for-collision` Rule.
 
-The following policies are recommended for testing:
+#### Test Credentials
 
-- `pol_sandbox_1` - Returns `pass` for the `rental-covered-for-collision` Rule because the policy has collision coverage and the policy agreements indicate that collision coverage extends to rental vehicles
-- `pol_sandbox_4` - Returns `fail` for the `rental-covered-for-collision` Rule because the policy does not have collision coverage
+**Pass**
+
+`pol_sandbox_1` - Returns `pass` for the `rental-covered-for-collision` Rule because the policy has collision coverage and the policy agreements indicate that collision coverage extends to rental vehicles
+
+```
+username: username
+password: password
+```
+
+**Other Outcomes**
+
+Use the following credentials to test the other outcomes of the `rental-covered-for-collision` Rule. You will be able to select from the following policies, each clearly labled with the expected outcome of the Rule.
+
+```
+username: user-validation
+password: pass-validation
+```
+
+- `pol_sandbox_11` - Returns `fail` for the `rental-covered-for-collision` Rule because the policy does not have collision coverage
 - `pol_sandbox_12` - Returns a `caution` status for the `rental-covered-for-collision` Rule because validation engine does not have enough data to determine if the policy is covered
 - `pol_sandbox_13` - Returns an `unknown` status for the `rental-covered-for-collision` Rule because the policy is from a state in which this carrier may or may not cover collision damage to rental vehicles
 - `pol_sandbox_14` - Returns `pass` for the `rental-covered-for-collision` Rule because the policy is from a state in which this carrier is required to cover collision damage to rental vehicles under property damage liablity
