@@ -1517,7 +1517,6 @@ components:
         enum:
           - "url"
           - "base64"
-          - "signedUrl"
       description: "Specify desired return mode of the report. Options: `url` for a signedUrl or `base64` for the full file returned in base64 encoding. Defaults to `url`."
     format:
       name: format
