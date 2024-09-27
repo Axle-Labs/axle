@@ -1503,7 +1503,10 @@ components:
       in: query
       required: false
       schema:
-        type: boolean
+        type: string
+        enum:
+          - "true"
+          - "false"
       description: Set to `true` if you would like to expand related entities (e.g., account, policy, client). Defaults to `false`.
     mode:
       name: mode
@@ -1511,6 +1514,10 @@ components:
       required: false
       schema:
         type: string
+        enum:
+          - "url"
+          - "base64"
+          - "signedUrl"
       description: "Specify desired return mode of the report. Options: `url` for a signedUrl or `base64` for the full file returned in base64 encoding. Defaults to `url`."
     format:
       name: format
@@ -1518,6 +1525,9 @@ components:
       required: false
       schema:
         type: string
+        enum:
+          - "pdf"
+          - "jpeg"
       description: "Specify desired return format of the report. Options: `pdf` or `jpeg`. Defaults to `pdf`."
   responses: {}
   securitySchemes:
