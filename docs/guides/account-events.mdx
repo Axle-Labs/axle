@@ -17,6 +17,7 @@ Once an insurance account is connected through an Ignition session, Axle can mon
   You must specify a `webhookUri` when generating an Ignition token to receive
   webhook events. See [Start Ignition](/api-reference/ignition/start-ignition)
   for more details.
+  <Snippet file="custom-webhooks.mdx" />
 </Tip>
 
 A `POST` request will be sent to the `webhookUri` with the following payload. All events will include `client`, `ref` (Account object identifier), `user` (optionally specified when generating Ignition token), and `metadata` (optionally specified when generating Ignition token).
