@@ -5,6 +5,8 @@ description:
   Ignition session."
 ---
 
+import CustomWebhooks from "/snippets/custom-webhooks.mdx";
+
 Axle’s Ignition session is the main interface that allows your users to connect to their insurance accounts and authorize access to scoped data from their insurance policies.
 
 Please first review the [Quickstart](/guides/quickstart) guide and API docs on how to start an Ignition session, if you have not already.
@@ -132,3 +134,7 @@ If an optional `webhookUri` is provided, a `POST` request will be sent to the `w
 | ignition.opened    | client : String, token : String, user: Object, metadata: Object                                     |
 | ignition.exited    | client : String, token : String, user: Object, metadata: Object, step : String                      |
 | ignition.errored   | client : String, token : String, user: Object, metadata: Object, message : String                   |
+
+<Note>
+  <Snippet file="custom-webhooks.mdx" />
+</Note>

@@ -12,6 +12,9 @@ description: "Receive proactive notifications for updates to an insurance policy
 <Steps>
   <Step title="Configure Ignition to receive webhooks" titleSize="h3">
     Ensure that the request made to generate an Ignition token includes the webhook URL where you would like to receive notifications.
+    <Note>
+      <Snippet file="custom-webhooks.mdx" />
+    </Note>
 
     ```bash Request Sample: cURL
     curl --request POST \
