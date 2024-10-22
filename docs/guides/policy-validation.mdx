@@ -91,11 +91,12 @@ The response also contains two other fields:
 
 Evaluates whether the policy is currently active.
 
-| Status    | Cause                                        |
-| --------- | -------------------------------------------- |
-| `pass`    | The policy is currently active               |
-| `fail`    | The policy is not currently active           |
-| `unknown` | The `isActive` field is unvailable or `null` |
+| Status    | Cause                                                                                                 |
+| --------- | ----------------------------------------------------------------------------------------------------- |
+| `pass`    | The policy is currently active                                                                        |
+| `fail`    | The policy is not currently active                                                                    |
+| `caution` | The `isActive` field is `null`, meaning Axle could not confirm the `isActive` status with the carrier |
+| `unknown` | The `isActive` field is `undefined`, meaning it's a manual policy                                     |
 
 ```typescript Example Rule
 "policy-active": {
