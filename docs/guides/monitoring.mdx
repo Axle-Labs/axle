@@ -51,6 +51,8 @@ description: "Receive proactive notifications for updates to an insurance policy
 
     - [Account events](/guides/account-events)
       - `account.modified`: Updates made to identifying details for the insurance account (e.g., name, email, phone)
+        <Note> The modifiedAt and refreshedAt dates may be earlier timestamps than the time when this event is emitted. Axle performs accuracy
+        and safety checks on account modifications to ensure you are receiving the most accurate and up-to-date information before sending out an account.modified event. </Note>
       - `account.disconnected`: The account and any connected policies are no longer being monitored by Axle
     - [Policy events](/guides/policy-events)
       - `policy.modified`: Updates made to insurance policy, such as policy cancellation or change in coverages
@@ -69,7 +71,8 @@ description: "Receive proactive notifications for updates to an insurance policy
   </Step>
   <Step title="Validate against requirements and contact user if action is required" titleSize="h3">
     `policy.modified`: Validate updated Policy against your application's requirements. If policy does not meet requirements, ask user to complete new Axle Ignition session.
-    
+      <Note> The modifiedAt and refreshedAt dates may be earlier timestamps than the time when this event is emitted. Axle performs accuracy
+        and safety checks on policy modifications to ensure you are receiving the most accurate and up-to-date information before notifying you of a policy.modified event. </Note>
     `account.disconnected`: Ask user to complete new Axle Ignition session. See [Account events](/guides/account-events) for additional guidance on messaging.
 
     Key considerations:
