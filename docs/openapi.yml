@@ -528,7 +528,7 @@ paths:
         content:
           application/json:
             schema:
-              description: "The Account object attributes you would like to change. For list of all possible attributes refer to [Account](/api-reference/accounts/account)"
+              description: "The Account object fields you would like to change. For list of all possible fields refer to [Account](/api-reference/accounts/account)"
               type: object
               $ref: "#/components/schemas/AccountSandbox"
         required: true
@@ -570,7 +570,7 @@ paths:
         content:
           application/json:
             schema:
-              description: "The Policy object attributes you would like to change. For list of all possible attributes refer to [Policy](/api-reference/policies/policy)"
+              description: "The Policy object fields you would like to change. For list of all possible fields refer to [Policy](/api-reference/policies/policy)"
               type: object
               $ref: "#/components/schemas/PolicySandbox"
         required: true
