@@ -5,7 +5,7 @@ description: "Evaluate a set of Rules against a policy to determine if your appl
 
 ## Overview
 
-When embedding insurance verification into your application, you may want to evaluate whether a shared insurance policy meets your business' requirements. Each supported Rule is an individual check evaluated against the Policy object to determine if the Policy meets a certain requirement or set of requirements.
+When embedding insurance verification into your application, you may want to evaluate whether a shared insurance policy meets your business' requirements. Each supported Rule is an individual check evaluated against the [Policy](/api-reference/policies/policy) object to determine if the Policy meets a certain requirement or set of requirements.
 
 For example, the `policy-active` Rule checks if the policy is currently active, evaluating to `pass` if the `isActive` field of the policy is `true` and `fail` if it is `false`. If `isActive` is `null` (not provided by the insurance carrier), this Rule will resolve to `unknown`.
 
