@@ -209,9 +209,11 @@ paths:
     get:
       summary: Get Account
       description:
-        The Get Account method will return an Account object including
-        high-level account information (e.g., name) and any children objects
-        (e.g., Policies) associated with the Account. Please note that this method will NOT refresh the Account object.
+        The Get Account endpoint will return an Account object including
+        high-level account information (e.g., connection status) and any children objects
+        (e.g., Policies) associated with the Account.
+
+        Please note that this endpoint will NOT refresh the Account object with new data from the insurance carrier.
       operationId: GetAccount
       parameters:
         - $ref: "#/components/parameters/x-client-id"
@@ -239,9 +241,9 @@ paths:
     get:
       summary: Get Policy
       description:
-        The Get Policy method returns a Policy object including high-level
-        policy information (e.g., policy number) and any children objects (e.g.,
-        Coverages) associated with the Policy. Please note that this method will NOT refresh the Policy object.
+        The Get Policy endpoint returns a Policy object. Please refer to the [Policy](/api-reference/policies/policy) object for a detailed description of each field.
+
+        Please note that this endpoint will NOT refresh the Policy object with new data from the insurance carrier.
       operationId: GetPolicy
       parameters:
         - $ref: "#/components/parameters/x-client-id"
@@ -268,10 +270,7 @@ paths:
   /policies/{id}/report:
     get:
       summary: Get Policy Report
-      description:
-        "The Get Policy Report method returns a PDF or image report of the requested Policy object, including high-level
-        policy information (e.g., policy number) and any children objects (e.g.,
-        Coverages) associated with the Policy."
+      description: "The Get Policy Report endpoint returns a PDF or image report of the requested Policy object. Please refer to the [Policy](/api-reference/policies/policy) object for a detailed description of each field."
       operationId: GetPolicyReport
       parameters:
         - $ref: "#/components/parameters/x-client-id"
@@ -300,7 +299,7 @@ paths:
   /policies/{id}/validate:
     post:
       summary: Validate Policy
-      description: "The Validate Policy method returns the result of a evaluating a series of Rules against the requested policy object. For details about each Rule and their return types, see the [Policy Validation Guide](/guides/policy-validation)"
+      description: "The Validate Policy endpoint returns the result of a evaluating a series of Rules against the requested policy object. For details about each Rule and their return types, see the [Policy Validation Guide](/guides/policy-validation)."
       operationId: ValidatePolicy
       parameters:
         - $ref: "#/components/parameters/x-client-id"
@@ -383,7 +382,7 @@ paths:
   /carriers/{id}:
     get:
       summary: Get Carrier
-      description: The Get Carrier method returns a Carrier object that include additional details about an Axle-supported insurance carrier.
+      description: The Get Carrier endpoint returns a Carrier object that include additional details about an Axle-supported insurance carrier.
       operationId: GetCarrier
       parameters:
         - $ref: "#/components/parameters/x-client-id"
@@ -407,7 +406,7 @@ paths:
   /carriers:
     get:
       summary: Get Carriers
-      description: The Get Carriers method returns an array of Carrier objects which include additional details about Axle-supported insurance carriers.
+      description: The Get Carriers endpoint returns an array of Carrier objects which include additional details about Axle-supported insurance carriers.
       operationId: GetCarriers
       parameters:
         - $ref: "#/components/parameters/x-client-id"
@@ -806,7 +805,7 @@ components:
         premium:
           type: number
           nullable: true
-          description: "Total policy premium, as specified by the insurance carrier. *Note: only available for `type=home` policies*"
+          description: "Total policy premium, as specified by the insurance carrier. *Note: only available for `type=home,condo` policies*"
           example: 999.99
         address:
           description: Primary address associated with the policy.
@@ -821,11 +820,9 @@ components:
               label: Bodily Injury
               limitPerPerson: 250000
               limitPerAccident: 500000
-              property: prp_uSdzLVpi8c76H7kl6AQ-F
             - code: PD
               label: Property Damage
               limitPerAccident: 100000
-              property: prp_uSdzLVpi8c76H7kl6AQ-F
             - code: COMP
               label: Comprehensive
               deductible: 375
@@ -1273,13 +1270,13 @@ components:
       title: Third Party
       type: object
       example:
-        name: Super Leasing Trust
-        type: lessor
+        name: "Super Leasing Trust"
+        type: "lessor"
         address:
-          addressLine1: Po Box 105205
-          state: GA
-          city: Atlanta
-          postalCode: 30348-5205
+          addressLine1: "Po Box 105205"
+          state: "GA"
+          city: "Atlanta"
+          postalCode: "30348"
       x-internal: false
       properties:
         property:

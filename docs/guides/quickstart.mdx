@@ -120,15 +120,14 @@ can now leverage the Axle API to access their insurance data 🎉🎉!
 
 </Check>
 
-### Step 5: Retrieve the Account and associated Policies
+### Step 5: Retrieve the Policy
 
-Now that you have an `accessToken`, you can retrieve the Account object for the
-user's connected account by making a `GET` request to `accounts/{id}` with
-the `accessToken` passed in the `x-access-token` header. By passing the `expand` parameter, you can also can retrieve all Policy objects available on the account:
+Now that you have an `accessToken`, you can retrieve the [Policy](/api-reference/policies/policy) object that was shared by the user by making a `GET` request to `policies/{id}` with
+the `accessToken` passed in the `x-access-token` header.
 
 ```bash Request Sample: cURL
 curl --request GET \
-  --url https://api.axle.insure/accounts/acc_gM2wn_gaqUv76ZljeVXOv?expand=true \
+  --url https://api.axle.insure/policies/pol_CbxGmGWnp9bGAFCC-eod2 \
   --header 'Content-Type: application/json' \
   --header 'x-access-token: tok_IwShXCT_JPr6rmtiCVxcQ' \
   --header 'x-client-id: cli_mZj6YGXhQyQnccN97aXbq' \
@@ -139,105 +138,116 @@ curl --request GET \
 {
   "success": true,
   "data": {
-    "id": "acc_gM2wn_gaqUv76ZljeVXOv",
-    "firstName": "John",
-    "lastName": "Smith",
-    "email": "john.smith@grr.la",
+    "id": "pol_CbxGmGWnp9bGAFCC-eod2",
+    "accountId": "acc_gM2wn_gaqUv76ZljeVXOv",
+    "type": "auto",
     "carrier": "state-farm",
-    "policies": [
+    "policyNumber": "123456789",
+    "isActive": true,
+    "effectiveDate": "2023-10-22T04:00:00.000Z",
+    "expirationDate": "2024-10-22T04:00:00.000Z",
+    "premium": "543.23",
+    "address": {
+      "addressLine1": "123 Fake St.",
+      "addressLine2": "Unit 456",
+      "city": "Atlanta",
+      "state": "Georgia",
+      "postalCode": "30315",
+      "country": "USA"
+    },
+    "properties": [
       {
-        "id": "pol_CbxGmGWnp9bGAFCC-eod2",
-        "accountId": "acc_gM2wn_gaqUv76ZljeVXOv",
-        "type": "auto",
-        "carrier": "state-farm",
-        "policyNumber": "123456789",
-        "isActive": true,
-        "effectiveDate": "2021-10-22T04:00:00.000Z",
-        "expirationDate": "2022-10-22T04:00:00.000Z",
-        "premium": "543.23",
-        "address": {
-          "addressLine1": "123 Fake St.",
-          "addressLine2": "Unit 456",
-          "city": "Atlanta",
-          "state": "Georgia",
-          "postalCode": "30315",
-          "country": "USA"
-        },
-        "coverages": [
-          {
-            "code": "BI",
-            "label": "Bodily Injury",
-            "limitPerPerson": 250000,
-            "limitPerAccident": 500000
-          },
-          {
-            "code": "PD",
-            "label": "Property Damage",
-            "limitPerAccident": 100000
-          },
-          {
-            "code": "UMBI",
-            "label": "Uninsured Bodily Injury",
-            "limitPerPerson": 100000,
-            "limitPerAccident": 300000
-          },
-          {
-            "code": "COMP",
-            "label": "Comprehensive",
-            "deductible": 500
-          },
-          {
-            "code": "COLL",
-            "label": "Collision",
-            "deductible": 500
-          }
-        ],
-        "properties": [
-          {
-            "type": "vehicle",
-            "data": {
-              "bodyStyle": "sedan",
-              "vin": "WDDWJ8EB4KF776265",
-              "model": "C 300",
-              "year": "2019",
-              "make": "Mercedes-Benz"
-            }
-          }
-        ],
-        "insureds": [
-          {
-            "firstName": "John",
-            "lastName": "Smith",
-            "dateOfBirthYear": "1990",
-            "licenseNo": "•••••1234",
-            "licenseState": "GA",
-            "licenseStatus": "Valid",
-            "type": "primary"
-          },
-          {
-            "firstName": "Jane",
-            "lastName": "Doe",
-            "dateOfBirthYear": "1992",
-            "licenseNo": "•••••5678",
-            "licenseState": "GA",
-            "licenseStatus": "Valid",
-            "type": "secondary"
-          }
-        ],
-        "thirdParties": [],
-        "documents": [],
-        "createdAt": "2022-01-01T00:00:00.000Z",
-        "modifiedAt": "2022-01-01T00:00:00.000Z",
-        "refreshedAt": "2022-01-01T00:00:00.000Z"
+        "id": "prp_uSdzLVpi8c76H7kl6AQ-F",
+        "type": "vehicle",
+        "data": {
+          "bodyStyle": "sedan",
+          "vin": "WDDWJ8EB4KF776265",
+          "model": "C 300",
+          "year": "2019",
+          "make": "Mercedes-Benz"
+        }
       }
     ],
-    "connection": {
-      "status": "active",
-      "updatedAt": "2022-01-01T00:00:00.000Z"
-    },
-    "createdAt": "2022-01-01T00:00:00.000Z",
-    "modifiedAt": "2022-01-01T00:00:00.000Z",
-    "refreshedAt": "2022-01-01T00:00:00.000Z"
+    "coverages": [
+      {
+        "code": "BI",
+        "label": "Bodily Injury",
+        "limitPerPerson": 250000,
+        "limitPerAccident": 500000
+      },
+      {
+        "code": "PD",
+        "label": "Property Damage",
+        "limitPerAccident": 100000
+      },
+      {
+        "code": "UMBI",
+        "label": "Uninsured Bodily Injury",
+        "limitPerPerson": 100000,
+        "limitPerAccident": 300000
+      },
+      {
+        "code": "COMP",
+        "label": "Comprehensive",
+        "deductible": 500,
+        "property": "prp_uSdzLVpi8c76H7kl6AQ-F"
+      },
+      {
+        "code": "COLL",
+        "label": "Collision",
+        "deductible": 500,
+        "property": "prp_uSdzLVpi8c76H7kl6AQ-F"
+      }
+    ],
+    "insureds": [
+      {
+        "firstName": "John",
+        "lastName": "Smith",
+        "dateOfBirthYear": "1990",
+        "licenseNo": "•••••1234",
+        "licenseState": "GA",
+        "licenseStatus": "Valid",
+        "type": "primary"
+      },
+      {
+        "firstName": "Jane",
+        "lastName": "Doe",
+        "dateOfBirthYear": "1992",
+        "licenseNo": "•••••5678",
+        "licenseState": "GA",
+        "licenseStatus": "Valid",
+        "type": "secondary"
+      }
+    ],
+    "thirdParties": [
+      {
+        "name": "Super Leasing Trust",
+        "type": "lessor",
+        "address": {
+          "addressLine1": "Po Box 105205",
+          "addressLine2": null,
+          "city": "Atlanta",
+          "state": "GA",
+          "postalCode": "30348"
+        },
+        "property": "prp_uSdzLVpi8c76H7kl6AQ-F"
+      }
+    ],
+    "documents": [
+      {
+        "source": "carrier",
+        "name": "Declaration Page",
+        "type": ["declaration-page"],
+        "url": "<signed-url>",
+        "id": "doc_jd73dw6fn02sj28.pdf",
+        "issuedDate": "2023-12-31T00:00:00.000Z",
+        "effectiveDate": "2024-01-02T00:00:00.000Z",
+        "createdAt": "2024-01-01T00:00:00.000Z"
+      }
+    ],
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "modifiedAt": "2024-01-01T00:00:00.000Z",
+    "refreshedAt": "2024-01-01T00:00:00.000Z"
   }
 }
 ```
