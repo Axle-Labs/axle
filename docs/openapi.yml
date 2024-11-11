@@ -1451,7 +1451,7 @@ components:
       description: |
         Set to *true* if you would like to send an encrypted base64 string as the request body, instead of a JSON string. The body must be encrypted using an Axle-provided public key with RSA_PKCS1_OAEP_PADDING and SHA256 hashing. Defaults to *false*.
 
-        **Note** - If using the Ignition landing page to collect additional user information, the provided Ignition user and metadata can be accessed by the user that is sent a generated Ignition session.
+        **Note** - If your client is configured to use the Ignition landing page to collect additional user information, the provided Ignition user and metadata can be accessed by the user that is sent a generated Ignition session.
     account:
       name: id
       in: path
