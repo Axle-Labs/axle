@@ -23,8 +23,17 @@ description: "A Policy represents a specific policy associated with an
 </ParamField>
 
 <ParamField body="type" type="string">
-  Type of insurance policy that the Policy object represents. Available options:
+  Type of insurance policy that the Policy object represents. 
+  
+  Available options:
+  
   `auto` `motorcycle` `home` `condo`
+
+  Rules applied:
+  1. `auto` does not include commercial or business auto insurance policies.
+  2. `home` includes HO-1, HO-2, HO-3, HO-5, HO-7, and HO-8 homeowners insurance policies. It does not include HO-4 (i.e. renter’s policies).
+  3.  `condo` is equivalent to an HO-6 insurance policy.
+  4. `other` encompasses any policy type that does not fall into one of the four described above. An example would be a renter’s policy.
 </ParamField>
 
 <ParamField body="carrier" type="string">
@@ -38,12 +47,20 @@ description: "A Policy represents a specific policy associated with an
 <ParamField body="isActive" type="boolean (optional)">
   Active status of the policy, as specified by the insurance carrier. If an
   Ignition session is completed with result: `manual`, this field will be
-  undefined.
+  undefined. 
+  
+
+  Rules applied: 
+  
+  1. If the policy status defined by the insurance carrier is an enum value, the Axle Service conservatively maps only "active" and active-like enum values to isActive `true` and the remainder as `false`.
+  2. Pre-effective policies are policies that have been purchased but do not go into effect until a future date. The following applies to these policies:
+  - Pre-effective policies of type `home` or `condo` will be marked as isActive `true` if policy data is able to be retrieved.
+  - Pre-effective policies of type `auto` will be marked as isActive `false`.
 </ParamField>
 
 <ParamField body="effectiveDate" type="string">
   ISO 8601 timestamp of current term effective date of the policy, as specified
-  by the insurance carrier.
+  by the insurance carrier. 
 </ParamField>
 
 <ParamField body="expirationDate" type="string">
@@ -52,25 +69,36 @@ description: "A Policy represents a specific policy associated with an
 </ParamField>
 
 <ParamField body="premium" type="number">
-  Total policy premium, as specified by the insurance carrier. *Note: only
-  available for `type=home` policies*
+  Policy term premium, as specified by the insurance carrier. This value is inclusive of discounts and fees but may exclude certain fees due to variation in carrier reporting or additional surcharges placed via state policies.
 </ParamField>
 
 <ParamField body="address" type="Address">
     Primary address associated with the policy.
     <Expandable title="Address">
 
-      <ResponseField name="addressLine1" type="string" />
+      <ResponseField name="addressLine1" type="string">
+        First line of the street address, typically including the house number and street name.
+      </ResponseField>
 
-      <ResponseField name="addressLine2" type="string" />
+      <ResponseField name="addressLine2" type="string">
+        Additional address details, such as an apartment, suite, or unit number.
+      </ResponseField>
 
-      <ResponseField name="city" type="string" />
+      <ResponseField name="city" type="string">
+        City name of the address.
+      </ResponseField>
 
-      <ResponseField name="state" type="string" />
+      <ResponseField name="state" type="string">
+        State of the address.
+      </ResponseField>
 
-      <ResponseField name="postalCode" type="string" />
+      <ResponseField name="postalCode" type="string">
+        ZIP or postal code of the address.
+      </ResponseField>
 
-      <ResponseField name="country" type="string" />
+      <ResponseField name="country" type="string">
+        Country of the address.
+      </ResponseField>
 
     </Expandable>
 
@@ -89,33 +117,63 @@ List of properties (such as a vehicle or dwelling) afforded coverage by the poli
         </ResponseField>
 
         <ResponseField name="type" type="string">
-          Available options: `vehicle` `dwelling`
+          The type of the insured property.
+
+          Available options:
+
+          `vehicle` - Represents a motor vehicle (e.g., car, truck, motorcycle, trailer) insured under the policy.
+
+          `dwelling` - Refers to a residential property (e.g., house, apartment) insured under the policy.
         </ResponseField>
 
         <ResponseField name="data" type="Vehicle or Dwelling" >
+          Contains specific details related to the insured property.
 
             <Expandable title="Vehicle">
 
-                <ResponseField name="vin" type="string" />
-                <ResponseField name="model" type="string" />
-                <ResponseField name="year" type="string" />
-                <ResponseField name="make" type="string" />
-                <ResponseField name="bodyStyle" type="string, optional" />
+                <ResponseField name="vin" type="string">
+                  The Vehicle Identification Number (VIN), a unique code used to identify individual motor vehicles.
+                </ResponseField>
+                <ResponseField name="model" type="string">
+                  The specific model name of the vehicle, indicating the manufacturer’s designation.
+                </ResponseField>
+                <ResponseField name="year" type="string">
+                  The model year of the vehicle, representing the year it was manufactured.
+                </ResponseField>
+                <ResponseField name="make" type="string">
+                  The manufacturer or brand name of the vehicle.
+                </ResponseField>
+                <ResponseField name="bodyStyle" type="string, optional">
+                  The style of the vehicle's body (e.g., sedan, SUV, coupe), which describes its design and configuration.
+                </ResponseField>
 
             </Expandable>
           <Expandable title="Dwelling">
-            <ResponseField name="addressLine1" type="string" />
+            <ResponseField name="addressLine1" type="string">
+              The primary address line of the dwelling, typically including the street number and name.
+            </ResponseField>
 
-            <ResponseField name="addressLine2" type="string" />
+            <ResponseField name="addressLine2" type="string">
+              An optional secondary address line for additional information (e.g., apartment number or suite).
+            </ResponseField>
 
-            <ResponseField name="city" type="string" />
+            <ResponseField name="city" type="string">
+              The city where the dwelling is located.
+            </ResponseField>
 
-            <ResponseField name="state" type="string" />
+            <ResponseField name="state" type="string">
+              The state where the dwelling is situated.
+            </ResponseField>
 
-            <ResponseField name="postalCode" type="string" />
+            <ResponseField name="postalCode" type="string">
+              The postal code for the dwelling's address.
+            </ResponseField>
 
-            <ResponseField name="country" type="string" />
+            <ResponseField name="country" type="string">
+              The country where the dwelling is located.
+            </ResponseField>
           </Expandable>
+
         </ResponseField>
 
     </Expandable>
@@ -129,19 +187,31 @@ List of coverage types and levels offered by the policy.
     <Expandable title="Coverage">
 
         <ResponseField name="code" type="string" required>
-          Available options for an auto insurance policy: `BI` `PD` `UMBI` `UMPD` `UIMBI` `UIMPD` `UUIMBI` `UUIMPD`
-          `COLL` `COMP`
-        <br/>
-          Available options for a home insurance policy: `DW` `OS` `PP` `LOU` `PL` `MED`
+          Available options for an `auto` insurance policy: 
+
+          `BI` `PD` `UMBI` `UMPD` `UIMBI` `UIMPD` `UUIMBI` `UUIMPD` `COLL` `COMP`
+
+
+          Available options for a `home` or `condo` insurance policy: 
+          
+          `DW` `OS` `PP` `LOU` `PL` `MED`
         </ResponseField>
 
-        <ResponseField name="label" type="string" required />
+        <ResponseField name="label" type="string" required>
+          A human-readable name describing the type of insurance coverage provided by the policy.
+        </ResponseField>
 
-        <ResponseField name="limitPerPerson" type="number, optional" />
+        <ResponseField name="limitPerPerson" type="number, optional">
+        The maximum amount the insurance policy will pay for bodily injury or damages sustained by an individual in a covered incident.
+        </ResponseField>
 
-        <ResponseField name="limitPerAccident" type="number, optional" />
+        <ResponseField name="limitPerAccident" type="number, optional">
+          The maximum amount the insurance policy will pay for a single accident or claim.
+        </ResponseField>
 
-        <ResponseField name="deductible" type="number, optional" />
+        <ResponseField name="deductible" type="number, optional">
+          The amount the policyholder must pay out-of-pocket toward a claim before the insurance coverage begins to pay.
+        </ResponseField>
 
         <ResponseField name="property" type="string, optional" >
           Unique identifier of Property afforded coverage. If specified coverage is afforded to all properties on the policy, `property` will be `undefined`.
@@ -160,38 +230,62 @@ List of coverage types and levels offered by the policy.
 
 List of entities (such as an individuals or businesses) afforded direct coverage by the policy.
 
-    <Expandable title="Insured">
+Rules applied:
+1. Excluded drivers are not included.
+2. Entities listed as Additional Insureds are not included within the list of Insureds but are included under the list of Third Parties as an "interest".
 
-      <ResponseField name="firstName" type="string" />
+  <Expandable title="Insured">
 
-      <ResponseField name="lastName" type="string" />
+    <ResponseField name="firstName" type="string">
+      The first name of the insured individual.
+    </ResponseField>
 
-      <Tip>
-        Insurance carriers may represent `firstName` and `lastName` in different ways (such as including middle name in `firstName` or dropping special characters such as `-`).
+    <ResponseField name="lastName" type="string">
+    The last name of the insured individual.
+    </ResponseField>
+
+    <Tip>
+      Insurance carriers may represent `firstName` and `lastName` in different ways (such as including middle name in `firstName` or dropping special characters such as `-`).
 
 
-        If your application requires matching your users against policy insureds, it is recommended to combine `firstName` and `lastName` into a single value and using a "fuzzy" matching algorithm with a strict threshold.
-      </Tip>
+      If your application requires matching your users against policy insureds, it is recommended to combine `firstName` and `lastName` into a single value and using a "fuzzy" matching algorithm with a strict threshold.
+    </Tip>
 
-      <ResponseField name="type" type="string">
-        Available options: `primary` `secondary`
-      </ResponseField>
+    <ResponseField name="type" type="string">
+      The role of the insured individual, indicating whether they are the primary policyholder or a secondary insured party.
 
-      <ResponseField name="dateOfBirthYear" type="string" />
+      Available options:
 
-      <ResponseField name="licenseNo" type="string" />
+      `primary` - The main policyholder, the individual who holds and is primarily responsible for the insurance policy.
 
-      <ResponseField name="licenseState" type="string" />
+      `secondary` - An additional person insured under the policy, such as an additional driver.
+    </ResponseField>
 
-      <ResponseField name="licenseStatus" type="string" />
+    <ResponseField name="dateOfBirthYear" type="string">
+      The birth year of the insured individual.
+    </ResponseField>
 
-      <ResponseField name="dateOfBirth" type="string" />
+    <ResponseField name="licenseNo" type="string">
+      The driver's license number of the insured individual.
+    </ResponseField>
 
-      <ResponseField name="property" type="string, optional" >
-        Unique identifier of Property afforded coverage for specified Insured. If Insured is afforded coverage across all properties on the policy, `property` will be `undefined`.
-      </ResponseField>
+    <ResponseField name="licenseState" type="string">
+      The state that issued the insured individual's driver's license.
+    </ResponseField>
 
-    </Expandable>
+    <ResponseField name="licenseStatus" type="string">
+      The current status of the insured individual's driver's license.
+    </ResponseField>
+
+    <ResponseField name="dateOfBirth" type="string">
+      The insured individual's date of birth in a standard date format.
+    </ResponseField>
+
+    <ResponseField name="property" type="string, optional" >
+      Unique identifier of Property afforded coverage for specified Insured. If Insured is afforded coverage across all properties on the policy, `property` will be `undefined`.
+    </ResponseField>
+
+  </Expandable>
 
 </ParamField>
 
@@ -202,12 +296,35 @@ List of external parties with interest in the policy.
     <Expandable title="ThirdParty">
 
         <ResponseField name="type" type="string" default="interest">
-          Available options: `lienholder` `lessor` `interest`
+          The role of the third party associated with the insured property. 
+          
+          The Axle Schema currently supports the following third party options. See below for details on Axle's standardization of third party type based on data provided by the insurance carrier.  
+
+
+          Available options:
+
+
+          `lienholder` - A financial institution or individual that holds a legal claim on the insured property. 
+          - This includes mortgagees.
+
+          `lessor` - The owner or leasing company that leases the insured property to the policyholder under a lease agreement. 
+          - This includes loss payees if the third party is also assessed as an Additional Insured.
+
+          `interest` - Any third party with a financial interest in the insured property. 
+          - This option serves as the conservative default used in the following cases:
+            1. The third party is specifically listed as an "additional interest"
+            2. The exact carrier-provided third party enum is not currently supported in the Axle Schema (e.g. loss payee, additional insured, creditor, etc.)
+            3. The third party falls across options (e.g. a third party that is both a loss payee and a lienholder)
+            4. The specific role of the third party is uncertain or not clearly defined.
         </ResponseField>
 
-        <ResponseField name="name" type="string" />
+        <ResponseField name="name" type="string">
+          The name of the third party.
+        </ResponseField>
 
-        <ResponseField name="address" type="Address" />
+        <ResponseField name="address" type="Address">
+            The address of the third party.
+        </ResponseField>
 
         <ResponseField name="property" type="string" >
           Unique identifier of Property afforded coverage for specified Third Party.
@@ -228,7 +345,16 @@ List of documents (such as declaration pages and policy agreements) associated w
         </ResponseField>
 
         <ResponseField name="source" type="string">
-          The source of the document. Available options: `carrier` `user`.
+          The origin of the document.
+
+
+          Available options:
+
+
+          `carrier` - Indicates that the document originated from the insurance carrier.
+
+
+          `user` - Indicates that the document was uploaded by the user.
 
           <Tip>
             User-provided documents are not verified by Axle.
@@ -236,11 +362,25 @@ List of documents (such as declaration pages and policy agreements) associated w
 
         </ResponseField>
 
-        <ResponseField name="name" type="string" />
+        <ResponseField name="name" type="string">
+          The name of the document.
+        </ResponseField>
 
         <ResponseField name="type" type="array[string]" >
           The type of information contained in the document, as specified by carrier or user. A document may have multiple types.
-          Available options: `declaration-page`, `policy-agreement`, or `id-card`.
+
+
+          Available options:
+
+
+          `declaration-page` - A summary document that outlines the key details of the insurance policy, including coverage limits, premiums, and insured parties. 
+            - This includes renewal policy documents and amended policy documents.
+
+
+          `policy-agreement` - The formal contract between the insurer and the policyholder that specifies the terms and conditions of the insurance coverage.
+            - This includes insurance policy contract documents.
+
+          `id-card` - An identification card issued by the insurer that serves as proof of insurance coverage and includes relevant policy information for the insured vehicle. This document type is generally only found for auto insurance policies.
         </ResponseField>
 
         <ResponseField name="url" type="string" >
