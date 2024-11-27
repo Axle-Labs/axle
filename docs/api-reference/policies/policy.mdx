@@ -30,9 +30,9 @@ description: "A Policy represents a specific policy associated with an
   `auto` `motorcycle` `home` `condo`
 
   Rules applied:
-  1. `auto` does not include commercial or business auto insurance policies.
-  2. `home` includes HO-1, HO-2, HO-3, HO-5, HO-7, and HO-8 homeowners insurance policies. It does not include HO-4 (i.e. renter’s policies).
-  3.  `condo` is equivalent to an HO-6 insurance policy.
+  1. `auto` includes non-owned auto insurance policies but does not include commercial or business auto insurance policies.
+  2. `home` includes HO-1, HO-2, HO-3, HO-5, HO-7, and HO-8 homeowners insurance policies. It also includes landlord and specialty fire policies. It does not include HO-4 (i.e. renter’s policies).
+  3. `condo` is equivalent to an HO-6 insurance policy.
   4. `other` encompasses any policy type that does not fall into one of the four described above. An example would be a renter’s policy.
 </ParamField>
 
@@ -52,15 +52,12 @@ description: "A Policy represents a specific policy associated with an
 
   Rules applied: 
   
-  1. If the policy status defined by the insurance carrier is an enum value, the Axle Service conservatively maps only "active" and active-like enum values to isActive `true` and the remainder as `false`.
-  2. Pre-effective policies are policies that have been purchased but do not go into effect until a future date. The following applies to these policies:
-  - Pre-effective policies of type `home` or `condo` will be marked as isActive `true` if policy data is able to be retrieved.
-  - Pre-effective policies of type `auto` will be marked as isActive `false`.
+  1. isActive `true` includes policies that are specified as active but may also include policies in pre-effective or pending cancellation statuses that are marked as active by the carrier.
 </ParamField>
 
 <ParamField body="effectiveDate" type="string">
   ISO 8601 timestamp of current term effective date of the policy, as specified
-  by the insurance carrier. 
+  by the insurance carrier. The effective date may be in the future for policies that renew early.
 </ParamField>
 
 <ParamField body="expirationDate" type="string">
@@ -187,18 +184,34 @@ List of coverage types and levels offered by the policy.
     <Expandable title="Coverage">
 
         <ResponseField name="code" type="string" required>
+          A coverage code for the type of insurance coverage present. Each code corresponds to a human-readable label.
+          
           Available options for an `auto` insurance policy: 
 
-          `BI` `PD` `UMBI` `UMPD` `UIMBI` `UIMPD` `UUIMBI` `UUIMPD` `COLL` `COMP`
+          1. `BI` - Bodily Injury
+          2. `PD` - Property Damage 
+          3. `UMBI` - Uninsured Motorists Bodily Injury
+          4. `UMPD` - Uninsured Motorists Property Damage
+          5. `UIMBI` - Underinsured Motorists Bodily Injury
+          6. `UIMPD` - Underinsured Motorists Property Damage
+          7. `UUIMBI` - Uninsured & Underinsured Motorists Bodily Injury
+          8. `UUIMPD` - Uninsured & Underinsured Motorists Property Damage
+          9. `COLL` - Collision
+          10. `COMP` - Comprehensive
 
 
           Available options for a `home` or `condo` insurance policy: 
           
-          `DW` `OS` `PP` `LOU` `PL` `MED`
+          1. `DW` - Dwelling
+          2. `OS` - Other Structures
+          3. `PP` - Personal Property
+          4. `LOU` - Loss of Use
+          5. `PL` - Personal Liability
+          6. `MED` - Medical Expenses
         </ResponseField>
 
         <ResponseField name="label" type="string" required>
-          A human-readable name describing the type of insurance coverage provided by the policy.
+          A human-readable name describing the type of insurance coverage provided by the policy. The labels are provided above next to each corresponding coverage code.
         </ResponseField>
 
         <ResponseField name="limitPerPerson" type="number, optional">
@@ -228,10 +241,10 @@ List of coverage types and levels offered by the policy.
 
 <ParamField body="insured" type="array[Insured]" >
 
-List of entities (such as an individuals or businesses) afforded direct coverage by the policy.
+List of entities (such as an individuals or businesses) afforded direct coverage by the policy. 
 
 Rules applied:
-1. Excluded drivers are not included.
+1. Excluded drivers are not included for `auto` insurance policies.
 2. Entities listed as Additional Insureds are not included within the list of Insureds but are included under the list of Third Parties as an "interest".
 
   <Expandable title="Insured">
@@ -252,33 +265,33 @@ Rules applied:
     </Tip>
 
     <ResponseField name="type" type="string">
-      The role of the insured individual, indicating whether they are the primary policyholder or a secondary insured party.
+      The role of the insured individual, indicating whether they are the primary policyholder / user or a secondary insured party. Note that this field is in beta and is subject to modification.
 
       Available options:
 
-      `primary` - The main policyholder, the individual who holds and is primarily responsible for the insurance policy.
+      `primary` - The main policyholder or primary user of the insured property.
 
       `secondary` - An additional person insured under the policy, such as an additional driver.
     </ResponseField>
 
     <ResponseField name="dateOfBirthYear" type="string">
-      The birth year of the insured individual.
+      The birth year of the insured individual. This field is only available for select carriers.
     </ResponseField>
 
     <ResponseField name="licenseNo" type="string">
-      The driver's license number of the insured individual.
+      The driver's license number of the insured individual. This field is only available for select carriers.
     </ResponseField>
 
     <ResponseField name="licenseState" type="string">
-      The state that issued the insured individual's driver's license.
+      The state that issued the insured individual's driver's license. This field is only available for select carriers.
     </ResponseField>
 
     <ResponseField name="licenseStatus" type="string">
-      The current status of the insured individual's driver's license.
+      The current status of the insured individual's driver's license. This field is only available for select carriers.
     </ResponseField>
 
     <ResponseField name="dateOfBirth" type="string">
-      The insured individual's date of birth in a standard date format.
+      The insured individual's date of birth in a standard date format. This field is only available for select carriers.
     </ResponseField>
 
     <ResponseField name="property" type="string, optional" >
@@ -296,38 +309,33 @@ List of external parties with interest in the policy.
     <Expandable title="ThirdParty">
 
         <ResponseField name="type" type="string" default="interest">
-          The role of the third party associated with the insured property. 
+          The role of the Third Party associated with the insured property. Note that this field is in beta and is subject to modification.
           
-          The Axle Schema currently supports the following third party options. See below for details on Axle's standardization of third party type based on data provided by the insurance carrier.  
-
+          The Axle Schema currently supports the following Third Party options. See below for details on Axle's standardization of Third Party type based on data provided by the insurance carrier.  
 
           Available options:
 
 
-          `lienholder` - A financial institution or individual that holds a legal claim on the insured property. 
-          - This includes mortgagees.
+          `lienholder` - A financial institution or individual that holds a legal claim on the insured property. This includes mortgagees.
 
-          `lessor` - The owner or leasing company that leases the insured property to the policyholder under a lease agreement. 
-          - This includes loss payees if the third party is also assessed as an Additional Insured.
+          `lessor` - The owner or leasing company that leases the insured property to the policyholder under a lease agreement. This includes loss payees if the Third Party is also assessed as an Additional Insured.
 
-          `interest` - Any third party with a financial interest in the insured property. 
-          - This option serves as the conservative default used in the following cases:
-            1. The third party is specifically listed as an "additional interest"
-            2. The exact carrier-provided third party enum is not currently supported in the Axle Schema (e.g. loss payee, additional insured, creditor, etc.)
-            3. The third party falls across options (e.g. a third party that is both a loss payee and a lienholder)
-            4. The specific role of the third party is uncertain or not clearly defined.
+          `interest` - Any Third Party with a financial interest in the insured property. This option serves as the conservative default used in the following cases:
+            1. The Third Party is specifically listed as an "additional interest".
+            2. The Third Party falls across options (e.g. a Third Party that is both an additional insured and an additional interest).
+            3. The specific role of the Third Party is uncertain or not clearly defined.
         </ResponseField>
 
         <ResponseField name="name" type="string">
-          The name of the third party.
+          The name of the Third Party.
         </ResponseField>
 
         <ResponseField name="address" type="Address">
-            The address of the third party.
+            The address of the Third Party.
         </ResponseField>
 
         <ResponseField name="property" type="string" >
-          Unique identifier of Property afforded coverage for specified Third Party.
+          Unique identifier of Property for which the specified Third Party is afforded coverage through this policy.
         </ResponseField>
 
     </Expandable>
@@ -336,75 +344,76 @@ List of external parties with interest in the policy.
 
 <ParamField body="documents" type="array[Document]" >
 
-List of documents (such as declaration pages and policy agreements) associated with the policy.
+List of documents (such as declaration pages and policy agreements) associated with the policy. Note that the insurance carrier may not always update documents on the policy to reflect policy changes or term renewals.
 
-    <Expandable title="Document">
+Rules applied:
+1. There will only be at most one document of each type listed in the documents array.
 
-        <ResponseField name="id" type="string" >
-          Unique identifier (formatted as filename) for the document.
-        </ResponseField>
+  <Expandable title="Document">
 
-        <ResponseField name="source" type="string">
-          The origin of the document.
+      <ResponseField name="id" type="string" >
+        Unique identifier (formatted as filename) for the document.
+      </ResponseField>
 
-
-          Available options:
-
-
-          `carrier` - Indicates that the document originated from the insurance carrier.
+      <ResponseField name="source" type="string">
+        The origin of the document.
 
 
-          `user` - Indicates that the document was uploaded by the user.
-
-          <Tip>
-            User-provided documents are not verified by Axle.
-          </Tip>
-
-        </ResponseField>
-
-        <ResponseField name="name" type="string">
-          The name of the document.
-        </ResponseField>
-
-        <ResponseField name="type" type="array[string]" >
-          The type of information contained in the document, as specified by carrier or user. A document may have multiple types.
+        Available options:
 
 
-          Available options:
+        `carrier` - Indicates that the document originated from the insurance carrier.
 
 
-          `declaration-page` - A summary document that outlines the key details of the insurance policy, including coverage limits, premiums, and insured parties. 
-            - This includes renewal policy documents and amended policy documents.
+        `user` - Indicates that the document was uploaded by the user.
+
+        <Tip>
+          User-provided documents are not verified by Axle.
+        </Tip>
+
+      </ResponseField>
+
+      <ResponseField name="name" type="string">
+        The name of the document.
+      </ResponseField>
+
+      <ResponseField name="type" type="array[string]" >
+        The type of information contained in the document, as specified by carrier or user. A document may have multiple types.
 
 
-          `policy-agreement` - The formal contract between the insurer and the policyholder that specifies the terms and conditions of the insurance coverage.
-            - This includes insurance policy contract documents.
+        Available options:
 
-          `id-card` - An identification card issued by the insurer that serves as proof of insurance coverage and includes relevant policy information for the insured vehicle. This document type is generally only found for auto insurance policies.
-        </ResponseField>
 
-        <ResponseField name="url" type="string" >
-          Pre-signed url to access document.
+        `declaration-page` - A summary document that outlines the key details of the insurance policy, including coverage limits, premiums, and insured parties. This includes renewal policy documents, amended policy documents, and new business documents.
 
-          <Tip>
-            For security, document urls have an expiry of 60 minutes.
-          </Tip>
 
-        </ResponseField>
+        `policy-agreement` - The formal contract between the insurer and the policyholder that specifies the terms and conditions of the insurance coverage. This includes insurance policy contract documents. Note that this type of document may not always be available.
 
-        <ResponseField name="issuedDate" type="string" >
-          If available, ISO 8601 timestamp at which the document was generated or issued by the carrier.
-        </ResponseField>
+        `id-card` - An identification card issued by the insurer that serves as proof of insurance coverage and includes relevant policy information for the insured vehicle. This document type is generally only found for auto insurance policies.
+      </ResponseField>
 
-        <ResponseField name="effectiveDate" type="string" >
-          If available, ISO 8601 timestamp at which the document becomes active or goes into effect.
-        </ResponseField>
+      <ResponseField name="url" type="string" >
+        Pre-signed url to access document.
 
-        <ResponseField name="createdAt" type="string" >
-          ISO 8601 timestamp at which the document was fetched or shared via Axle.
-        </ResponseField>
+        <Tip>
+          For security, document urls have an expiry of 60 minutes.
+        </Tip>
 
-    </Expandable>
+      </ResponseField>
+
+      <ResponseField name="issuedDate" type="string" >
+        If available, ISO 8601 timestamp at which the document was generated or issued by the carrier.
+      </ResponseField>
+
+      <ResponseField name="effectiveDate" type="string" >
+        If available, ISO 8601 timestamp at which the document becomes active or goes into effect.
+      </ResponseField>
+
+      <ResponseField name="createdAt" type="string" >
+        ISO 8601 timestamp at which the document was fetched or shared via Axle.
+      </ResponseField>
+
+  </Expandable>
 
 </ParamField>
 
