@@ -29,12 +29,12 @@ description: "A Policy represents a specific policy associated with an
   
   `auto` `motorcycle` `home` `condo`
 
-  Rules applied:
-  1. `auto` includes non-owned auto insurance policies but does not include commercial or business auto insurance policies.
-  2. `home` includes HO-1, HO-2, HO-3, HO-5, HO-7, and HO-8 homeowners insurance policies. It also includes landlord and specialty fire policies. It does not include HO-4 (i.e. renter’s policies).
-  3. `condo` is equivalent to an HO-6 insurance policy.
-  4. `other` encompasses any policy type that does not fall into one of the four described above. An example would be a renter’s policy.
-</ParamField>
+Rules applied:
+
+1. `auto` includes non-owned auto insurance policies but does not include commercial or business auto insurance policies.
+2. `home` includes HO-1, HO-2, HO-3, HO-5, HO-7, and HO-8 homeowners insurance policies. It also includes landlord and specialty fire policies. It does not include HO-4 (i.e. renter’s policies).
+3. `condo` is equivalent to an HO-6 insurance policy.
+   </ParamField>
 
 <ParamField body="carrier" type="string">
   Insurance carrier that is the source for the Policy data.
@@ -47,17 +47,17 @@ description: "A Policy represents a specific policy associated with an
 <ParamField body="isActive" type="boolean (optional)">
   Active status of the policy, as specified by the insurance carrier. If an
   Ignition session is completed with result: `manual`, this field will be
-  undefined. 
-  
+  undefined.
 
-  Rules applied: 
-  
-  1. isActive `true` includes policies that are specified as active but may also include policies in pre-effective or pending cancellation statuses that are marked as active by the carrier.
-</ParamField>
+Rules applied:
+
+1. isActive `true` includes policies that are specified as active but may also include policies in pre-effective or pending cancellation statuses that are marked as active by the carrier.
+   </ParamField>
 
 <ParamField body="effectiveDate" type="string">
   ISO 8601 timestamp of current term effective date of the policy, as specified
-  by the insurance carrier. The effective date may be in the future for policies that renew early.
+  by the insurance carrier. The effective date may be in the future for policies
+  that renew early.
 </ParamField>
 
 <ParamField body="expirationDate" type="string">
@@ -66,7 +66,9 @@ description: "A Policy represents a specific policy associated with an
 </ParamField>
 
 <ParamField body="premium" type="number">
-  Policy term premium, as specified by the insurance carrier. This value is inclusive of discounts and fees but may exclude certain fees due to variation in carrier reporting or additional surcharges placed via state policies.
+  Policy term premium, as specified by the insurance carrier. This value is
+  inclusive of discounts and fees but may exclude certain fees due to variation
+  in carrier reporting or additional surcharges placed via state policies.
 </ParamField>
 
 <ParamField body="address" type="Address">
@@ -185,11 +187,11 @@ List of coverage types and levels offered by the policy.
 
         <ResponseField name="code" type="string" required>
           A coverage code for the type of insurance coverage present. Each code corresponds to a human-readable label.
-          
-          Available options for an `auto` insurance policy: 
+
+          Available options for an `auto` or `motorcycle` insurance policy:
 
           1. `BI` - Bodily Injury
-          2. `PD` - Property Damage 
+          2. `PD` - Property Damage
           3. `UMBI` - Uninsured Motorists Bodily Injury
           4. `UMPD` - Uninsured Motorists Property Damage
           5. `UIMBI` - Underinsured Motorists Bodily Injury
@@ -200,8 +202,8 @@ List of coverage types and levels offered by the policy.
           10. `COMP` - Comprehensive
 
 
-          Available options for a `home` or `condo` insurance policy: 
-          
+          Available options for a `home` or `condo` insurance policy:
+
           1. `DW` - Dwelling
           2. `OS` - Other Structures
           3. `PP` - Personal Property
@@ -241,10 +243,11 @@ List of coverage types and levels offered by the policy.
 
 <ParamField body="insured" type="array[Insured]" >
 
-List of entities (such as an individuals or businesses) afforded direct coverage by the policy. 
+List of entities (such as an individuals or businesses) afforded direct coverage by the policy.
 
 Rules applied:
-1. Excluded drivers are not included for `auto` insurance policies.
+
+1. Excluded drivers are removed from Insureds list for `auto` and `motorcycle` insurance policies.
 2. Entities listed as Additional Insureds are not included within the list of Insureds but are included under the list of Third Parties as an "interest".
 
   <Expandable title="Insured">
@@ -265,7 +268,7 @@ Rules applied:
     </Tip>
 
     <ResponseField name="type" type="string">
-      The role of the insured individual, indicating whether they are the primary policyholder / user or a secondary insured party. Note that this field is in beta and is subject to modification.
+      The role of the insured individual, indicating whether they are the primary policyholder / user or a secondary insured party. Note that this field is in continued development and is subject to modification.
 
       Available options:
 
@@ -309,9 +312,9 @@ List of external parties with interest in the policy.
     <Expandable title="ThirdParty">
 
         <ResponseField name="type" type="string" default="interest">
-          The role of the Third Party associated with the insured property. Note that this field is in beta and is subject to modification.
-          
-          The Axle Schema currently supports the following Third Party options. See below for details on Axle's standardization of Third Party type based on data provided by the insurance carrier.  
+          The role of the Third Party associated with the insured property. Note that this field is in continued development and is subject to modification.
+
+          The Axle Schema currently supports the following Third Party options. See below for details on Axle's standardization of Third Party type based on data provided by the insurance carrier.
 
           Available options:
 
@@ -347,7 +350,9 @@ List of external parties with interest in the policy.
 List of documents (such as declaration pages and policy agreements) associated with the policy. Note that the insurance carrier may not always update documents on the policy to reflect policy changes or term renewals.
 
 Rules applied:
-1. There will only be at most one document of each type listed in the documents array.
+
+1. Only the most recently effective or issued document of each document type will be present in the document list.
+2. There will only be at most one document of each type listed in the documents list.
 
   <Expandable title="Document">
 
