@@ -1,0 +1,353 @@
+---
+title: "Coverages"
+description: "This page provides additional detail about the Axle Schema's insurance coverage types and highlights key rules and checks used to ensure accurate data. Coverages are provided through the `coverages` array in Policy objects.
+
+"
+---
+
+Rules applied to all coverages:
+    1. If both the `limitPerAccident` and `limitPerPerson` values are provided for a coverage, the `limitPerAccident` value must be greater than the `limitPerPerson` value.
+    2. If a specified coverage is afforded to all properties on the policy, the `property` field will be `undefined`.
+
+<Tip>
+ For standardization purposes, Axle performs opinionated data transformation of insurance carriers' data into the Axle Schema. As a result, Axle makes certain carrier enumeration inferences to map carrier data into the Axle Schema. 
+</Tip>
+
+## Auto Policy Coverage Types
+
+<Accordion title="Bodily Injury" icon="crutch">
+    Rules applied:
+    1. If the carrier returns limits combined as `“$50,000 / $100,000”`, the first value represents `limitPerPerson` and the second value represents `limitPerAccident`. If there is only a single limit returned, the limit will be recorded as `limitPerAccident`.
+     2. If the policy returns a combined single limit (CSL) for Bodily Injury and Property Damage, the limit will be set as `limitPerAccident` for both Bodily Injury and Property Damage coverages.
+
+    Suppression checks:
+    1. `limitPerAccident`, `limitPerPerson`, and `deductible` fields contain certain min / max value thresholds used to suppress inaccurate or nonsensical data.
+
+    ### Fields
+    <ResponseField name="code" type="string" required>
+        BI
+    </ResponseField>
+
+    <ResponseField name="label" type="string" required>
+        Bodily Injury
+    </ResponseField>
+
+    <ResponseField name="limitPerAccident" type="number or null" />
+
+    <ResponseField name="limitPerPerson" type="number or null (optional)" />
+</Accordion>
+
+<Accordion title="Property Damage" icon="car-burst">
+    Rules applied:
+    1. If the carrier returns limits combined as `“$50,000 / $500”`, the first value represents `limitPerAccident` and the second value represents the `deductible`.
+    2. If the policy returns a combined single limit (CSL) for Bodily Injury and Property Damage, the limit will be set as `limitPerAccident` for both Bodily Injury and Property Damage coverages.
+
+    Suppression checks:
+    1. `limitPerAccident` and `deductible` fields contain certain min / max value thresholds used to suppress inaccurate or nonsensical data.
+
+    ### Fields
+    <ResponseField name="code" type="string" required>
+        PD
+    </ResponseField>
+
+    <ResponseField name="label" type="string" required>
+        Property Damage
+    </ResponseField>
+
+    <ResponseField name="limitPerAccident" type="number or null" />
+
+    <ResponseField name="deductible" type="number or null (optional)" />
+</Accordion>
+
+
+<Accordion title="Uninsured Motorists Bodily Injury" icon="motorcycle">
+    Rules applied:
+    1. If the carrier returns limits combined as `“$50,000 / $100,000”`, the first value represents `limitPerPerson` and the second value represents `limitPerAccident`. If there is only a single limit returned, the limit will be recorded as `limitPerAccident`.
+    2. If the policy returns a combined single limit (CSL) for Uninsured Motorists Bodily Injury and Uninsured Motorists Property Damage, the limit will be set as `limitPerAccident` for both Uninsured Motorists Bodily Injury and Uninsured Motorists Property Damage coverages and `limitPerPerson` will be `undefined`.
+
+    Suppression checks:
+    1. `limitPerAccident` and `limitPerPerson` fields contain certain min / max value thresholds used to suppress inaccurate or nonsensical data.
+
+    ### Fields
+    <ResponseField name="code" type="string" required>
+        UMBI
+    </ResponseField>
+
+    <ResponseField name="label" type="string" required>
+        Uninsured Motorists Bodily Injury
+    </ResponseField>
+
+    <ResponseField name="limitPerAccident" type="number or null" required/>
+
+    <ResponseField name="limitPerPerson" type="number or null (optional)" />
+</Accordion>
+
+<Accordion title="Uninsured Motorists Property Damage" icon="motorcycle">
+    Rules applied:
+    1. If the carrier returns limits combined as `“$50,000 / $500”`, the first value represents `limitPerAccident` and the second value represents the `deductible`.
+    2. If the policy returns a combined single limit (CSL) for Uninsured Motorists Bodily Injury and Uninsured Motorists Property Damage, the limit will be set as `limitPerAccident` for both Uninsured Motorists Bodily Injury and Uninsured Motorists Property Damage coverages and `limitPerPerson` will be `undefined`.
+
+    Suppression checks:
+    1. `limitPerAccident` and `deductible` fields contain certain min / max value thresholds used to suppress inaccurate or nonsensical data.
+
+    ### Fields
+    <ResponseField name="code" type="string" required>
+        UMPD
+    </ResponseField>
+
+    <ResponseField name="label" type="string" required>
+        Uninsured Motorists Property Damage
+    </ResponseField>
+
+    <ResponseField name="limitPerAccident" type="number or null" />
+
+    <ResponseField name="deductible" type="number or null (optional)" />
+</Accordion>
+
+<Accordion title="Underinsured Motorists Bodily Injury" icon="motorcycle">
+    Rules applied:
+    1. If the carrier returns limits combined as `“$50,000 / $100,000”`, the first value represents `limitPerPerson` and the second value represents `limitPerAccident`. If there is only a single limit returned, the limit will be recorded as `limitPerAccident`.
+
+    Suppression checks:
+    1. `limitPerAccident` and `limitPerPerson` fields contain certain min / max value thresholds used to suppress inaccurate or nonsensical data.
+
+    ### Fields
+    <ResponseField name="code" type="string" required>
+        UIMBI
+    </ResponseField>
+
+    <ResponseField name="label" type="string" required>
+        Underinsured Motorists Bodily Injury
+    </ResponseField>
+
+    <ResponseField name="limitPerAccident" type="number or null" required/>
+
+    <ResponseField name="limitPerPerson" type="number or null (optional)" />
+</Accordion>
+
+<Accordion title="Underinsured Motorists Property Damage" icon="motorcycle">
+    Rules applied:
+    1. If the carrier returns limits combined as `“$50,000 / $500”`, the first value represents `limitPerAccident` and the second value represents the `deductible`.
+
+    Suppression checks:
+    1. `limitPerAccident` and `deductible` fields contain certain min / max value thresholds used to suppress inaccurate or nonsensical data.
+
+    ### Fields
+    <ResponseField name="code" type="string" required>
+        UIMPD
+    </ResponseField>
+
+    <ResponseField name="label" type="string" required>
+        Underinsured Motorists Property Damage
+    </ResponseField>
+
+    <ResponseField name="limitPerAccident" type="number or null"/>
+
+    <ResponseField name="deductible" type="number or null (optional)" />
+</Accordion>
+
+<Accordion title="Uninsured & Underinsured Motorists Bodily Injury" icon="motorcycle">
+    Rules applied:
+    1. If the carrier returns limits combined as `“$50,000 / $100,000”`, the first value represents `limitPerPerson` and the second value represents `limitPerAccident`. If there is only a single limit returned, the limit will be recorded as `limitPerAccident`.
+
+    Suppression checks:
+    1. `limitPerAccident` and `limitPerPerson` fields contain certain min / max value thresholds used to suppress inaccurate or nonsensical data.
+
+    ### Fields
+    <ResponseField name="code" type="string" required>
+        UUIMBI
+    </ResponseField>
+
+    <ResponseField name="label" type="string" required>
+        Uninsured & Underinsured Motorists Bodily Injury
+    </ResponseField>
+
+    <ResponseField name="limitPerAccident" type="number or null" required/>
+    
+    <ResponseField name="limitPerPerson" type="number or null (optional)" />
+</Accordion>
+
+<Accordion title="Uninsured & Underinsured Motorists Property Damage" icon="motorcycle">
+    Rules applied:
+    1. If the carrier returns limits combined as `“$50,000 / $500”`, the first value represents `limitPerAccident` and the second value represents the `deductible`.
+
+    Suppression checks:
+    1. `limitPerAccident` and `deductible` fields contain certain min / max value thresholds used to suppress inaccurate or nonsensical data.
+
+    ### Fields
+    <ResponseField name="code" type="string" required>
+        UUIMPD
+    </ResponseField>
+
+    <ResponseField name="label" type="string" required>
+        Uninsured & Underinsured Motorists Property Damage
+    </ResponseField>
+
+    <ResponseField name="limitPerAccident" type="number or null"/>
+
+    <ResponseField name="deductible" type="number or null (optional)" />
+</Accordion>
+
+<Accordion title="Collision" icon="car-burst">
+    Suppression checks:
+    1. `limitPerAccident` and `deductible` fields contain certain min / max value thresholds used to suppress inaccurate or nonsensical data.
+
+    ### Fields
+    <ResponseField name="code" type="string" required>
+        COLL
+    </ResponseField>
+
+    <ResponseField name="label" type="string" required>
+        Collision
+    </ResponseField>
+
+    <ResponseField name="limitPerAccident" type="number or null (optional)"/>
+
+    <ResponseField name="deductible" type="number or null" />
+
+    <ResponseField name="property" type="string" />
+</Accordion>
+
+<Accordion title="Comprehensive" icon="car-burst">
+    Suppression checks:
+    1. `limitPerAccident` and `deductible` fields contain certain min / max value thresholds used to suppress inaccurate or nonsensical data.
+
+    ### Fields
+    <ResponseField name="code" type="string" required>
+        COMP
+    </ResponseField>
+
+    <ResponseField name="label" type="string" required>
+        Comprehensive
+    </ResponseField>
+
+    <ResponseField name="limitPerAccident" type="number or null (optional)"/>
+
+    <ResponseField name="deductible" type="number or null" />
+
+    <ResponseField name="property" type="string" />
+</Accordion>
+
+
+## Home Policy Coverage Types
+
+<Accordion title="Dwelling" icon="house">
+    Rules applied:
+    1. When the deductible is listed differently based on the type of claim, the deductible associated with covered perils will be returned. This deductible value is often represented as “All Perils”, “All Covered Perils”, or “Other Covered Perils”.
+
+    Suppression checks:
+    1. If both the policy `premium` and Dwelling coverage `limitPerAccident` values are defined, the Axle Service will ensure that the premium-to-Dwelling-limitPerAccident ratio falls within our set bounds of reasonability. If this ratio is greater than our upper bound, both the policy `premium` and Dwelling coverage `limitPerAccident` values will be conservatively set to `null`. If a `premium` value exists but no Dwelling `limitPerAccident` value is present, then the `premium` will be conservatively set to `null`.
+    2. `limitPerAccident` and `deductible` fields contain certain min / max value thresholds used to suppress inaccurate or nonsensical data.
+
+    ### Fields
+    <ResponseField name="code" type="string" required>
+        DW
+    </ResponseField>
+
+    <ResponseField name="label" type="string" required>
+        Dwelling
+    </ResponseField>
+
+    <ResponseField name="limitPerAccident" type="number or null" />
+
+    <ResponseField name="deductible" type="number or null" />
+</Accordion>
+
+<Accordion title="Other Structures" icon="warehouse">
+    Rules applied:
+    1. When the deductible is listed differently based on the type of claim, the deductible associated with covered perils will be returned. This deductible value is often represented as “All Perils”, “All Covered Perils”, or “Other Covered Perils”.
+    
+    Suppression checks:
+    1. `limitPerAccident` and `deductible` fields contain certain min / max value thresholds used to suppress inaccurate or nonsensical data.
+    
+    ### Fields
+    <ResponseField name="code" type="string" required>
+        OS
+    </ResponseField>
+
+    <ResponseField name="label" type="string" required>
+        Other Structures
+    </ResponseField>
+
+    <ResponseField name="limitPerAccident" type="number or null" />
+
+    <ResponseField name="deductible" type="number or null" />
+</Accordion>
+
+<Accordion title="Personal Property" icon="bag-shopping">
+    Rules applied:
+    1. When the deductible is listed differently based on the type of claim, the deductible associated with covered perils will be returned. This deductible value is often represented as “All Perils”, “All Covered Perils”, or “Other Covered Perils”.
+    
+    Suppression checks:
+    1. `limitPerAccident` and `deductible` fields contain certain min / max value thresholds used to suppress inaccurate or nonsensical data.
+    
+    ### Fields
+    <ResponseField name="code" type="string" required>
+        PP
+    </ResponseField>
+
+    <ResponseField name="label" type="string" required>
+        Personal Property
+    </ResponseField>
+
+    <ResponseField name="limitPerAccident" type="number or null" />
+
+    <ResponseField name="deductible" type="number or null" />
+</Accordion>
+
+<Accordion title="Loss of Use" icon="x">
+    Rules applied:
+    1. When the deductible is listed differently based on the type of claim, the deductible associated with covered perils will be returned. This deductible value is often represented as “All Perils”, “All Covered Perils”, or “Other Covered Perils”.
+    
+    Suppression checks:
+    1. `limitPerAccident` and `deductible` fields contain certain min / max value thresholds used to suppress inaccurate or nonsensical data.
+    
+    ### Fields
+    <ResponseField name="code" type="string" required>
+        LOU
+    </ResponseField>
+
+    <ResponseField name="label" type="string" required>
+        Loss of Use
+    </ResponseField>
+
+    <ResponseField name="limitPerAccident" type="number or null" />
+
+    <ResponseField name="deductible" type="number or null (optional)" />
+</Accordion>
+
+<Accordion title="Personal Liability" icon="user-injured">
+    Suppression checks:
+    1. `limitPerAccident` and `deductible` fields contain certain min / max value thresholds used to suppress inaccurate or nonsensical data.
+    
+    ### Fields
+    <ResponseField name="code" type="string" required>
+        PL
+    </ResponseField>
+
+    <ResponseField name="label" type="string" required>
+        Personal Liability
+    </ResponseField>
+
+    <ResponseField name="limitPerAccident" type="number or null" />
+</Accordion>
+
+<Accordion title="Medical Expenses" icon="house-chimney-medical">
+    Rules applied:
+    1. Only a `limitPerAccident` or `limitPerPerson` value can exist on this coverage but not both.
+
+    Suppression checks:
+    1. `limitPerAccident` and `deductible` fields contain certain min / max value thresholds used to suppress inaccurate or nonsensical data.
+    
+    ### Fields
+    <ResponseField name="code" type="string" required>
+        MED
+    </ResponseField>
+
+    <ResponseField name="label" type="string" required>
+        Medical Expenses
+    </ResponseField>
+
+    <ResponseField name="limitPerAccident" type="number" />
+    <ResponseField name="limitPerPerson" type="number" />
+</Accordion>
