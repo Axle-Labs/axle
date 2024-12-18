@@ -355,6 +355,9 @@ paths:
                           rental-covered-for-collision:
                             $ref: "#/components/schemas/EvaluationStatus"
                             description: "The evaluation status of the rental-covered-for-collision Rule."
+                          expiration-date-comparison:
+                            $ref: "#/components/schemas/EvaluationStatusWithoutCaution"
+                            description: "The evaluation status of the expiration-date-comparison Rule."
                       rules:
                         type: object
                         description: "A detailed report of the Rule evaluation results."
@@ -377,6 +380,26 @@ paths:
                             required:
                               - status
                               - metadata
+                          expiration-date-comparison:
+                            type: object
+                            description: ""
+                            properties:
+                              status:
+                                $ref: "#/components/schemas/EvaluationStatusWithoutCaution"
+                              metadata:
+                                type: object
+                                description: "Additional metadata about the results of the Rule evaluation and the input provided."
+                                properties:
+                                  policyExpirationDate:
+                                    type: string
+                                    description: "The expiration date on the policy."
+                                    nullable: true
+                                  input:
+                                    type: object
+                                    properties:
+                                      date:
+                                        type: string
+                                        description: "The input date that was provided for evaluating this Rule."
     parameters:
       - $ref: "#/components/parameters/policy"
   /carriers/{id}:
@@ -1427,6 +1450,14 @@ components:
         - fail
         - caution
         - unknown
+    EvaluationStatusWithoutCaution:
+      title: EvaluationStatusWithoutCaution
+      type: string
+      description: Indicates whether the rule evaluations were successful.
+      enum:
+        - pass
+        - fail
+        - unknown
     ExpirationDateComparisonInput:
       title: Expiration Date Comparison
       type: object
@@ -1449,7 +1480,7 @@ components:
         - input
 
     StandaloneRuleInput:
-      title: Rules With No Input
+      title: Rule With No Input
       type: object
       properties:
         rule:
