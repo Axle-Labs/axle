@@ -223,4 +223,16 @@ password: pass-rental-cover
 
       </Accordion>
 
+  <Accordion title="Policy Expiration Date Comparison">
+  ### `expiration-date-comparison`
+
+Given an input date, evaluates whether the policy's expiration date is greater than or equal to (on or after) the input date.
+
+| Status    | Cause                                                                |
+| --------- | -------------------------------------------------------------------- |
+| `pass`    | The policy's expiration date is on or after the provided input date. |
+| `fail`    | The policy's expiration date is before the provided input date.      |
+| `unknown` | The policy's expiration date is `null` on the policy.                |
+
+  </Accordion>
   </AccordionGroup>
