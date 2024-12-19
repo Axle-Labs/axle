@@ -315,7 +315,7 @@ paths:
               items:
                 oneOf:
                   - $ref: "#/components/schemas/StandaloneRuleInput"
-                  - $ref: "#/components/schemas/ExpirationDateComparisonInput"
+                  - $ref: "#/components/schemas/RuleWithInput"
             example:
               [
                 { "rule": "policy-active" },
@@ -362,7 +362,7 @@ paths:
                         type: object
                         description: "A detailed report of the Rule evaluation results."
                         properties:
-                          policy-active:
+                          example-rule:
                             type: object
                             description: ""
                             properties:
@@ -380,26 +380,6 @@ paths:
                             required:
                               - status
                               - metadata
-                          expiration-date-comparison:
-                            type: object
-                            description: ""
-                            properties:
-                              status:
-                                $ref: "#/components/schemas/EvaluationStatusWithoutCaution"
-                              metadata:
-                                type: object
-                                description: "Additional metadata about the results of the Rule evaluation and the input provided."
-                                properties:
-                                  policyExpirationDate:
-                                    type: string
-                                    description: "The expiration date on the policy."
-                                    nullable: true
-                                  input:
-                                    type: object
-                                    properties:
-                                      date:
-                                        type: string
-                                        description: "The input date that was provided for evaluating this Rule."
     parameters:
       - $ref: "#/components/parameters/policy"
   /carriers/{id}:
@@ -1458,8 +1438,8 @@ components:
         - pass
         - fail
         - unknown
-    ExpirationDateComparisonInput:
-      title: Expiration Date Comparison
+    RuleWithInput:
+      title: Rule With Input
       type: object
       properties:
         rule:
@@ -1468,13 +1448,7 @@ components:
             - "expiration-date-comparison"
         input:
           type: object
-          description: Additional input required to evaluate the rule.
-          properties:
-            date:
-              type: string
-              description: The date to compare against the expiration date of the policy.
-          required:
-            - date
+          description: Additional input required to evaluate the rule. See [Supported Rules](/guides/policy-validation#supported-rules) for details on which Rules require additional input.
       required:
         - rule
         - input

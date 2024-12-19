@@ -11,6 +11,8 @@ For example, the `policy-active` Rule checks if the policy is currently active, 
 
 Some Rules are more complex, providing additional insight not found on the Policy object. For example, the `rental-covered-for-collision` Rule provides guidance on whether a policy affords coverage for collision damage when an insured is driving a rental vehicle.
 
+Some Rules require additional input to be evaluated. For example, the `expiration-date-comparison` Rule requires an input date to compare against the policy's expiration date. For more details on the additional inputs that a Rule may require, refer to [Supported Rules](/guides/policy-validation#supported-rules).
+
 Each Rule evaluates to one of the following statuses:
 
 | Status    | Description                                                                                               |
@@ -233,6 +235,34 @@ Given an input date, evaluates whether the policy's expiration date is greater t
 | `pass`    | The policy's expiration date is on or after the provided input date. |
 | `fail`    | The policy's expiration date is before the provided input date.      |
 | `unknown` | The policy's expiration date is `null`.                              |
+
+This Rule requires additional input to be evaluated. Specifically, the `input` must include a `date` property as a string, representing the date to compare against the policy's expiration date.
+
+```typescript
+{
+  "rule": "expiration-date-comparison",
+  "input": {
+    "date": "2025-01-01"
+  }
+}
+```
+
+The returned evaluation will include
+
+- The policy's expiration date.
+- The input date that was provided.
+
+```typescript
+"expiration-date-comparison": {
+  "status": "pass",
+  "metadata": {
+    "policyExpirationDate": "2025-02-01",
+    "input": {
+      "date": "2025-01-01"
+    }
+  }
+}
+```
 
   </Accordion>
   </AccordionGroup>
