@@ -95,7 +95,7 @@ description: "A Policy represents a specific policy associated with an
         ZIP or postal code of the address.
       </ResponseField>
 
-      <ResponseField name="country" type="string">
+      <ResponseField name="country" type="string or null">
         Country of the address.
       </ResponseField>
 
@@ -148,7 +148,7 @@ List of properties (such as a vehicle or dwelling) afforded coverage by the poli
 
             </Expandable>
           <Expandable title="Dwelling">
-            <ResponseField name="addressLine1" type="string">
+            <ResponseField name="addressLine1" type="string or null">
               The primary address line of the dwelling, typically including the street number and name.
             </ResponseField>
 
@@ -156,19 +156,19 @@ List of properties (such as a vehicle or dwelling) afforded coverage by the poli
               An optional secondary address line for additional information (e.g., apartment number or suite).
             </ResponseField>
 
-            <ResponseField name="city" type="string">
+            <ResponseField name="city" type="string or null">
               The city where the dwelling is located.
             </ResponseField>
 
-            <ResponseField name="state" type="string">
+            <ResponseField name="state" type="string or null">
               The state where the dwelling is situated.
             </ResponseField>
 
-            <ResponseField name="postalCode" type="string">
+            <ResponseField name="postalCode" type="string or null">
               The postal code for the dwelling's address.
             </ResponseField>
 
-            <ResponseField name="country" type="string">
+            <ResponseField name="country" type="string or null">
               The country where the dwelling is located.
             </ResponseField>
           </Expandable>
@@ -228,7 +228,7 @@ List of coverage types and levels offered by the policy.
           The amount the policyholder must pay out-of-pocket toward a claim before the insurance coverage begins to pay.
         </ResponseField>
 
-        <ResponseField name="property" type="string (optional)" >
+        <ResponseField name="property" type="string or null (optional)" >
           Unique identifier of Property afforded coverage. If specified coverage is afforded to all properties on the policy, `property` will be `undefined`.
         </ResponseField>
 
@@ -297,7 +297,7 @@ Rules applied:
       The insured individual's date of birth in a standard date format. This field is only available for select carriers.
     </ResponseField>
 
-    <ResponseField name="property" type="string (optional)" >
+    <ResponseField name="property" type="string or null (optional)" >
       Unique identifier of Property afforded coverage for specified Insured. If Insured is afforded coverage across all properties on the policy, `property` will be `undefined`.
     </ResponseField>
 
