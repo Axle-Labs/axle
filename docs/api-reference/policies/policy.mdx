@@ -40,11 +40,11 @@ description: "A Policy represents a specific policy associated with an
   Insurance carrier that is the source for the Policy data.
 </ParamField>
 
-<ParamField body="policyNumber" type="string">
+<ParamField body="policyNumber" type="string or null">
   Identifier of the policy, as specified by the insurance carrier.
 </ParamField>
 
-<ParamField body="isActive" type="boolean (optional)">
+<ParamField body="isActive" type="boolean or null (optional)">
   Active status of the policy, as specified by the insurance carrier. If an
   Ignition session is completed with result: `manual`, this field will be
   undefined.
@@ -54,18 +54,18 @@ description: "A Policy represents a specific policy associated with an
   1. isActive `true` includes policies that are specified as active but may also include policies in pre-effective or pending cancellation statuses that are marked as active by the carrier.
 </ParamField>
 
-<ParamField body="effectiveDate" type="string">
+<ParamField body="effectiveDate" type="string or null">
   ISO 8601 timestamp of current term effective date of the policy, as specified
   by the insurance carrier. The effective date may be in the future for policies
   that renew early.
 </ParamField>
 
-<ParamField body="expirationDate" type="string">
+<ParamField body="expirationDate" type="string or null">
   ISO 8601 timestamp of current term expiration date of the policy, as specified
   by the insurance carrier.
 </ParamField>
 
-<ParamField body="premium" type="number">
+<ParamField body="premium" type="number or null">
   Policy term premium, as specified by the insurance carrier. This value is
   inclusive of discounts and fees but may exclude certain fees due to variation
   in carrier reporting or additional surcharges placed via state policies.
@@ -75,27 +75,27 @@ description: "A Policy represents a specific policy associated with an
     Primary address associated with the policy.
     <Expandable title="Address">
 
-      <ResponseField name="addressLine1" type="string">
+      <ResponseField name="addressLine1" type="string or null">
         First line of the street address, typically including the house number and street name.
       </ResponseField>
 
-      <ResponseField name="addressLine2" type="string">
+      <ResponseField name="addressLine2" type="string or null">
         Additional address details, such as an apartment, suite, or unit number.
       </ResponseField>
 
-      <ResponseField name="city" type="string">
+      <ResponseField name="city" type="string or null">
         City name of the address.
       </ResponseField>
 
-      <ResponseField name="state" type="string">
+      <ResponseField name="state" type="string or null">
         State of the address.
       </ResponseField>
 
-      <ResponseField name="postalCode" type="string">
+      <ResponseField name="postalCode" type="string or null">
         ZIP or postal code of the address.
       </ResponseField>
 
-      <ResponseField name="country" type="string">
+      <ResponseField name="country" type="string or null">
         Country of the address.
       </ResponseField>
 
@@ -133,42 +133,42 @@ List of properties (such as a vehicle or dwelling) afforded coverage by the poli
                 <ResponseField name="vin" type="string">
                   The Vehicle Identification Number (VIN), a unique code used to identify individual motor vehicles.
                 </ResponseField>
-                <ResponseField name="model" type="string">
+                <ResponseField name="model" type="string or null">
                   The specific model name of the vehicle, indicating the manufacturer’s designation.
                 </ResponseField>
-                <ResponseField name="year" type="string">
+                <ResponseField name="year" type="string or null">
                   The model year of the vehicle, representing the year it was manufactured.
                 </ResponseField>
-                <ResponseField name="make" type="string">
+                <ResponseField name="make" type="string or null">
                   The manufacturer or brand name of the vehicle.
                 </ResponseField>
-                <ResponseField name="bodyStyle" type="string, optional">
+                <ResponseField name="bodyStyle" type="string or null (optional)">
                   The style of the vehicle's body (e.g., sedan, SUV, coupe), which describes its design and configuration.
                 </ResponseField>
 
             </Expandable>
           <Expandable title="Dwelling">
-            <ResponseField name="addressLine1" type="string">
+            <ResponseField name="addressLine1" type="string or null">
               The primary address line of the dwelling, typically including the street number and name.
             </ResponseField>
 
-            <ResponseField name="addressLine2" type="string">
+            <ResponseField name="addressLine2" type="string or null">
               An optional secondary address line for additional information (e.g., apartment number or suite).
             </ResponseField>
 
-            <ResponseField name="city" type="string">
+            <ResponseField name="city" type="string or null">
               The city where the dwelling is located.
             </ResponseField>
 
-            <ResponseField name="state" type="string">
+            <ResponseField name="state" type="string or null">
               The state where the dwelling is situated.
             </ResponseField>
 
-            <ResponseField name="postalCode" type="string">
+            <ResponseField name="postalCode" type="string or null">
               The postal code for the dwelling's address.
             </ResponseField>
 
-            <ResponseField name="country" type="string">
+            <ResponseField name="country" type="string or null">
               The country where the dwelling is located.
             </ResponseField>
           </Expandable>
@@ -216,19 +216,19 @@ List of coverage types and levels offered by the policy. Refer to [Coverages](/a
           A human-readable name describing the type of insurance coverage provided by the policy. The labels are provided above next to each corresponding coverage code.
         </ResponseField>
 
-        <ResponseField name="limitPerPerson" type="number, optional">
+        <ResponseField name="limitPerPerson" type="number or null (optional)">
         The maximum amount the insurance policy will pay for bodily injury or damages sustained by an individual in a covered incident.
         </ResponseField>
 
-        <ResponseField name="limitPerAccident" type="number, optional">
+        <ResponseField name="limitPerAccident" type="number or null (optional)">
           The maximum amount the insurance policy will pay for a single accident or claim.
         </ResponseField>
 
-        <ResponseField name="deductible" type="number, optional">
+        <ResponseField name="deductible" type="number or null (optional)">
           The amount the policyholder must pay out-of-pocket toward a claim before the insurance coverage begins to pay.
         </ResponseField>
 
-        <ResponseField name="property" type="string, optional" >
+        <ResponseField name="property" type="string or null (optional)" >
           Unique identifier of Property afforded coverage. If specified coverage is afforded to all properties on the policy, `property` will be `undefined`.
         </ResponseField>
 
@@ -252,11 +252,11 @@ Rules applied:
 
   <Expandable title="Insured">
 
-    <ResponseField name="firstName" type="string">
+    <ResponseField name="firstName" type="string or null">
       The first name of the insured individual.
     </ResponseField>
 
-    <ResponseField name="lastName" type="string">
+    <ResponseField name="lastName" type="string or null">
     The last name of the insured individual.
     </ResponseField>
 
@@ -277,27 +277,27 @@ Rules applied:
       `secondary` - An additional person insured under the policy, such as an additional driver.
     </ResponseField>
 
-    <ResponseField name="dateOfBirthYear" type="string">
+    <ResponseField name="dateOfBirthYear" type="string or null">
       The birth year of the insured individual. This field is only available for select carriers.
     </ResponseField>
 
-    <ResponseField name="licenseNo" type="string">
+    <ResponseField name="licenseNo" type="string or null">
       The driver's license number of the insured individual. This field is only available for select carriers.
     </ResponseField>
 
-    <ResponseField name="licenseState" type="string">
+    <ResponseField name="licenseState" type="string or null">
       The state that issued the insured individual's driver's license. This field is only available for select carriers.
     </ResponseField>
 
-    <ResponseField name="licenseStatus" type="string">
+    <ResponseField name="licenseStatus" type="string or null">
       The current status of the insured individual's driver's license. This field is only available for select carriers.
     </ResponseField>
 
-    <ResponseField name="dateOfBirth" type="string">
+    <ResponseField name="dateOfBirth" type="string or null">
       The insured individual's date of birth in a standard date format. This field is only available for select carriers.
     </ResponseField>
 
-    <ResponseField name="property" type="string, optional" >
+    <ResponseField name="property" type="string or null (optional)" >
       Unique identifier of Property afforded coverage for specified Insured. If Insured is afforded coverage across all properties on the policy, `property` will be `undefined`.
     </ResponseField>
 
@@ -337,7 +337,7 @@ List of external parties with interest in the policy.
             The address of the Third Party.
         </ResponseField>
 
-        <ResponseField name="property" type="string" >
+        <ResponseField name="property" type="string or null" >
           Unique identifier of Property for which the specified Third Party is afforded coverage through this policy.
         </ResponseField>
 
@@ -406,11 +406,11 @@ Rules applied:
 
       </ResponseField>
 
-      <ResponseField name="issuedDate" type="string" >
+      <ResponseField name="issuedDate" type="string or null" >
         If available, ISO 8601 timestamp at which the document was generated or issued by the carrier.
       </ResponseField>
 
-      <ResponseField name="effectiveDate" type="string" >
+      <ResponseField name="effectiveDate" type="string or null" >
         If available, ISO 8601 timestamp at which the document becomes active or goes into effect.
       </ResponseField>
 
