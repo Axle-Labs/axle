@@ -314,7 +314,7 @@ paths:
               description: "A list of Rules to perform on the policy object."
               items:
                 oneOf:
-                  - $ref: "#/components/schemas/StandaloneRuleInput"
+                  - $ref: "#/components/schemas/RuleWithNoInput"
                   - $ref: "#/components/schemas/RuleWithInput"
             example:
               [
@@ -1453,7 +1453,7 @@ components:
         - rule
         - input
 
-    StandaloneRuleInput:
+    RuleWithNoInput:
       title: Rule With No Input
       type: object
       properties:
