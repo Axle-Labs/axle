@@ -236,7 +236,9 @@ Given an input date, evaluates whether the policy's expiration date is greater t
 | `fail`    | The policy's expiration date is before the provided input date.      |
 | `unknown` | The policy's expiration date is `null`.                              |
 
-This Rule requires additional input to be evaluated. Specifically, the `input` must include a `date` property as a string, representing the date to compare against the policy's expiration date.
+This Rule requires additional input to be evaluated. Specifically, the `input` must include a `date` property as an ISO 8601 string, representing the date to compare against the policy's expiration date.
+
+For example, valid input dates could be `2025-01-01` or `2025-01-01T00:00:00.000Z`. If an invalid `date` is provided, this Rule will return a `400` response code.
 
 ```typescript
 {
