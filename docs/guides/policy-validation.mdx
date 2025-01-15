@@ -267,91 +267,191 @@ The returned evaluation will include
 ```
 
   </Accordion>
-  <Accordion title="Does Collision Coverage Meet My Requirements?">
+  <Accordion title="Does Collision Coverage Meet Requirements?">
+    ### `collision-coverage-meets-requirements`
+    
+    Evaluates whether the policy has collision coverage and if the coverage meets specific deductible requirements. This rule can evaluate coverage requirements for a specific vehicle (using VIN) or for the entire policy.
 
-  ### `collision-coverage-meets-requirements`
-  
-  Evaluates whether the policy has collision coverage and if the coverage meets specific deductible requirements. This rule can evaluate coverage requirements for a specific vehicle (using VIN) or for the entire policy.
+    **Input Parameters**
+    - `vin` (optional): The Vehicle Identification Number to check for collision coverage specific to a vehicle.
+    - `deductible` (optional): A specific collision deductible amount you want to verify against the policy.
 
-  **Input Parameters**
-  - `vin` (optional): The Vehicle Identification Number to check for collision coverage specific to a vehicle.
-  - `deductible` (optional): A specific collision deductible amount you want to verify against the policy.
+    **Evaluation Criteria**
 
-  **Evaluation Criteria**
+    The Rule is evaluated based on the following two criteria. Both of these criteria must be true for the `collision-coverage-meets-requirements` Rule to resolve to `pass`.
 
-  The Rule is evaluated based on the following two criterias. Both of these criteria must be true for the `collision-coverage-meets-requirements` Rule to resolve to `pass`.
+    1. `collision-exists`: Determines if collision coverage is present on the policy for any vehicle or, if a `vin` is provided, for a specified vehicle. 
 
-  1. `collision-exists`: Determines if collision coverage is present on the policy for any vehicle or, if a `vin` is provided, for a specified vehicle. 
-
-  2. `collision-deductible-comparison` (optional): Verifies if the provided `deductible` is less than or equal to the deductible specified in the collision coverage of the policy. This criteria will only run if `collision-exists` results in a `pass` and the optional `deductible` is provided.
-      -  If no `vin` is provided, the provided `deductible` will be verified against all collision coverages listed on the policy. 
-      - If a `vin` is provided, the provided `deductible` will be verified against only the collision coverage listed for the specified vehicle. 
-
-
-  | Status    | Cause                                                                                                    |
-| --------- | -------------------------------------------------------------------------------------------------------- |
-| `pass`    | The policy has collision coverage and meets all specified requirements (`deductible` and/or `vin` if provided) |
-| `fail`    | The policy either lacks collision coverage or doesn't meet the specified deductible requirements                      |
-| `unknown` | Not enough information was available to evaluate the coverage requirements 
-
-This Rule also returns a message and message code, which can be used to explain to the user why the Rule failed to result in a `pass`.
-
-| Message Code                        | Evaluation Status | Message                                                                                                                                                     |
-| ----------------------------------- | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| coll-exists          | `pass`            | The COLL coverage exists on this policy.                       |
-| coll-exists-for-vin          | `pass`            | The COLL coverage exists on this policy for the specified vehicle.                       |
-| coll-valid-deductible-for-vin          | `pass`            | The COLL coverage(s) on this policy for this specified vehicle have deductible(s) less than or equal to [inputDeductible].                       |
-| coll-valid-deductible          | `pass`            | The COLL coverage(s) on this policy have deductible(s) less than or equal to [inputDeductible].                       |
-| coll-does-not-exist          | `fail`            | The COLL coverage does not exist on this policy.                       |
-| coll-does-not-exist-for-vin          | `fail`            | The COLL coverage does not exist on this policy for the specified vehicle.                       |
-| coll-invalid-deductible-for-vin          | `fail`            | The COLL coverage(s) on this policy for this specified vehicle all have deductibles greater than [inputDeductible].                       |
-| coll-invalid-deductible          | `fail`            | The COLL coverage(s) on this policy all have deductibles greater than [inputDeductible].                       |
-| coll-unknown-deductible          | `unknown`            | The COLL coverage(s) on this policy have unknown deductibles.                       |
+    2. `collision-deductible-comparison` (optional): Verifies if the provided `deductible` is less than or equal to the deductible specified in the collision coverage of the policy. This criteria will only run if `collision-exists` results in a `pass` and the optional `deductible` is provided.
+        -  If no `vin` is provided, the provided `deductible` will be verified against all collision coverages listed on the policy. 
+        - If a `vin` is provided, the provided `deductible` will be verified against only the collision coverage listed for the specified vehicle. 
 
 
-**Example Usage**
+    | Status    | Cause                                                                                                    |
+  | --------- | -------------------------------------------------------------------------------------------------------- |
+  | `pass`    | The policy has collision coverage and meets all specified requirements (`deductible` and/or `vin` if provided) |
+  | `fail`    | The policy either lacks collision coverage or doesn't meet the specified deductible requirements                      |
+  | `unknown` | Not enough information was available to evaluate the coverage requirements 
 
-This example Rule will verify if the policy contains collision coverage for the vehicle with the given `vin` and that the `deductible` for that coverage is less than or equal to $1,000.
+  This Rule also returns a message and message code, which can be used to explain to the user why the Rule failed to result in a `pass`.
 
-```typescript Example Rule Request
-{
-  "rule": "collision-coverage-meets-requirements",
-  "input": {
+  | Message Code                        | Evaluation Status | Message                                                                                                                                                     |
+  | ----------------------------------- | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+  | coll-exists          | `pass`            | The COLL coverage exists on this policy.                       |
+  | coll-exists-for-vin          | `pass`            | The COLL coverage exists on this policy for the specified vehicle.                       |
+  | coll-valid-deductible          | `pass`            | The COLL coverage(s) on this policy have deductible(s) less than or equal to [inputDeductible].                       |
+  | coll-valid-deductible-for-vin          | `pass`            | The COLL coverage(s) on this policy for this specified vehicle have deductible(s) less than or equal to [inputDeductible].                       |
+  | coll-does-not-exist          | `fail`            | The COLL coverage does not exist on this policy.                       |
+  | coll-does-not-exist-for-vin          | `fail`            | The COLL coverage does not exist on this policy for the specified vehicle.                       |
+  | coll-invalid-deductible          | `fail`            | The COLL coverage(s) on this policy all have deductibles greater than [inputDeductible].                       |
+  | coll-invalid-deductible-for-vin          | `fail`            | The COLL coverage(s) on this policy for this specified vehicle all have deductibles greater than [inputDeductible].                       |
+  | coll-unknown-deductible          | `unknown`            | The COLL coverage(s) on this policy have unknown deductibles.                       |
+
+
+  **Example Usage**
+
+  This example Rule will verify if the policy contains collision coverage for the vehicle with the given `vin` and that the `deductible` for that coverage is less than or equal to $1,000.
+
+  ```typescript Example Rule Request
+  {
+    "rule": "collision-coverage-meets-requirements",
+    "input": {
+      "vin": "5FNRL38209B014050",
+      "deductible": 1000
+    }
+  }
+  ```
+
+  ```typescript Example Rule Response
+  "collision-coverage-meets-requirements": {
+        status: "pass",
+        metadata: {},
+        breakdown: {
+          "collision-exists": {
+            status: "pass",
+            metadata: {
+              coverages: [
+                {
+                  code: "COLL",
+                  label: "Collision",
+                  deductible: 500,
+                  property: "prp_tmGUxLpgHjmW9r6M6WjhS",
+                },
+              ],
+              input: {
+                coverageCode: "COLL",
+                vin: "5FNRL38209B014050",
+              }
+            },
+          },
+          "collision-deductible-comparison": {
+            status: "pass",
+            metadata: {
+              coverages: [
+                {
+                  code: "COLL",
+                  label: "Collision",
+                  deductible: 500,
+                  property: "prp_tmGUxLpgHjmW9r6M6WjhS",
+                },
+              ],
+              input: { deductible: 1000, vin: "5FNRL38209B014050" },
+            },
+          },
+        },
+        message: {
+          code: "coll-valid-deductible-for-vin",
+          displayText:
+            "The COLL coverage(s) on this policy for this specified vehicle have deductible(s) less than or equal to $1000.",
+        },
+      }
+  ```
+  </Accordion>
+  <Accordion title="Does Comprehensive Coverage Meet Requirements?">
+
+    ### `comprehensive-coverage-meets-requirements`
+
+    Evaluates whether the policy has comprehensive coverage and if the coverage meets specific deductible requirements. This rule can evaluate coverage requirements for a specific vehicle (using VIN) or for the entire policy.
+
+    **Input Parameters**
+    - `vin` (optional): The Vehicle Identification Number to check for comprehensive coverage specific to a vehicle.
+    - `deductible` (optional): A specific comprehensive deductible amount you want to verify against the policy.
+
+    **Evaluation Criteria**
+
+    The Rule is evaluated based on the following two criteria. Both of these criteria must be true for the `comprehensive-coverage-meets-requirements` Rule to resolve to `pass`.
+
+    1. `comprehensive-exists`: Determines if comprehensive coverage is present on the policy for any vehicle or, if a `vin` is provided, for a specified vehicle. 
+
+    2. `comprehensive-deductible-comparison` (optional): Verifies if the provided `deductible` is less than or equal to the deductible specified in the comprehensive coverage of the policy. This criteria will only run if `comprehensive-exists` results in a `pass` and the optional `deductible` is provided.
+      -  If no `vin` is provided, the provided `deductible` will be verified against all comprehensive coverages listed on the policy. 
+      - If a `vin` is provided, the provided `deductible` will be verified against only the comprehensive coverage listed for the specified vehicle. 
+
+
+    | Status    | Cause                                                                                                    |
+    | --------- | -------------------------------------------------------------------------------------------------------- |
+    | `pass`    | The policy has comprehensive coverage and meets all specified requirements (`deductible` and/or `vin` if provided) |
+    | `fail`    | The policy either lacks comprehensive coverage or doesn't meet the specified deductible requirements                      |
+    | `unknown` | Not enough information was available to evaluate the coverage requirements 
+
+    This Rule also returns a message and message code, which can be used to explain to the user why the Rule failed to result in a `pass`.
+
+    | Message Code                        | Evaluation Status | Message                                                                                                                                                     |
+    | ----------------------------------- | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+    | comp-exists          | `pass`            | The COMP coverage exists on this policy.                       |
+    | comp-exists-for-vin          | `pass`            | The COMP coverage exists on this policy for the specified vehicle.                       |
+    | comp-valid-deductible          | `pass`            | The COMP coverage(s) on this policy have deductible(s) less than or equal to [inputDeductible].                       |
+    | comp-valid-deductible-for-vin          | `pass`            | The COMP coverage(s) on this policy for this specified vehicle have deductible(s) less than or equal to [inputDeductible].                       |
+    | comp-does-not-exist          | `fail`            | The COMP coverage does not exist on this policy.                       |
+    | comp-does-not-exist-for-vin          | `fail`            | The COMP coverage does not exist on this policy for the specified vehicle.                       |
+    | comp-invalid-deductible          | `fail`            | The COMP coverage(s) on this policy all have deductibles greater than [inputDeductible].                       |
+    | comp-invalid-deductible-for-vin          | `fail`            | The COMP coverage(s) on this policy for this specified vehicle all have deductibles greater than [inputDeductible].                       |
+    | comp-unknown-deductible          | `unknown`            | The COMP coverage(s) on this policy have unknown deductibles.                       |
+
+
+    **Example Usage**
+
+    This example Rule will verify if the policy contains comprehensive coverage for the vehicle with the given `vin` and that the `deductible` for that coverage is less than or equal to $1,000.
+
+    ```typescript Example Rule Request
+    {
+    "rule": "comprehensive-coverage-meets-requirements",
+    "input": {
     "vin": "5FNRL38209B014050",
     "deductible": 1000
-  }
-}
-```
+    }
+    }
+    ```
 
-```typescript Example Rule Response
-"collision-coverage-meets-requirements": {
+    ```typescript Example Rule Response
+    "comprehensive-coverage-meets-requirements": {
       status: "pass",
       metadata: {},
       breakdown: {
-        "collision-exists": {
+        "comprehensive-exists": {
           status: "pass",
           metadata: {
             coverages: [
               {
-                code: "COLL",
-                label: "Collision",
+                code: "COMP",
+                label: "Comprehensive",
                 deductible: 500,
                 property: "prp_tmGUxLpgHjmW9r6M6WjhS",
               },
             ],
             input: {
-              coverageCode: "COLL",
+              coverageCode: "COMP",
               vin: "5FNRL38209B014050",
             }
           },
         },
-        "collision-deductible-comparison": {
+        "comprehensive-deductible-comparison": {
           status: "pass",
           metadata: {
             coverages: [
               {
-                code: "COLL",
-                label: "Collision",
+                code: "COMP",
+                label: "Comprehensive",
                 deductible: 500,
                 property: "prp_tmGUxLpgHjmW9r6M6WjhS",
               },
@@ -361,14 +461,11 @@ This example Rule will verify if the policy contains collision coverage for the 
         },
       },
       message: {
-        code: "coll-valid-deductible-for-vin",
+        code: "comp-valid-deductible-for-vin",
         displayText:
-          "The COLL coverage(s) on this policy for this specified vehicle have deductible(s) less than or equal to $1000.",
+          "The COMP coverage(s) on this policy for this specified vehicle have deductible(s) less than or equal to $1000.",
       },
     }
-```
-
-
-
+    ```
   </Accordion>
-  </AccordionGroup>
+</AccordionGroup>
