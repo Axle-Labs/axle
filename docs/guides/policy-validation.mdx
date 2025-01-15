@@ -269,7 +269,7 @@ The returned evaluation will include
   </Accordion>
   <Accordion title="Does Collision Coverage Meet My Requirements?">
 
-  ### `collision-coverage-meets-my-requirements`
+  ### `collision-coverage-meets-requirements`
   
   Evaluates whether the policy has collision coverage and if the coverage meets specific deductible requirements. This rule can evaluate coverage requirements for a specific vehicle (using VIN) or for the entire policy.
 
@@ -279,7 +279,7 @@ The returned evaluation will include
 
   **Evaluation Criteria**
 
-  The Rule is evaluated based on the following two criterias. Both of these criteria must be true for the `collision-coverage-meets-my-requirements` Rule to resolve to `pass`.
+  The Rule is evaluated based on the following two criterias. Both of these criteria must be true for the `collision-coverage-meets-requirements` Rule to resolve to `pass`.
 
   1. `collision-exists`: Determines if collision coverage is present on the policy for any vehicle or, if a `vin` is provided, for a specified vehicle. 
 
@@ -315,7 +315,7 @@ This example Rule will verify if the policy contains collision coverage for the 
 
 ```typescript Example Rule Request
 {
-  "rule": "collision-coverage-meets-my-requirements",
+  "rule": "collision-coverage-meets-requirements",
   "input": {
     "vin": "5FNRL38209B014050",
     "deductible": 1000
@@ -324,7 +324,7 @@ This example Rule will verify if the policy contains collision coverage for the 
 ```
 
 ```typescript Example Rule Response
-"collision-coverage-meets-my-requirements": {
+"collision-coverage-meets-requirements": {
       status: "pass",
       metadata: {},
       breakdown: {
