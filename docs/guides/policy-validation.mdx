@@ -314,10 +314,10 @@ The returned evaluation will include
 
   ```typescript Example Rule Request
   {
-    "rule": "collision-coverage-meets-requirements",
-    "input": {
-      "vin": "5FNRL38209B014050",
-      "deductible": 1000
+    rule: "collision-coverage-meets-requirements",
+    input: {
+      vin: "5FNRL38209B014050",
+      deductible: 1000
     }
   }
   ```
@@ -325,7 +325,12 @@ The returned evaluation will include
   ```typescript Example Rule Response
   "collision-coverage-meets-requirements": {
         status: "pass",
-        metadata: {},
+        metadata: {
+          input: {
+            vin: "5FNRL38209B014050",
+            deductible: 1000
+          }
+        },
         breakdown: {
           "collision-exists": {
             status: "pass",
@@ -415,18 +420,23 @@ The returned evaluation will include
 
     ```typescript Example Rule Request
     {
-    "rule": "comprehensive-coverage-meets-requirements",
-    "input": {
-    "vin": "5FNRL38209B014050",
-    "deductible": 1000
-    }
+      rule: "comprehensive-coverage-meets-requirements",
+      input: {
+        vin: "5FNRL38209B014050",
+        deductible: 1000
+      }
     }
     ```
 
     ```typescript Example Rule Response
     "comprehensive-coverage-meets-requirements": {
       status: "pass",
-      metadata: {},
+      metadata: {
+        input: {
+            vin: "5FNRL38209B014050",
+            deductible: 1000
+          }
+      },
       breakdown: {
         "comprehensive-exists": {
           status: "pass",
