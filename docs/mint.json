@@ -65,8 +65,8 @@
             "guides/policy-events"
           ]
         },
-        "guides/sandbox",
-        "guides/policy-validation"
+        "guides/policy-validation",
+        "guides/sandbox"
       ]
     },
     {
@@ -98,7 +98,7 @@
             "api-reference/policies/get-policy",
             "api-reference/policies/get-policy-report",
             "api-reference/policies/coverages",
-            "guides/policy-validation"
+            "api-reference/policies/validate-policy"
           ]
         },
         {
