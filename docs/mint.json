@@ -65,7 +65,8 @@
             "guides/policy-events"
           ]
         },
-        "guides/sandbox"
+        "guides/sandbox",
+        "guides/policy-validation"
       ]
     },
     {
