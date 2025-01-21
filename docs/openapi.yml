@@ -59,8 +59,8 @@ paths:
                   example-1:
                     success: true
                     data:
-                      ignitionToken: ur7EPeAa0km4wRlDrPJ4Z
-                      ignitionUri: "https://ignition.dev.axle.insure/?token=ur7EPeAa0km4wRlDrPJ4Z"
+                      ignitionToken: "ign_d83jd7n2hd75jDh6E575x"
+                      ignitionUri: "https://ignition.axle.insure/?token=ign_d83jd7n2hd75jDh6E575x"
                 properties:
                   success:
                     $ref: "#/components/schemas/Success"
@@ -82,8 +82,8 @@ paths:
               example:
                 success: true
                 data:
-                  ignitionToken: ur7EPeAa0km4wRlDrPJ4Z
-                  ignitionUri: "https://ignition.dev.axle.insure/?token=ur7EPeAa0km4wRlDrPJ4Z"
+                  ignitionToken: "ign_d83jd7n2hd75jDh6E575x"
+                  ignitionUri: "https://ignition.axle.insure/?token=ign_d83jd7n2hd75jDh6E575x"
       deprecated: false
       tags:
         - Ignition
