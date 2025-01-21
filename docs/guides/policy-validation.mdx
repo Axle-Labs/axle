@@ -223,7 +223,7 @@ username: user-rental-cover
 password: pass-rental-cover
 ```
 
-      </Accordion>
+  </Accordion>
 
   <Accordion title="Policy Expiration Date Comparison">
   ### `expiration-date-comparison`
@@ -477,6 +477,48 @@ The returned evaluation will include
         displayText:
           "The COMP coverage(s) on this policy for this specified vehicle have deductible(s) less than or equal to $1000.",
       },
+    }
+    ```
+  </Accordion>
+  <Accordion title="Insureds Match">
+    ### `insureds-match`
+
+    Evaluates whether all of the input insured names are listed on the Axle policy. 
+
+    | Status    | Cause                                                                |
+    | --------- | -------------------------------------------------------------------- |
+    | `pass`    | All of the input insured names are listed on the Axle policy. |
+    | `caution`    | One or more of the input insured names passed a fuzzy match. This occurs when either the input name or Axle policy name is missing an additional first name or middle name (e.g. "John Tracy Smith" vs. "John Smith"). |
+    | `fail`    | One or more of the input insured names were not listed on the Axle policy.      |
+    | `unknown` | An error occurred during validation.                              |
+
+    **Input Parameters**
+    - `insuredNames`: An array of full names provided as strings. Each name should be provided in the format `"firstName middleName lastName suffix"`
+
+    <Info>
+    This Rule currently does not support nickname matching. Please contact the Axle team if this is a feature of interest. 
+    </Info>
+    
+    **Example Usage**
+
+    ```typescript Example Rule Request
+    {
+      "rule": "insureds-match",
+      "input": {
+        "insuredNames": ["John Tracy Smith", "Alex Jacob Smith", "Jane Doe"]
+      }
+    }
+    ```
+
+    ```typescript Example Rule Response
+    "insureds-match": {
+      "status": "fail",
+      "metadata": {
+        "pass": ["John Tracy Smith", "Alex Jacob Smith"],
+        "fail": ["Jane Doe"],
+        "caution": [],
+        "unknown": [],
+      }
     }
     ```
   </Accordion>
