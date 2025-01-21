@@ -97,7 +97,8 @@
             "api-reference/policies/policy",
             "api-reference/policies/get-policy",
             "api-reference/policies/get-policy-report",
-            "api-reference/policies/coverages"
+            "api-reference/policies/coverages",
+            "guides/policy-validation"
           ]
         },
         {
