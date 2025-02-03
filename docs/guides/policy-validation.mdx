@@ -538,8 +538,11 @@ The returned evaluation will include
     | ------ | ---------------------------------------------------------------------------------------------- |
     | `pass`   | The policy has all required fields, or there is a declarations page (or both).                 |
     | `fail`   | Neither the required fields nor a declarations page could be confirmed on the policy.          |
-    
 
+
+    **Input Parameters**
+    - `requiredFields`: An object used to specify which fields must exist on the policy. Each key maps to a boolean (or nested object / array structure) indicating whether that particular field is required. The shape of the object mirrors the Axle Policy Schema. 
+    
     Below is an example request specifying the required fields. If either the required fields or the declarations page check is satisfied, the Rule evaluates to `pass`.
 
     ```typescript Example Rule Request
