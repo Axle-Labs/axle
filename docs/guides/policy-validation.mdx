@@ -88,7 +88,7 @@ The response also contains two other fields:
 </Info>
 
 <AccordionGroup>
-  <Accordion title="Policy Active">
+  <Accordion title="Policy is Active">
   ### `policy-active`
 
 Evaluates whether the policy is currently active.
@@ -110,7 +110,7 @@ Evaluates whether the policy is currently active.
 ```
 
   </Accordion>
-  <Accordion title="Rental Vehicle Covered For Collision Damage">
+  <Accordion title="Rental Vehicle is Covered For Collision Damage">
     ### `rental-covered-for-collision`
 
     Evaluates the likelihood that the policy provides coverage for collision damage when an insured is driving a rental vehicle, based on the collision coverage available on the policy and the policy terms of insurance agreements similar to the one used by this policy.
@@ -225,7 +225,7 @@ password: pass-rental-cover
 
   </Accordion>
 
-  <Accordion title="Policy Expiration Date Comparison">
+  <Accordion title="Policy Expiration Date is After Provided Date">
   ### `expiration-date-comparison`
 
 Given an input date, evaluates whether the policy's expiration date is greater than or equal to (on or after) the input date.
@@ -267,7 +267,7 @@ The returned evaluation will include
 ```
 
   </Accordion>
-  <Accordion title="Collision Coverage Meet Requirements">
+  <Accordion title="Collision Coverage Meets Requirements">
     ### `collision-coverage-meets-requirements`
     
     Evaluates whether the policy has collision coverage and if the coverage meets specific deductible requirements. This rule can evaluate coverage requirements for a specific vehicle (using VIN) or for the entire policy.
@@ -373,7 +373,7 @@ The returned evaluation will include
       }
   ```
   </Accordion>
-  <Accordion title="Comprehensive Coverage Meet Requirements">
+  <Accordion title="Comprehensive Coverage Meets Requirements">
 
     ### `comprehensive-coverage-meets-requirements`
 
@@ -524,8 +524,8 @@ The returned evaluation will include
     }
     ```
   </Accordion>
-    <Accordion title="Required Information Available">
-    ### `required-information-available`
+    <Accordion title="Required Policy Information is Present">
+    ### `required-policy-information-is-present`
 
     Evaluates if the policy either has (1) certain required fields present OR (2) at least one declarations page. If either sub-check passes, the overall Rule resolves to `pass`. Otherwise, it resolves to `fail`.
 
@@ -547,7 +547,7 @@ The returned evaluation will include
 
     ```typescript Example Rule Request
     {
-      "rule": "required-information-available",
+      "rule": "required-policy-information-is-present",
       "input": {
          "requiredFields": {
             "carrier": true,
@@ -573,13 +573,13 @@ The returned evaluation will include
     ```
 
     ```typescript Example Rule Response
-    "required-information-available": {
+    "required-policy-information-is-present": {
         "status": "pass",
         "summary": {
-            "required-information-available": "pass"
+            "required-policy-information-is-present": "pass"
         },
         "rules": {
-            "required-information-available": {
+            "required-policy-information-is-present": {
                 "status": "pass",
                 "breakdown": {
                     "fieldsExist": {
