@@ -527,12 +527,12 @@ The returned evaluation will include
     <Accordion title="Required Policy Information is Present">
     ### `required-policy-information-is-present`
 
-    Evaluates if the policy either has (1) certain required fields present OR (2) at least one declarations page. If either sub-check passes, the overall Rule resolves to `pass`. Otherwise, it resolves to `fail`.
+    Evaluates if the policy either has (1) certain required fields present OR (2) at least one declarations page. If either sub-rule passes, the overall Rule resolves to `pass`. Otherwise, it resolves to `fail`.
 
-    This Rule combines two separate checks:
+    This Rule combines two separate sub-rules:
 
-      1. `fieldsExist` – Verifies that all fields specified by your `requiredFields` input are present on the policy. If every requested field is found, this check resolves to `pass`; otherwise, it resolves to `fail` and includes a `missingFields` list in the metadata.
-      2. `declarationsPageExists` – Checks whether the policy has at least one document classified by Axle as a declaration page. 
+      1. `fields-exist` – Verifies that all fields specified by your `requiredFields` input are present on the policy. If every requested field is found, this Rule resolves to `pass`; otherwise, it resolves to `fail` and includes a `missingFields` list in the metadata.
+      2. `declarations-page-exists` – Checks whether the policy has at least one document classified by Axle as a declaration page. 
 
     | Status | Cause                                                                                          |
     | ------ | ---------------------------------------------------------------------------------------------- |
@@ -582,13 +582,13 @@ The returned evaluation will include
             "required-policy-information-is-present": {
                 "status": "pass",
                 "breakdown": {
-                    "fieldsExist": {
+                    "fields-exist": {
                         "status": "pass",
                         "metadata": {
                             "missingFields": []
                         }
                     },
-                    "declarationsPageExists": {
+                    "declarations-page-exists": {
                         "status": "pass",
                         "metadata": {
                             "documents": [
