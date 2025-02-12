@@ -29,12 +29,12 @@ description: "A Policy represents a specific policy associated with an
   
   `auto` `motorcycle` `home` `condo`
 
-  Rules applied:
+Rules applied:
 
-  1. `auto` includes non-owned auto insurance policies but does not include commercial or business auto insurance policies.
-  2. `home` includes HO-1, HO-2, HO-3, HO-5, HO-7, and HO-8 homeowners insurance policies. It also includes landlord and specialty fire policies. It does not include HO-4 (i.e. renter’s policies).
-  3. `condo` is equivalent to an HO-6 insurance policy.
-</ParamField>
+1. `auto` includes non-owned auto insurance policies but does not include commercial or business auto insurance policies.
+2. `home` includes HO-1, HO-2, HO-3, HO-5, HO-7, and HO-8 homeowners insurance policies. It also includes landlord and specialty fire policies. It does not include HO-4 (i.e. renter’s policies).
+3. `condo` is equivalent to an HO-6 insurance policy.
+   </ParamField>
 
 <ParamField body="carrier" type="string">
   Insurance carrier that is the source for the Policy data.
@@ -49,10 +49,10 @@ description: "A Policy represents a specific policy associated with an
   Ignition session is completed with result: `manual`, this field will be
   undefined.
 
-  Rules applied:
+Rules applied:
 
-  1. isActive `true` includes policies that are specified as active but may also include policies in pre-effective or pending cancellation statuses that are marked as active by the carrier.
-</ParamField>
+1. isActive `true` includes policies that are specified as active but may also include policies in pre-effective or pending cancellation statuses that are marked as active by the carrier.
+   </ParamField>
 
 <ParamField body="effectiveDate" type="string or null">
   ISO 8601 timestamp of current term effective date of the policy, as specified
@@ -278,23 +278,23 @@ Rules applied:
     </ResponseField>
 
     <ResponseField name="dateOfBirthYear" type="string or null">
-      The birth year of the insured individual. This field is only available for select carriers.
+      The birth year of the insured individual. **Note:** This field is only available for select carriers.
     </ResponseField>
 
     <ResponseField name="licenseNo" type="string or null">
-      The driver's license number of the insured individual. This field is only available for select carriers.
+      The driver's license number of the insured individual. **Note:** This field is only available for select carriers.
     </ResponseField>
 
     <ResponseField name="licenseState" type="string or null">
-      The state that issued the insured individual's driver's license. This field is only available for select carriers.
+      The state that issued the insured individual's driver's license. **Note:** This field is only available for select carriers.
     </ResponseField>
 
     <ResponseField name="licenseStatus" type="string or null">
-      The current status of the insured individual's driver's license. This field is only available for select carriers.
+      The current status of the insured individual's driver's license. **Note:** This field is only available for select carriers.
     </ResponseField>
 
     <ResponseField name="dateOfBirth" type="string or null">
-      The insured individual's date of birth in a standard date format. This field is only available for select carriers.
+      The insured individual's date of birth in a standard date format. **Note:** This field is only available for select carriers.
     </ResponseField>
 
     <ResponseField name="property" type="string or null (optional)" >
@@ -312,7 +312,7 @@ List of external parties with interest in the policy.
     <Expandable title="ThirdParty">
 
         <ResponseField name="type" type="string" default="interest">
-          The role of the Third Party associated with the insured property. Note that this field is in continued development and is subject to modification.
+          The role of the Third Party associated with the insured property. **Note:** this field is in continued development and is subject to modification.
 
           The Axle Schema currently supports the following Third Party options. See below for details on Axle's standardization of Third Party type based on data provided by the insurance carrier.
 
@@ -334,7 +334,7 @@ List of external parties with interest in the policy.
         </ResponseField>
 
         <ResponseField name="address" type="Address">
-            The address of the Third Party.
+            The address of the Third Party. **Note:** This field may not be available for all carriers.
         </ResponseField>
 
         <ResponseField name="property" type="string or null" >
