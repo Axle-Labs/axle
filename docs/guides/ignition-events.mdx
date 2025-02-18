@@ -18,7 +18,7 @@ body:
 
 - `redirectUri` (optional) - the URL Axle Ignition will redirect the user to upon completion, exit, or error outcomes of the Ignition session, defaults to no redirect
 - `webhookUri` (optional) - the URL Axle will send events to as the user proceeds through the Ignition session, defaults to no webhook events
-- `user` (optional in production; required in the sandbox) - optional user to attach. Please refer to [startIgnition](/api-reference/ignition/start-ignition) for more details.
+- `user` (required) - user to attach. Please refer to [startIgnition](/api-reference/ignition/start-ignition) for more details.
 - `metadata` (optional) - optional Ignition session metadata, please refer to [startIgnition](/api-reference/ignition/start-ignition) for more details
 
 ```bash Request Sample
@@ -29,8 +29,9 @@ curl --request POST \
   --header 'x-client-secret: RZM-5BErZuChKqycbCS1O' \
   --data '{
   "redirectUri": "https://example.com/insurance/redirect",
-  "webhookUri": "https://example.com/insurance/webhook"
-}
+  "webhookUri": "https://example.com/insurance/webhook",
+  "user": {"id": "usr_123456789"}
+  }'
 ```
 
 <Note>
