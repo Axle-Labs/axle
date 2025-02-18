@@ -43,9 +43,13 @@ paths:
                 metadata:
                   type: object
                   description: Optional object to store ephermeral information about the session, such as `reservationTime`. Will be returned in webhook events.
+              required:
+                - user
             example:
               redirectUri: "https://example.com/redirect"
               webhookUri: "https://example.com/webhook"
+              user:
+                id: "usr_123456789"
         required: true
       responses:
         "200":
@@ -1370,11 +1374,12 @@ components:
           firstName: "John"
           lastName: "Smith"
           email: "john@smith.com"
-      description: User to attach to Ignition session. If user is set, unique `id` must be provided. Will be returned in webhook events.
+      description: |-
+        User to attach to Ignition session. This object is used to identify the user that is associated with the Ignition session, enabling consolidated metrics, easy matching for webhook events, and upcoming features.
       properties:
         id:
           type: string
-          description: Your application's unique user id.
+          description: Your application's unique, public user id. If a public id is not available, it is recommended to encrypt any unique user identifier (e.g., email or username) to create a public id.
         firstName:
           type: string
           description: User's first name.
