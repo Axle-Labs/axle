@@ -48,3 +48,15 @@ This event type indicates details on the Policy changed. Refer to [Policy](/api-
   event. This may cause a short delay between when policy information was refreshed
   from the carrier and when you receive notification of the event.{" "}
 </Note>
+
+#### Special Policy Changes
+
+<AccordionGroup>
+  <Accordion title="Policy isActive changes to null">
+  
+    If a `policy.modified` [event](/guides/policy-events) indicates that a policy’s `isActive` field has changed to `null`, then
+    the policy may have been removed from the account. It is recommended to reach out to the user to re-connect the policy for the existing
+    account or link a new account.
+  </Accordion>
+
+</AccordionGroup>
