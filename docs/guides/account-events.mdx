@@ -39,11 +39,11 @@ A `POST` request will be sent to the `webhookUri` with the following payload. Al
 
 ### account.modified
 
-When identifying details on the Account change. Refer to [Account](/api-reference/accounts/account) for more details on the fields that can be modified.
+This event type indicates details on the Account changed. Refer to [Account](/api-reference/accounts/account) for more details on the fields that can be modified.
 
 ### account.disconnected
 
-When Account `connection.status` is no longer "active", meaning Axle is no longer able to monitor the policies present on the account.
+This event type indicates the Account `connection.status` is no longer "active", meaning Axle is no longer able to monitor the policies present on the account.
 
 ```json Additional data parameters (example)
 {

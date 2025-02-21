@@ -40,7 +40,7 @@ A `POST` request will be sent to the `webhookUri` with the following payload. Al
 
 ### policy.modified
 
-When identifying details on the Policy change. Refer to the [Policy](/api-reference/policies/policy) object reference for more details on the fields that can be modified.
+This event type indicates details on the Policy changed. Refer to [Policy](/api-reference/policies/policy) for more details on the fields that can be modified.
 
 <Note>
   {" "}
@@ -48,3 +48,15 @@ When identifying details on the Policy change. Refer to the [Policy](/api-refere
   event. This may cause a short delay between when policy information was refreshed
   from the carrier and when you receive notification of the event.{" "}
 </Note>
+
+#### Special Policy Changes
+
+<AccordionGroup>
+  <Accordion title="Policy isActive changes to null">
+  
+    If a `policy.modified` [event](/guides/policy-events) indicates that a policy’s `isActive` field has changed to `null`, then
+    the policy may have been removed from the account. It is recommended to reach out to the user to re-connect the policy for the existing
+    account or link a new account.
+  </Accordion>
+
+</AccordionGroup>
