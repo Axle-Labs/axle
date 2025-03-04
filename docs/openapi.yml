@@ -88,6 +88,10 @@ paths:
                 data:
                   ignitionToken: "ign_d83jd7n2hd75jDh6E575x"
                   ignitionUri: "https://ignition.axle.insure/?token=ign_d83jd7n2hd75jDh6E575x"
+        "400":
+          $ref: "#/components/responses/InputValidation"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
       deprecated: false
       tags:
         - Ignition
@@ -156,6 +160,10 @@ paths:
                 required:
                   - success
                   - data
+        "400":
+          $ref: "#/components/responses/InputValidation"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
       deprecated: false
       tags:
         - Tokens
@@ -206,6 +214,10 @@ paths:
                       accessToken:
                         type: string
                         description: The token required for access to the requested Account and Policy objects.
+        "400":
+          $ref: "#/components/responses/InputValidation"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
       deprecated: false
       tags:
         - Tokens
@@ -236,6 +248,10 @@ paths:
                     $ref: "#/components/schemas/Success"
                   data:
                     $ref: "#/components/schemas/Account"
+        "400":
+          $ref: "#/components/responses/InputValidation"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
       deprecated: false
       tags:
         - Accounts
@@ -266,6 +282,10 @@ paths:
                     $ref: "#/components/schemas/Success"
                   data:
                     $ref: "#/components/schemas/Policy"
+        "400":
+          $ref: "#/components/responses/InputValidation"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
       deprecated: false
       tags:
         - Policies
@@ -295,6 +315,10 @@ paths:
                     $ref: "#/components/schemas/Success"
                   data:
                     $ref: "#/components/schemas/PolicyReport"
+        "400":
+          $ref: "#/components/responses/InputValidation"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
       deprecated: false
       tags:
         - Policies
@@ -384,6 +408,10 @@ paths:
                             required:
                               - status
                               - metadata
+        "400":
+          $ref: "#/components/responses/InputValidation"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
     parameters:
       - $ref: "#/components/parameters/policy"
   /carriers/{id}:
@@ -405,6 +433,10 @@ paths:
                     $ref: "#/components/schemas/Success"
                   data:
                     $ref: "#/components/schemas/Carrier"
+        "400":
+          $ref: "#/components/responses/InputValidation"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
       deprecated: false
       tags:
         - Carriers
@@ -431,6 +463,10 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/Carrier"
+        "400":
+          $ref: "#/components/responses/InputValidation"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
       deprecated: false
       tags:
         - Carriers
@@ -462,6 +498,10 @@ paths:
                       oneOf:
                         - type: string
                         - $ref: "#/components/schemas/DestinationClient"
+        "400":
+          $ref: "#/components/responses/InputValidation"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
       deprecated: false
       tags:
         - Clients
@@ -516,6 +556,10 @@ paths:
                 required:
                   - success
                   - data
+        "400":
+          $ref: "#/components/responses/InputValidation"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
       deprecated: false
       tags:
         - Clients
@@ -556,6 +600,10 @@ paths:
                 required:
                   - success
                   - data
+        "400":
+          $ref: "#/components/responses/InputValidation"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
       deprecated: false
       tags:
         - Sandbox
@@ -598,6 +646,10 @@ paths:
                 required:
                   - success
                   - data
+        "400":
+          $ref: "#/components/responses/InputValidation"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
       deprecated: false
       tags:
         - Sandbox
@@ -642,6 +694,10 @@ paths:
                 properties:
                   success:
                     $ref: "#/components/schemas/Success"
+        "400":
+          $ref: "#/components/responses/InputValidation"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
       deprecated: false
       tags:
         - Ignition
@@ -1595,7 +1651,32 @@ components:
           - "pdf"
           - "jpeg"
       description: "Specify desired return format of the report. Options: `pdf` or `jpeg`. Defaults to `pdf`."
-  responses: {}
+  responses:
+    InputValidation:
+      description: "The request body is invalid. See the error message for details."
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+                example: false
+              message:
+                type: string
+                example: "Input validation failed due to one or more missing or invalid parameters. Review the request and try again."
+    TooManyRequests:
+      description: "Rate limit exceeded. The client has sent too many requests in a given amount of time."
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Too Many Requests"
+            required:
+              - message
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
