@@ -287,13 +287,11 @@ The returned evaluation will include
         -  If no `vin` is provided, the provided `deductible` will be verified against all collision coverages listed on the policy.
         - If a `vin` is provided, the provided `deductible` will be verified against only the collision coverage listed for the specified vehicle.
 
-
-    | Status    | Cause                                                                                                    |
-
-| --------- | -------------------------------------------------------------------------------------------------------- |
-| `pass` | The policy has collision coverage and meets all specified requirements (`deductible` and/or `vin` if provided) |
-| `fail` | The policy either lacks collision coverage or doesn't meet the specified deductible requirements |
-| `unknown` | Not enough information was available to evaluate the coverage requirements
+| Status    | Cause                                                                                                          |
+| --------- | -------------------------------------------------------------------------------------------------------------- |
+| `pass`    | The policy has collision coverage and meets all specified requirements (`deductible` and/or `vin` if provided) |
+| `fail`    | The policy either lacks collision coverage or doesn't meet the specified deductible requirements               |
+| `unknown` | Not enough information was available to evaluate the coverage requirements                                     |
 
 This Rule also returns a message and message code, which can be used to explain to the user why the Rule failed to result in a `pass`.
 

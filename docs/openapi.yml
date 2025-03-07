@@ -1512,13 +1512,16 @@ components:
         rule:
           type: string
           enum:
+            - "collision-coverage-meets-requirements"
+            - "comprehensive-coverage-meets-requirements"
             - "expiration-date-comparison"
+            - "insureds-match"
+            - "required-policy-information-is-present"
         input:
           type: object
-          description: Additional input required to evaluate the rule. See [Supported Rules](/guides/policy-validation#supported-rules) for details on which Rules require additional input.
+          description: Additional input to evaluate the rule. See [Supported Rules](/guides/policy-validation#supported-rules) for details on which Rules require additional input.
       required:
         - rule
-        - input
     RuleWithNoInput:
       title: Rule With No Input
       type: object
