@@ -677,8 +677,7 @@ paths:
                   type: string
                   description: The proxy operation to be completed.
                   enum:
-                    - proxy
-                  example: "proxy"
+                    - process-document
                 input:
                   type: object
                   description: The input provided will be unique to the proxy type specified.
