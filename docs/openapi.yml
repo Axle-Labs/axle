@@ -1668,7 +1668,7 @@ components:
                 type: string
                 example: "Input validation failed due to one or more missing or invalid parameters. Review the request and try again."
     TooManyRequests:
-      description: "Rate limit exceeded. The client has sent too many requests in a given amount of time."
+      description: "Rate limit exceeded. This is only to protect Axle systems against errant or abnormal request volume. The limit is sufficiently high for all normal usage."
       content:
         application/json:
           schema:
