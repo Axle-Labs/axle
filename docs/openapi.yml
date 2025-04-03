@@ -1284,6 +1284,11 @@ components:
         use:
           type: string
           nullable: true
+          enum:
+            - pleasure
+            - commute
+            - business
+            - farm
       required:
         - vin
         - model
