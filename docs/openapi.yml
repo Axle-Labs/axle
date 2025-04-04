@@ -1204,6 +1204,7 @@ components:
           model: CR-V
           year: "2017"
           make: HONDA
+          use: "pleasure"
       x-internal: false
       properties:
         id:
@@ -1262,6 +1263,7 @@ components:
         model: CR-V
         year: "2017"
         make: HONDA
+        use: "pleasure"
       x-internal: false
       properties:
         bodyStyle:
@@ -1279,6 +1281,14 @@ components:
         make:
           type: string
           nullable: true
+        use:
+          type: string
+          nullable: true
+          enum:
+            - pleasure
+            - commute
+            - business
+            - farm
       required:
         - vin
         - model
