@@ -533,13 +533,13 @@ This example Rule will verify if the policy contains collision coverage for the 
 
     | Status    | Cause                                                                |
     | --------- | -------------------------------------------------------------------- |
-    | `pass`    | Input `addressLine1`, `addressLine2`, and `postalCode` matches Axle policy  |
-    | `caution`    | Input `addressLine1` and `postalCode` match, but `addressLine2` does not match  |
-    | `fail`    | Either `addressLine1` or `postalCode` do not match between provided input and Axle policy address    |
-    | `unknown` | Axle policy does not have addressLine1 or postalCode. Alternatively, it could indicate an error during validation.                              |
+    | `pass`    | Input address matches Axle Policy address  |
+    | `caution`    | Input and Axle policy `addressLine2` do not match  |
+    | `fail`    | Input address does not match Axle Policy address    |
+    | `unknown` | There is insufficient information to compare input address and Axle Policy address.                              |
 
     **Input Parameters**
-    - `address`: Full address provided as a `string` that includes both Address Line 1 and 2 along with postal code, and state.
+    - `address`: Full address provided as a `string` that includes both Address Line 1 and 2 along with city, postal code, and state.
 
 
     **Example Usage**
@@ -557,7 +557,7 @@ This example Rule will verify if the policy contains collision coverage for the 
     "address-match": {
       "status": "pass",
       "metadata": {
-        "policyAddress" : {
+        "address" : {
             "addressLine1": "123 Axle Street NE",
             "addressLine2": "APT 111",
             "city": "Atlanta",
@@ -565,7 +565,7 @@ This example Rule will verify if the policy contains collision coverage for the 
             "postalCode": "30303",
             "country": "US"
         },
-        "inputAddress": {
+        "input": {
             "addressLine1": "123 Axle Street NE",
             "addressLine2": "APT 111",
             "city": "Atlanta",
