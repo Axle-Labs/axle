@@ -526,6 +526,58 @@ This example Rule will verify if the policy contains collision coverage for the 
     ```
 
   </Accordion>
+  <Accordion title="Address Match">
+    ### `address-match`
+
+    Evaluates whether input address matches the address that is listed on the Axle policy.
+
+    | Status    | Cause                                                                |
+    | --------- | -------------------------------------------------------------------- |
+    | `pass`    | Input address matches Axle Policy address  |
+    | `caution`    | Input and Axle policy `addressLine2` do not match  |
+    | `fail`    | Input address does not match Axle Policy address    |
+    | `unknown` | There is insufficient information to compare input address and Axle Policy address.                              |
+
+    **Input Parameters**
+    - `address`: Full address provided as a `string` that includes both Address Line 1 and 2 along with city, postal code, and state.
+
+
+    **Example Usage**
+
+    ```typescript Example Rule Request
+    {
+      "rule": "address-match",
+      "input": {
+        "address": "123 Axle St. NE, Apartment 111, Atlanta, GA 30303"
+      }
+    }
+    ```
+
+    ```typescript Example Rule Response
+    "address-match": {
+      "status": "pass",
+      "metadata": {
+        "address" : {
+            "addressLine1": "123 Axle Street NE",
+            "addressLine2": "APT 111",
+            "city": "Atlanta",
+            "state": "GA",
+            "postalCode": "30303",
+            "country": "US"
+        },
+        "input": {
+            "addressLine1": "123 Axle Street NE",
+            "addressLine2": "APT 111",
+            "city": "Atlanta",
+            "state": "GA",
+            "postalCode": "30303",
+            "country": "US"
+        }
+      }
+    }
+    ```
+
+  </Accordion>
     <Accordion title="Required Policy Information is Present">
     ### `required-policy-information-is-present`
 
