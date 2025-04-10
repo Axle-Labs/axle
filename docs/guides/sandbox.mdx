@@ -72,6 +72,35 @@ username: user-error
 password: pass-error
 ```
 
+#### Using test inputs to complete Policy Lookup
+
+1. After generating an `Ignition` session, select one of the below test inputs based on which Axle scenario you would like to test. These inputs can only be used for carriers that support Policy Lookup.
+2. Navigate to a carrier which supports Policy Lookup.
+3. Click on "Search your policy number" to arrive at the Policy Lookup page.
+4. Type in the test inputs and click on "Search" to simulate searching for policy details from the selected carrier.
+
+After seeing the Success page, you can now access sample [Account](/api-reference/accounts/account) or [Policy](/api-reference/policies/policy) objects after exchanging the generated `authCode` for an `accessToken`. See the [Quickstart](/guides/quickstart) guide for more details.
+
+#### Test credentials
+
+**`auto`**
+
+The following test inputs will connect to a sample `auto` policy.
+
+```
+Policy number: A123456789
+Last 5 of your VIN: any 5 digit input (e.g. 12345)
+```
+
+**Error**
+
+The following inputs will fail to connect to the Axle service, resulting in an `errored` status for the Ignition session.
+
+```
+Policy number: error
+Last 5 of your VIN: any 5 digit input (e.g. 12345)
+```
+
 ### Result: `manual`
 
 You can complete Ignition sessions manually by selecting "My carrier is not listed" on the carrier selection page and then uploading any document of the allowed types (defaults to `pdf`, `jpg`, `jpeg`, `png`).
