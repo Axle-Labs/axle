@@ -1523,6 +1523,8 @@ components:
           enum:
             - "collision-coverage-meets-requirements"
             - "comprehensive-coverage-meets-requirements"
+            - "bodily-injury-coverage-meets-requirements"
+            - "property-damage-coverage-meets-requirements"
             - "expiration-date-comparison"
             - "insureds-match"
             - "required-policy-information-is-present"
