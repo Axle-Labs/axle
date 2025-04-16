@@ -481,6 +481,206 @@ This example Rule will verify if the policy contains collision coverage for the 
     ```
 
   </Accordion>
+
+  <Accordion title="Bodily Injury Coverage Meets Requirements">
+   ### `bodily-injury-coverage-meets-requirements`
+
+    Evaluates whether the policy has bodily injury coverage and if the coverage meets specific limit requirements.
+
+    **Input Parameters**
+    - `limitPerPerson` (optional): The limitPerPerson amount you want to verify against the policy.
+    - `limitPerAccident` (optional): The limitPerAccident amount you want to verify against the policy.
+
+    **Evaluation Criteria**
+
+    The Rule is evaluated based on the following criteria, depending on if any limit was passed in. If no limits are passed in, then the Rule is evaluated based off if bodily injury coverage exists on the policy.
+
+    1. `bodily-injury-exists`: Determines if bodily injury coverage is present on the policy.
+
+    2. `bodily-injury-limit-per-person-comparison` (if applicable): Determines if the `limitPerPerson` specified on the bodily injury coverage on the policy is greater than or equal to the provided `limitPerPerson`.
+
+    3. `bodily-injury-limit-per-accident-comparison` (if applicable): Determines if the `limitPerAccident` specified on the bodily injury coverage on the policy is greater than or equal to the provided `limitPerAccident`.
+
+    | Status    | Cause                                                                                                    |
+    | --------- | -------------------------------------------------------------------------------------------------------- |
+    | `pass`    | The policy has bodily injury coverage and meets all specified limit requirements                         |
+    | `fail`    | The policy either lacks bodily injury coverage or doesn't meet the specified limit requirements          |
+    | `unknown` | Not enough information was available to evaluate the coverage requirements
+
+
+    This Rule also returns a message and message code which can be used to explain to the user why the Rule failed to result in a `pass`.
+
+    | Message Code                        | Evaluation Status | Message                                                                                                                                                     |
+    | ----------------------------------- | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+    | bodily-injury-exists          | `pass`            | The BI coverage exists on this policy.                       |
+    | bodily-injury-valid-limit-per-person        | `pass`            | The BI coverage on this policy has a limitPerPerson greater than or equal to [inputLimitPerPerson].               |
+    | bodily-injury-valid-limit-per-accident         | `pass`            | The BI coverage on this policy has a limitPerAccident greater than or equal to [inputLimitPerAccident].                       |
+    | bodily-injury-valid-limits          | `pass`            | The BI coverage on this policy has limits greater than or equal to [inputLimitPerPerson] per person and [inputLimitPerAccident] per accident.                       |
+    | bodily-injury-invalid-limit-per-person        | `fail`            | The BI coverage on this policy has a limitPerPerson less than to [inputLimitPerPerson].               |
+    | bodily-injury-invalid-limit-per-accident         | `fail`            | The BI coverage on this policy has a limitPerAccident less than to [inputLimitPerAccident].                       |
+    | bodily-injury-invalid-limits          | `fail`            | The BI coverage on this policy has limits less than to [inputLimitPerPerson] per person and [inputLimitPerAccident] per accident.                       |
+    | bodily-injury-unknown-limit-per-person        | `unknown`            | The BI coverage on this policy has a limitPerPerson that is unknown.               |
+    | bodily-injury-unknown-limit-per-accident         | `unknown`            | The BI coverage on this policy has a limitPerAccident that is unknown.                       |
+
+
+    **Example Usage**
+
+    This example Rule will verify if the policy has bodily injury coverage and if the limitPerPerson on the coverage is greater than or equal to $200,000.
+
+    ```typescript Example Rule Request
+    {
+      rule: "bodily-injury-coverage-meets-requirements",
+      input: {
+        limitPerPerson: 200000
+      }
+    }
+    ```
+
+    ```typescript Example Rule Response
+    "bodily-injury-coverage-meets-requirements": {
+      status: "pass",
+      metadata: {
+        input: {
+          limitPerPerson: 200000,
+          limitPerAccident: undefined
+        }
+      },
+      breakdown: {
+        "bodily-injury-exists": {
+          status: "pass",
+          metadata: {
+            coverages: [
+              {
+                code: "BI",
+                label: "Bodily Injury",
+                limitPerPerson: 250000,
+                limitPerAccident: 500000
+              },
+            ],
+            input: {
+              coverageCode: "BI"
+            }
+          }
+        },
+        "bodily-injury-limit-per-person-comparison": {
+          status: "pass",
+          metadata: {
+            coverages: [
+              {
+                code: "BI",
+                label: "Bodily Injury",
+                limitPerPerson: 250000,
+                limitPerAccident: 500000,
+              },
+            ],
+            input: {
+              limitPerPerson: 200000,
+            },
+          },
+        },
+      },
+      message: {
+        code: "bodily-injury-valid-limit-per-person",
+        displayText: "The BI coverage on this policy has a limitPerPerson greater than or equal to $200000.",
+      }
+    }
+    ```
+
+  </Accordion>
+  
+  <Accordion title="Property Damage Coverage Meets Requirements">
+    ### `property-damage-meets-requirements`
+
+    Evaluates whether the policy has property damage coverage and if the coverage meets specific limit requirements.
+
+    **Input Parameters**
+    - `limitPerAccident` (optional): The limitPerAccident amount you want to verify against the policy.
+
+    **Evaluation Criteria**
+
+    The Rule is evaluated based on the following criteria, depending on if any limit was passed in. If no limits are passed in, then the Rule is evaluated based off if property damage coverage exists on the policy.
+
+    1. `property-damage-exists`: Determines if property damage coverage is present on the policy.
+
+    2. `property-damage-limit-per-accident-comparison` (if applicable): Determines if the `limitPerAccident` specified on the property damage coverage on the policy is greater than or equal to the provided `limitPerAccident`.
+
+    | Status    | Cause                                                                                                    |
+    | --------- | -------------------------------------------------------------------------------------------------------- |
+    | `pass`    | The policy has property damage coverage and meets all specified limit requirements                         |
+    | `fail`    | The policy either lacks property damage coverage or doesn't meet the specified limit requirements          |
+    | `unknown` | Not enough information was available to evaluate the coverage requirements
+
+    This Rule also returns a message and message code which can be used to explain to the user why the Rule failed to result in a `pass`.
+
+        | Message Code                        | Evaluation Status | Message                                                                                                                                                     |
+    | ----------------------------------- | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+    | property-damage-exists          | `pass`            | The PD coverage exists on this policy.                       |
+    | property-damage-valid-limit-per-accident         | `pass`            | The PD coverage on this policy has a limitPerAccident greater than or equal to [inputLimitPerAccident].                       |
+    | property-damage-invalid-limit-per-accident         | `fail`            | The PD coverage on this policy has a limitPerAccident less than to [inputLimitPerAccident].                       |
+    | property-damage-unknown-limit-per-accident         | `unknown`            | The PD coverage on this policy has a limitPerAccident that is unknown.                       |
+
+    **Example Usage**
+
+    This example Rule will verify if the policy has property damage coverage and if the limitPerAccident on the coverage is greater than or equal to $50,000.
+
+    ```typescript Example Rule Request
+    {
+      rule: "property-damage-coverage-meets-requirements",
+      input: {
+        limitPerAccident: 50000
+      }
+    }
+    ```
+
+    ```typescript Example Rule Response
+    "property-damage-coverage-meets-requirements": {
+      status: "pass",
+      metadata: {
+        input: {
+          limitPerAccident: 50000
+        }
+      },
+      breakdown: {
+        "property-damage-exists": {
+          status: "pass",
+          metadata: {
+            coverages: [
+              {
+                code: "PD",
+                label: "Property Damage",
+                limitPerAccident: 100000,
+              },
+            ],
+            input: {
+              coverageCode: "PD"
+            }
+          }
+        },
+        "property-damage-limit-per-accident-comparison": {
+          status: "pass",
+          metadata: {
+            coverages: [
+              {
+                code: "PD",
+                label: "Property Damage",
+                limitPerAccident: 100000,
+              },
+            ],
+            input: {
+              limitPerAccident: 50000
+            }
+          }
+        }
+      },
+      message: {
+        code: "property-damage-valid-limit-per-accident",
+        displayText: `The PD coverage on this policy has a limitPerAccident greater than or equal to $50000.`,
+      }
+    }
+    ```
+
+  </Accordion>
+
   <Accordion title="Insureds Match">
     ### `insureds-match`
 
