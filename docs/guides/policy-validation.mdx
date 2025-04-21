@@ -488,8 +488,8 @@ This example Rule will verify if the policy contains collision coverage for the 
     Evaluates whether the policy has bodily injury coverage and if the coverage meets specific limit requirements.
 
     **Input Parameters**
-    - `limitPerPerson` (optional): The limitPerPerson amount you want to verify against the policy.
     - `limitPerAccident` (optional): The limitPerAccident amount you want to verify against the policy.
+    - `limitPerPerson` (optional): The limitPerPerson amount you want to verify against the policy.
 
     **Evaluation Criteria**
 
@@ -587,6 +587,48 @@ This example Rule will verify if the policy contains collision coverage for the 
     ```
 
   </Accordion>
+
+  <Accordion title="Uninsured/Underinsured Motorists Bodily Injury Coverage Meets Requirements">
+    ### `uninsured-underinsured-bi-coverage-meets-requirements`
+
+    Evaluates whether a policy includes uninsured motorists (UM), underinsured motorists (UIM), or uninsured/underinsured motorists (UUIM) bodily injury coverage and verifies if the coverage(s) meet the specified limit requirements.
+
+    **Input Parameters**
+
+    - `limitPerAccident` (optional): The limitPerAccident amount you want to verify against the policy.
+    - `limitPerPerson` (optional): The limitPerPerson amount you want to verify against the policy.
+
+    **Evaluation Criteria**
+
+    The Rule is evaluated based on the following criteria. If no limits are specified in the input, then the Rule evaluates solely on the presence of any
+    uninsured motorists, underinsured motorists, or uninsured/underinsured motorists bodily injury coverage on the policy.
+
+    1. `uninsured-underinsured-bi-exists`: Determines if UM, UIMs, or UUIM motorists bodily injury coverage is present on the policy.
+
+    2. `uninsured-underinsured-bi-limit-per-person-comparison` (if applicable): Determines if the `limitPerPerson` on the policy's UM, UIM, or UUIM bodily injury coverage  is greater than or equal to the provided `limitPerPerson`.
+
+    3. `uninsured-underinsured-bi-limit-per-accident-comparison` (if applicable): Determines if the `limitPerAccident` on the policy's UM, UIM, or UUIM bodily injury coverage  is greater than or equal to the provided `limitPerAccident`.
+
+  </Accordion>
+
+  <Accordion title="Uninsured/Underinsured Motorists Property Damage Coverage Meets Requirements">
+    ### `uninsured-underinsured-pd-coverage-meets-requirements`
+
+    Evaluates whether a policy includes uninsured motorist (UM), underinsured motorist (UIM), or uninsured/underinsured motorist (UUIM) property damage coverage and verifies if the coverage(s) meet the specified limit requirements.
+
+    **Input Parameters**
+
+    - `limitPerAccident` (optional): The limitPerAccident amount you want to verify against the policy.
+
+    **Evaluation Criteria**
+
+    The Rule is evaluated based on the following criteria. If no limit is specified in the input, the Rule evaluates solely on the presence of any uninsured motorist (UM), underinsured motorist (UIM), or uninsured/underinsured motorist (UUIM) property damage coverage on the policy.
+
+    1. `uninsured-underinsured-pd-exists`: Determines if UM, UIM, or UUIM motorist property damage coverage is present on the policy.
+
+    3. `uninsured-underinsured-pd-limit-per-accident-comparison` (if applicable): Determines if the `limitPerAccident` on the policy's UM, UIM, or UUIM property damage coverage  is greater than or equal to the provided `limitPerAccident`.
+
+  </Accordion>
   
   <Accordion title="Property Damage Coverage Meets Requirements">
     ### `property-damage-meets-requirements`
@@ -599,7 +641,6 @@ This example Rule will verify if the policy contains collision coverage for the 
     **Evaluation Criteria**
 
     The Rule is evaluated based on the following criteria. If no limits are specified in the input, the Rule evaluates solely on the presence of property damage coverage on the policy.
-
 
     1. `property-damage-exists`: Determines if property damage coverage is present on the policy.
 
