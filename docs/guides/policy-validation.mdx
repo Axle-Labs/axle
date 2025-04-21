@@ -603,11 +603,26 @@ This example Rule will verify if the policy contains collision coverage for the 
     The Rule is evaluated based on the following criteria. If no limits are specified in the input, then the Rule evaluates solely on the presence of any
     uninsured motorists, underinsured motorists, or uninsured/underinsured motorists bodily injury coverage on the policy.
 
-    1. `uninsured-underinsured-bi-exists`: Determines if UM, UIMs, or UUIM motorists bodily injury coverage is present on the policy.
+    1. `uninsured-underinsured-bi-exists`: Determines if UM, UIM, or UUIM motorists bodily injury coverage is present on the policy.
 
     2. `uninsured-underinsured-bi-limit-per-person-comparison` (if applicable): Determines if the `limitPerPerson` on the policy's UM, UIM, or UUIM bodily injury coverage  is greater than or equal to the provided `limitPerPerson`.
 
     3. `uninsured-underinsured-bi-limit-per-accident-comparison` (if applicable): Determines if the `limitPerAccident` on the policy's UM, UIM, or UUIM bodily injury coverage  is greater than or equal to the provided `limitPerAccident`.
+
+    This Rule also returns a message and message code which can be used to explain to the user why the Rule failed to result in a `pass`.
+
+    | Message Code                        | Evaluation Status | Message                                                                                                                                                     |
+    | ----------------------------------- | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+    | uninsured-underinsured-bi-exists          | `pass`            | At least one of UM, UIM, or UUIM bodily injury coverage exists on this policy.                      |
+    | uninsured-underinsured-bi-valid-limit-per-person        | `pass`            | At least one of UM, UIM, or UUIM bodily injury coverage on this policy has a `limitPerPerson` greater than or equal to [inputLimitPerPerson].               |
+    | uninsured-underinsured-bi-valid-limit-per-accident         | `pass`            | At least one of UM, UIM, or UUIM bodily injury coverage on this policy has a `limitPerAccident` greater than or equal to [inputLimitPerAccident].                       |
+    | uninsured-underinsured-bi-valid-limits          | `pass`            | At least one of UM, UIM, or UUIM bodily injury coverage on this policy has limits greater than or equal to [inputLimitPerPerson] per person and [inputLimitPerAccident] per accident.                       |
+    | uninsured-underinsured-bi-invalid-limit-per-person        | `fail`            | None of UM, UIM, or UUIM bodily injury coverage on this policy has a `limitPerPerson` greater than or equal to [inputLimitPerPerson].               |
+    | uninsured-underinsured-bi-invalid-limit-per-accident         | `fail`            | None of UM, UIM, or UUIM bodily injury coverage on this policy has a `limitPerAccident` greater than or equal to [inputLimitPerAccident].                       |
+    | uninsured-underinsured-bi-invalid-limits          | `fail`            | None of UM, UIM, or UUIM bodily injury coverage on this policy has limits greater than or equal to [inputLimitPerPerson] per person and [inputLimitPerAccident] per accident.                       |
+    | uninsured-underinsured-bi-unknown-limit-per-person        | `unknown`            | At least one of UM, UIM, or UUIM bodily injury coverage on this policy has a `limitPerPerson` that is unknown.               |
+    | uninsured-underinsured-bi-unknown-limit-per-accident         | `unknown`            |  At least one of UM, UIM, or UUIM bodily injury coverage on this policy has a `limitPerAccident` that is unknown.                       |
+    | uninsured-underinsured-bi-unknown-limits | `unknown` | At least one of UM, UIM, or UUIM bodily injury coverage on this policy has unknown limits. |
 
   </Accordion>
 
@@ -626,7 +641,22 @@ This example Rule will verify if the policy contains collision coverage for the 
 
     1. `uninsured-underinsured-pd-exists`: Determines if UM, UIM, or UUIM motorist property damage coverage is present on the policy.
 
-    3. `uninsured-underinsured-pd-limit-per-accident-comparison` (if applicable): Determines if the `limitPerAccident` on the policy's UM, UIM, or UUIM property damage coverage  is greater than or equal to the provided `limitPerAccident`.
+    2. `uninsured-underinsured-pd-limit-per-accident-comparison` (if applicable): Determines if the `limitPerAccident` on the policy's UM, UIM, or UUIM property damage coverage  is greater than or equal to the provided `limitPerAccident`.
+
+    | Status    | Cause                                                                                                    |
+    | --------- | -------------------------------------------------------------------------------------------------------- |
+    | `pass`    | The policy has at least one of UM, UIM, or UUIM property damage coverage and meets all specified limit requirements.                        |
+    | `fail`    | The policy either doesn't have any UM, UIM, or UUIM property damage coverage, or has at least one but doesn't meet the specified limit requirements. |
+    | `unknown` | Not enough information was available to evaluate the coverage requirements.
+
+    This Rule also returns a message and message code which can be used to explain to the user why the Rule failed to result in a `pass`.
+
+    | Message Code                        | Evaluation Status | Message                                                                                                                                                     |
+    | ----------------------------------- | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+    | uninsured-underinsured-pd-exists          | `pass`            | At least one of UM, UIM, or UUIM property damage coverage exists on this policy.                       |
+    | uninsured-underinsured-pd-valid-limit-per-accident         | `pass`            | At least one of UM, UIM, or UUIM property damage coverage on this policy has a `limitPerAccident` greater than or equal to [inputLimitPerAccident].                       |
+    | uninsured-underinsured-pd-invalid-limit-per-accident         | `fail`            | None of UM, UIM, or UUIM property damage coverage on this policy has a `limitPerAccident` less than to [inputLimitPerAccident].                       |
+    | uninsured-underinsured-pd-unknown-limit-per-accident         | `unknown`            | At least one of UM, UIM, or UUIM property damage coverage on this policy has a `limitPerAccident` that is unknown.                       |
 
   </Accordion>
   
@@ -654,7 +684,7 @@ This example Rule will verify if the policy contains collision coverage for the 
 
     This Rule also returns a message and message code which can be used to explain to the user why the Rule failed to result in a `pass`.
 
-        | Message Code                        | Evaluation Status | Message                                                                                                                                                     |
+    | Message Code                        | Evaluation Status | Message                                                                                                                                                     |
     | ----------------------------------- | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
     | property-damage-exists          | `pass`            | The PD coverage exists on this policy.                       |
     | property-damage-valid-limit-per-accident         | `pass`            | The PD coverage on this policy has a `limitPerAccident` greater than or equal to [inputLimitPerAccident].                       |
