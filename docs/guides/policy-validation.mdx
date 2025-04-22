@@ -491,8 +491,8 @@ This example Rule will verify if the policy contains collision coverage for the 
     Evaluates whether the policy has bodily injury coverage and if the coverage meets specific limit requirements.
 
     **Input Parameters**
-    - `limitPerPerson` (optional): The limitPerPerson amount you want to verify against the policy.
     - `limitPerAccident` (optional): The limitPerAccident amount you want to verify against the policy.
+    - `limitPerPerson` (optional): The limitPerPerson amount you want to verify against the policy.
 
     **Evaluation Criteria**
 
@@ -590,7 +590,114 @@ This example Rule will verify if the policy contains collision coverage for the 
     ```
 
   </Accordion>
-  
+
+  <Accordion title="Uninsured/Underinsured Motorists Bodily Injury Coverage Meets Requirements">
+    ### `uninsured-underinsured-bi-coverage-meets-requirements`
+
+    Evaluates whether a policy includes uninsured motorists (UM), underinsured motorists (UIM), or uninsured/underinsured motorists (UUIM) bodily injury coverage and verifies if the coverage(s) meet the specified limit requirements.
+
+    **Input Parameters**
+
+    - `limitPerAccident` (optional): The limitPerAccident amount you want to verify against the policy.
+    - `limitPerPerson` (optional): The limitPerPerson amount you want to verify against the policy.
+
+    **Evaluation Criteria**
+
+    The Rule is evaluated based on the following criteria. If no limits are specified in the input, then the Rule evaluates solely on the presence of any
+    uninsured motorists, underinsured motorists, or uninsured/underinsured motorists bodily injury coverage on the policy.
+
+    1. `uninsured-underinsured-bi-exists`: Determines if UM, UIM, or UUIM motorists bodily injury coverage is present on the policy.
+
+    2. `uninsured-underinsured-bi-limit-per-person-comparison` (if applicable): Determines if the `limitPerPerson` on the policy's UM, UIM, or UUIM bodily injury coverage  is greater than or equal to the provided `limitPerPerson`.
+
+    3. `uninsured-underinsured-bi-limit-per-accident-comparison` (if applicable): Determines if the `limitPerAccident` on the policy's UM, UIM, or UUIM bodily injury coverage  is greater than or equal to the provided `limitPerAccident`.
+
+    | Status    | Cause                                                                                                    |
+    | --------- | -------------------------------------------------------------------------------------------------------- |
+    | `pass`    | The policy has at least one of UM, UIM, or UUIM bodily injury and meets all specified limit requirements                         |
+    | `fail`    | The policy either doesn't have any UM, UIM, or UUIM bodily injury coverage, or has at least one but doesn't meet the specified limit requirements. |
+    | `unknown` | Not enough information was available to evaluate the coverage requirements.
+
+    This Rule also returns a message and message code which can be used to explain to the user why the Rule failed to result in a `pass`.
+
+    | Message Code                        | Evaluation Status | Message                                                                                                                                                     |
+    | ----------------------------------- | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+    | uninsured-underinsured-bi-exists          | `pass`            | At least one of UM, UIM, or UUIM bodily injury coverage exists on this policy.                      |
+    | uninsured-underinsured-bi-valid-limit-per-person        | `pass`            | At least one of UM, UIM, or UUIM bodily injury coverage on this policy has a `limitPerPerson` greater than or equal to [inputLimitPerPerson].               |
+    | uninsured-underinsured-bi-valid-limit-per-accident         | `pass`            | At least one of UM, UIM, or UUIM bodily injury coverage on this policy has a `limitPerAccident` greater than or equal to [inputLimitPerAccident].                       |
+    | uninsured-underinsured-bi-valid-limits          | `pass`            | At least one of UM, UIM, or UUIM bodily injury coverage on this policy has limits greater than or equal to [inputLimitPerPerson] per person and [inputLimitPerAccident] per accident.                       |
+    | uninsured-underinsured-bi-invalid-limit-per-person        | `fail`            | None of UM, UIM, or UUIM bodily injury coverage on this policy has a `limitPerPerson` greater than or equal to [inputLimitPerPerson].               |
+    | uninsured-underinsured-bi-invalid-limit-per-accident         | `fail`            | None of UM, UIM, or UUIM bodily injury coverage on this policy has a `limitPerAccident` greater than or equal to [inputLimitPerAccident].                       |
+    | uninsured-underinsured-bi-invalid-limits          | `fail`            | None of UM, UIM, or UUIM bodily injury coverage on this policy has limits greater than or equal to [inputLimitPerPerson] per person and [inputLimitPerAccident] per accident.                       |
+    | uninsured-underinsured-bi-unknown-limit-per-person        | `unknown`            | At least one of UM, UIM, or UUIM bodily injury coverage on this policy has a `limitPerPerson` that is unknown.               |
+    | uninsured-underinsured-bi-unknown-limit-per-accident         | `unknown`            |  At least one of UM, UIM, or UUIM bodily injury coverage on this policy has a `limitPerAccident` that is unknown.                       |
+    | uninsured-underinsured-bi-unknown-limits | `unknown` | At least one of UM, UIM, or UUIM bodily injury coverage on this policy has unknown limits. |
+
+    **Example Usage**
+
+    This example Rule will verify if the policy has at least one of UM, UIM, or UUIM bodily injury coverage and if the limitPerPerson on the coverage is greater than or equal to $200,000.
+
+    ```typescript Example Rule Request
+    {
+      rule: "uninsured-underinsured-bi-coverage-meets-requirements",
+      input: {
+        limitPerPerson: 200000
+      }
+    }
+    ```
+
+    ```typescript Example Rule Response
+    "uninsured-underinsured-bi-coverage-meets-requirements": {
+      status: "pass",
+      metadata: {
+        input: {
+          limitPerPerson: 200000,
+          limitPerAccident: undefined
+        }
+      },
+      breakdown: {
+        "uninsured-underinsured-bi-exists": {
+          status: "pass",
+          metadata: {
+            coverages: [
+              {
+                code: "UMBI",
+                label: "Uninsured Motorists Bodily Injury",
+                limitPerPerson: 250000,
+                limitPerAccident: 500000
+              },
+            ],
+            input: {
+              coverageCodes: ["UMBI", "UIMBI", "UUIMBI"]
+            }
+          }
+        },
+        "uninsured-underinsured-bi-limit-per-person-comparison": {
+          status: "pass",
+          metadata: {
+            coverages: [
+              {
+                code: "UMBI",
+                label: "Uninsured Motorists Bodily Injury",
+                limitPerPerson: 250000,
+                limitPerAccident: 500000,
+              },
+            ],
+            input: {
+              limitPerPerson: 200000,
+            },
+          },
+        },
+      },
+      message: {
+        code: "uninsured-underinsured-bi-valid-limit-per-person",
+        displayText: "At least one of UM, UIM, or UUIM bodily injury coverage on this policy has a `limitPerPerson` greater than or equal to $200000.",
+      }
+    }
+    ```
+
+  </Accordion>
+
   <Accordion title="Property Damage Coverage Meets Requirements">
     ### `property-damage-meets-requirements`
 
@@ -602,7 +709,6 @@ This example Rule will verify if the policy contains collision coverage for the 
     **Evaluation Criteria**
 
     The Rule is evaluated based on the following criteria. If no limits are specified in the input, the Rule evaluates solely on the presence of property damage coverage on the policy.
-
 
     1. `property-damage-exists`: Determines if property damage coverage is present on the policy.
 
@@ -616,7 +722,7 @@ This example Rule will verify if the policy contains collision coverage for the 
 
     This Rule also returns a message and message code which can be used to explain to the user why the Rule failed to result in a `pass`.
 
-        | Message Code                        | Evaluation Status | Message                                                                                                                                                     |
+    | Message Code                        | Evaluation Status | Message                                                                                                                                                     |
     | ----------------------------------- | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
     | property-damage-exists          | `pass`            | The PD coverage exists on this policy.                       |
     | property-damage-valid-limit-per-accident         | `pass`            | The PD coverage on this policy has a `limitPerAccident` greater than or equal to [inputLimitPerAccident].                       |
@@ -679,6 +785,100 @@ This example Rule will verify if the policy contains collision coverage for the 
       message: {
         code: "property-damage-valid-limit-per-accident",
         displayText: `The PD coverage on this policy has a limitPerAccident greater than or equal to $50000.`,
+      }
+    }
+    ```
+
+  </Accordion>
+
+  <Accordion title="Uninsured/Underinsured Motorists Property Damage Coverage Meets Requirements">
+    ### `uninsured-underinsured-pd-coverage-meets-requirements`
+
+    Evaluates whether a policy includes uninsured motorist (UM), underinsured motorist (UIM), or uninsured/underinsured motorist (UUIM) property damage coverage and verifies if the coverage(s) meet the specified limit requirements.
+
+    **Input Parameters**
+
+    - `limitPerAccident` (optional): The limitPerAccident amount you want to verify against the policy.
+
+    **Evaluation Criteria**
+
+    The Rule is evaluated based on the following criteria. If no limit is specified in the input, the Rule evaluates solely on the presence of any uninsured motorist (UM), underinsured motorist (UIM), or uninsured/underinsured motorist (UUIM) property damage coverage on the policy.
+
+    1. `uninsured-underinsured-pd-exists`: Determines if UM, UIM, or UUIM motorist property damage coverage is present on the policy.
+
+    2. `uninsured-underinsured-pd-limit-per-accident-comparison` (if applicable): Determines if the `limitPerAccident` on the policy's UM, UIM, or UUIM property damage coverage  is greater than or equal to the provided `limitPerAccident`.
+
+    | Status    | Cause                                                                                                    |
+    | --------- | -------------------------------------------------------------------------------------------------------- |
+    | `pass`    | The policy has at least one of UM, UIM, or UUIM property damage coverage and meets all specified limit requirements.                        |
+    | `fail`    | The policy either doesn't have any UM, UIM, or UUIM property damage coverage, or has at least one but doesn't meet the specified limit requirements. |
+    | `unknown` | Not enough information was available to evaluate the coverage requirements.
+
+    This Rule also returns a message and message code which can be used to explain to the user why the Rule failed to result in a `pass`.
+
+    | Message Code                        | Evaluation Status | Message                                                                                                                                                     |
+    | ----------------------------------- | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+    | uninsured-underinsured-pd-exists          | `pass`            | At least one of UM, UIM, or UUIM property damage coverage exists on this policy.                       |
+    | uninsured-underinsured-pd-valid-limit-per-accident         | `pass`            | At least one of UM, UIM, or UUIM property damage coverage on this policy has a `limitPerAccident` greater than or equal to [inputLimitPerAccident].                       |
+    | uninsured-underinsured-pd-invalid-limit-per-accident         | `fail`            | None of UM, UIM, or UUIM property damage coverage on this policy has a `limitPerAccident` less than to [inputLimitPerAccident].                       |
+    | uninsured-underinsured-pd-unknown-limit-per-accident         | `unknown`            | At least one of UM, UIM, or UUIM property damage coverage on this policy has a `limitPerAccident` that is unknown.                       |
+
+    **Example Usage**
+
+    This example Rule will verify if the policy has at laest one of UM, UIM, or UUIM property damage coverage and if the `limitPerAccident` on the coverage is greater than or equal to $50,000.
+
+    ```typescript Example Rule Request
+    {
+      rule: "uninsured-underinsured-pd-coverage-meets-requirements",
+      input: {
+        limitPerAccident: 50000
+      }
+    }
+    ```
+
+    ```typescript Example Rule Response
+    "uninsured-underinsured-pd-coverage-meets-requirements": {
+      status: "pass",
+      metadata: {
+        input: {
+          limitPerAccident: 50000
+        }
+      },
+      breakdown: {
+        "uninsured-underinsured-pd-exists": {
+          status: "pass",
+          metadata: {
+            coverages: [
+              {
+                code: "UIMPD",
+                label: "Underinsured Motorists Property Damage",
+                limitPerAccident: 100000,
+              },
+            ],
+            input: {
+              coverageCodes: ["UMPD", "UIMPD", "UUIMPD"]
+            }
+          }
+        },
+        "uninsured-underinsured-pd-limit-per-accident-comparison": {
+          status: "pass",
+          metadata: {
+            coverages: [
+              {
+                code: "UIMPD",
+                label: "Underinsured Motorists Property Damage",
+                limitPerAccident: 100000,
+              },
+            ],
+            input: {
+              limitPerAccident: 50000
+            }
+          }
+        }
+      },
+      message: {
+        code: "uninsured-underinsured-pd-valid-limit-per-accident",
+        displayText: `At least one of UM, UIM, or UUIM property damage coverage on this policy has a `limitPerAccident` greater than or equal to $50000.`,
       }
     }
     ```
