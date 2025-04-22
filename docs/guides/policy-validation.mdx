@@ -26,7 +26,7 @@ Each Rule evaluates to one of the following statuses:
 
 You can request that a Policy be evaluated against a specified set of Rules through the [Validate Policy](/api-reference/policies/validate-policy) endpoint. Each Rule you requested will be run, and you'll receive a response with an overall status determination of either `pass`, `fail`, or `caution`.
 
-- `pass` means that the policy succeded in passing against all of the specified Rules.
+- `pass` means that the policy succeeded in passing against all of the specified Rules.
 - `fail` means that one or more specified Rules evaluated to a status of `fail`.
 - `caution` means that one or more specified Rules evaluated to a status of `caution`. In most cases, it is recommended to complete a manual review of the policy.
 
@@ -135,8 +135,9 @@ Evaluates whether the policy is currently active.
       - use of rental vehicle for TNC, DNC, or other auto business
       - rentals outside of the continental United States
 
-      The recommendation made by the Rental Coverage Validation AI should not be treated as legal advice. It is made on a "best-effort" basis. When messaging the recommendation to your application's user,
-    </Warning>
+      The recommendation made by the Rental Coverage Validation AI should not be treated as legal advice. It is made on a "best-effort" basis.
+
+   </Warning>
 
 | Status    | Cause                                                                                                                                                                  |
 | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -162,8 +163,8 @@ This Validation also returns a message and message code, which can be used to ex
 "rental-covered-for-collision": {
   "status": "pass",
   "message": {
-    "code": "...",
-    "displayText": "..."
+    "code": "coll-extends-to-rental"
+    "displayText": "The policy has collision coverage and the matching policy agreements indicate that collision coverage extends to rental vehicles."
   }
   "breakdown": {
     "collision-exists": {
@@ -175,9 +176,11 @@ This Validation also returns a message and message code, which can be used to ex
             "label": "Collision",
             "deductible": 375,
             "property": "prp_uSdzLVpi8c76H7kl6AQ-F"
-          },
-          ...
-        ]
+          }
+        ],
+        "input": {
+          "coverageCode": "COLL"
+        }
       }
       "collision-coverage-extends-to-rental": {
         "status": "pass",
@@ -777,251 +780,252 @@ This example Rule will verify if the policy contains collision coverage for the 
       }
     }
     ```
+
   </Accordion>
   <Accordion title="Properties Match">
 
-  ### `properties-match`
+### `properties-match`
 
-  Evaluates whether input property matches the property that is listed on Axle Policy. Properties can be matched via year-make-model, VIN, or address (corresponding to type of property).
+Evaluates whether input property matches the property that is listed on Axle Policy. Properties can be matched via year-make-model, VIN, or address (corresponding to type of property).
 
-  ### Year-make-model (property type `vehicle`)
+### Year-make-model (property type `vehicle`)
 
-  Evaluates if provided year-make-model matches year-make-model listed as one of the properties when `policy.properties.type=vehicle`
+Evaluates if provided year-make-model matches year-make-model listed as one of the properties when `policy.properties.type=vehicle`
 
-  | Status    | Cause                                                                |
-  | --------- | -------------------------------------------------------------------- |
-  | `pass`    | Exact match on the year and high similarity threshold score on `make` and `model` to one of the properties listed on the Axle Policy  |
-  | `caution`    | Exact match on the year and medium similarity threshold score on `make` and `model`  |
-  | `fail`    | No match on year or low similarity threshold score on `make` and `model`   |
-  | `unknown` |  There is insufficient information to compare input year-make-model and Axle Policy 
+| Status    | Cause                                                                                                                                |
+| --------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `pass`    | Exact match on the year and high similarity threshold score on `make` and `model` to one of the properties listed on the Axle Policy |
+| `caution` | Exact match on the year and medium similarity threshold score on `make` and `model`                                                  |
+| `fail`    | No match on year or low similarity threshold score on `make` and `model`                                                             |
+| `unknown` | There is insufficient information to compare input year-make-model and Axle Policy                                                   |
 
-  **Input Parameters**
-  - `year-make-model`: Provide a string in the following format "&lt;year&gt; &lt;make model of the vehicle&gt;". For example, you can provide "2009 Honda Odyssey"
+**Input Parameters**
 
+- `year-make-model`: Provide a string in the following format "&lt;year&gt; &lt;make model of the vehicle&gt;". For example, you can provide "2009 Honda Odyssey"
 
-  **Example Usage**
+**Example Usage**
 
-  ```typescript Example Rule Request
-  {
-      "rule": "properties-match",
-      "input": {
-          "year-make-model": "2009 Honda Odyssey"
+```typescript Example Rule Request
+{
+    "rule": "properties-match",
+    "input": {
+        "year-make-model": "2009 Honda Odyssey"
+    }
+}
+```
+
+```typescript Example Rule Response
+   "properties-match": {
+      "status": "pass",
+        "metadata": {
+              "properties": [
+                  {
+                      "type": "vehicle",
+                      "data": {
+                          "bodyStyle": "minivan",
+                          "vin": "5FNRL38209B014050",
+                          "model": "Odyssey",
+                          "year": "2009",
+                          "make": "Honda"
+                      },
+                      "id": "prp_tmGUxLpgHjmW9r6M6WjhS"
+                  }
+              ],
+              "input": {
+                  "year-make-model": "2009 Honda Odyssey"
+              }
+        }
+    }
+```
+
+### VIN (property type `vehicle`)
+
+Evaluates if provided VIN matches the VIN listed as one of the properties when `policy.properties.type=vehicle`
+
+| Status    | Cause                                                                  |
+| --------- | ---------------------------------------------------------------------- |
+| `pass`    | VIN matches a property listed on the Axle Policy                       |
+| `fail`    | VIN doesn't match any of the properties                                |
+| `unknown` | There is insufficient information to compare input VIN and Axle Policy |
+
+**Input Parameters**
+
+- `vin`: Provide VIN number of the vehicle as a `string`
+
+**Example Usage**
+
+```typescript Example Rule Request
+{
+    "rule": "properties-match",
+    "input": {
+        "vin": "ZAMBC38A450014565"
+    }
+}
+```
+
+```typescript Example Rule Response
+ "properties-match": {
+    "status": "pass",
+      "metadata": {
+            "properties": [
+                {
+                    "type": "vehicle",
+                    "data": {
+                        "vin": "ZAMBC38A450014565",
+                        "model": "Coupe",
+                        "year": "2005",
+                        "make": "Maserati"
+                    },
+                    "id": "prp_8BKSFvreM7FOwI_3X2sxB"
+                }
+            ],
+            "input": {
+                "vin": "ZAMBC38A450014565"
+            }
       }
   }
-  ```
+```
 
-  ```typescript Example Rule Response
-     "properties-match": {
-        "status": "pass",
-          "metadata": {
-                "properties": [
-                    {
-                        "type": "vehicle",
-                        "data": {
-                            "bodyStyle": "minivan",
-                            "vin": "5FNRL38209B014050",
-                            "model": "Odyssey",
-                            "year": "2009",
-                            "make": "Honda"
-                        },
-                        "id": "prp_tmGUxLpgHjmW9r6M6WjhS"
-                    }
-                ],
-                "input": {
-                    "year-make-model": "2009 Honda Odyssey"
-                }
+### Address (property type `dwelling`)
+
+Evaluates if provided address matches the address listed as one of the properties when `policy.properties.type=dwelling`
+
+| Status    | Cause                                                                                       |
+| --------- | ------------------------------------------------------------------------------------------- |
+| `pass`    | Input address matches one of the properties on the Axle Policy                              |
+| `caution` | Input address may not match any of the properties because of a difference in `addressLine2` |
+| `fail`    | Input address does not match any of the properties                                          |
+| `unknown` | There is insufficient information to compare input address and Axle Policy                  |
+
+**Input Parameters**
+
+- `address`: Full address provided as a `string` that includes both Address Line 1 and 2 along with city, postal code, and state.
+
+**Example Usage**
+
+```typescript Example Rule Request
+{
+  "rule": "properties-match",
+  "input": {
+    "address": "123 Axle St. NE, Apartment 111, Atlanta, GA 30303"
+  }
+}
+```
+
+```typescript Example Rule Response
+"address-match": {
+  "status": "pass",
+  "metadata": {
+    "address" : {
+        "addressLine1": "123 Axle Street NE",
+        "addressLine2": "APT 111",
+        "city": "Atlanta",
+        "state": "GA",
+        "postalCode": "30303",
+        "country": "US"
+    },
+    "input": {
+        "addressLine1": "123 Axle Street NE",
+        "addressLine2": "APT 111",
+        "city": "Atlanta",
+        "state": "GA",
+        "postalCode": "30303",
+        "country": "US"
+    }
+  }
+}
+```
+
+</Accordion>
+<Accordion title="Required Policy Information is Present">
+  ### `required-policy-information-is-present`
+
+Evaluates if the policy either has (1) certain required fields present OR (2) at least one declarations page. If either sub-rule passes, the overall Rule resolves to `pass`. Otherwise, it resolves to `fail`.
+
+This Rule combines two separate sub-rules:
+
+    1. `fields-exist` – Verifies that all fields specified by your `requiredFields` input are present on the policy. If every requested field is found, this Rule resolves to `pass`; otherwise, it resolves to `fail` and includes a `missingFields` list in the metadata.
+    2. `declarations-page-exists` – Checks whether the policy has at least one document classified by Axle as a declaration page.
+
+| Status | Cause                                                                                 |
+| ------ | ------------------------------------------------------------------------------------- |
+| `pass` | The policy has all required fields, or there is a declarations page (or both).        |
+| `fail` | Neither the required fields nor a declarations page could be confirmed on the policy. |
+
+**Input Parameters**
+
+- `requiredFields`: An object used to specify which fields must exist on the policy. Each key maps to a boolean (or nested object / array structure) indicating whether that particular field is required. The shape of the object mirrors the Axle Policy Schema.
+
+Below is an example request specifying the required fields. If either the required fields or the declarations page check is satisfied, the Rule evaluates to `pass`.
+
+```typescript Example Rule Request
+{
+  "rule": "required-policy-information-is-present",
+  "input": {
+     "requiredFields": {
+        "carrier": true,
+        "isActive": true,
+        "policyNumber": true,
+        "expirationDate": true,
+        "properties": [
+          {
+            "data": {
+              "vin": true
+            }
           }
-      }
-    ```
-
-    ### VIN (property type `vehicle`)
-
-    Evaluates if provided VIN matches the VIN listed as one of the properties when `policy.properties.type=vehicle`
-
-    | Status    | Cause                                                                |
-    | --------- | -------------------------------------------------------------------- |
-    | `pass`    | VIN matches a property listed on the Axle Policy  |
-    | `fail`    | VIN doesn't match any of the properties    |
-    | `unknown` | There is insufficient information to compare input VIN and Axle Policy                             |
-
-    **Input Parameters**
-    - `vin`: Provide VIN number of the vehicle as a `string`
-
-
-    **Example Usage**
-
-    ```typescript Example Rule Request
-    {
-        "rule": "properties-match",
-        "input": {
-            "vin": "ZAMBC38A450014565"
-        }
-    }
-    ```
-
-    ```typescript Example Rule Response
-     "properties-match": {
-        "status": "pass",
-          "metadata": {
-                "properties": [
-                    {
-                        "type": "vehicle",
-                        "data": {
-                            "vin": "ZAMBC38A450014565",
-                            "model": "Coupe",
-                            "year": "2005",
-                            "make": "Maserati"
-                        },
-                        "id": "prp_8BKSFvreM7FOwI_3X2sxB"
-                    }
-                ],
-                "input": {
-                    "vin": "ZAMBC38A450014565"
-                }
+        ],
+        "insureds":[
+          {
+            "firstName": true,
+            "lastName": true
           }
-      }
-    ```
-
-    ### Address (property type `dwelling`)
-
-    Evaluates if provided address matches the address listed as one of the properties when `policy.properties.type=dwelling`
-
-    | Status    | Cause                                                                |
-    | --------- | -------------------------------------------------------------------- |
-    | `pass`    | Input address matches one of the properties on the Axle Policy  |
-    | `caution`    | Input address may not match any of the properties because of a difference in `addressLine2`  |
-    | `fail`    | Input address does not match any of the properties    |
-    | `unknown` | There is insufficient information to compare input address and Axle Policy                              |
-
-    **Input Parameters**
-    - `address`: Full address provided as a `string` that includes both Address Line 1 and 2 along with city, postal code, and state.
-
-
-    **Example Usage**
-
-    ```typescript Example Rule Request
-    {
-      "rule": "properties-match",
-      "input": {
-        "address": "123 Axle St. NE, Apartment 111, Atlanta, GA 30303"
-      }
+        ]
     }
-    ```
+  }
+}
+```
 
-    ```typescript Example Rule Response
-    "address-match": {
-      "status": "pass",
-      "metadata": {
-        "address" : {
-            "addressLine1": "123 Axle Street NE",
-            "addressLine2": "APT 111",
-            "city": "Atlanta",
-            "state": "GA",
-            "postalCode": "30303",
-            "country": "US"
-        },
-        "input": {
-            "addressLine1": "123 Axle Street NE",
-            "addressLine2": "APT 111",
-            "city": "Atlanta",
-            "state": "GA",
-            "postalCode": "30303",
-            "country": "US"
-        }
-      }
-    }
-    ```
-
-  </Accordion>
-  <Accordion title="Required Policy Information is Present">
-    ### `required-policy-information-is-present`
-
-    Evaluates if the policy either has (1) certain required fields present OR (2) at least one declarations page. If either sub-rule passes, the overall Rule resolves to `pass`. Otherwise, it resolves to `fail`.
-
-    This Rule combines two separate sub-rules:
-
-      1. `fields-exist` – Verifies that all fields specified by your `requiredFields` input are present on the policy. If every requested field is found, this Rule resolves to `pass`; otherwise, it resolves to `fail` and includes a `missingFields` list in the metadata.
-      2. `declarations-page-exists` – Checks whether the policy has at least one document classified by Axle as a declaration page.
-
-    | Status | Cause                                                                                          |
-    | ------ | ---------------------------------------------------------------------------------------------- |
-    | `pass`   | The policy has all required fields, or there is a declarations page (or both).                 |
-    | `fail`   | Neither the required fields nor a declarations page could be confirmed on the policy.          |
-
-
-    **Input Parameters**
-    - `requiredFields`: An object used to specify which fields must exist on the policy. Each key maps to a boolean (or nested object / array structure) indicating whether that particular field is required. The shape of the object mirrors the Axle Policy Schema.
-
-    Below is an example request specifying the required fields. If either the required fields or the declarations page check is satisfied, the Rule evaluates to `pass`.
-
-    ```typescript Example Rule Request
-    {
-      "rule": "required-policy-information-is-present",
-      "input": {
-         "requiredFields": {
-            "carrier": true,
-            "isActive": true,
-            "policyNumber": true,
-            "expirationDate": true,
-            "properties": [
-              {
-                "data": {
-                  "vin": true
-                }
-              }
-            ],
-            "insureds":[
-              {
-                "firstName": true,
-                "lastName": true
-              }
-            ]
-        }
-      }
-    }
-    ```
-
-    ```typescript Example Rule Response
-    "required-policy-information-is-present": {
-        "status": "pass",
-        "summary": {
-            "required-policy-information-is-present": "pass"
-        },
-        "rules": {
-            "required-policy-information-is-present": {
-                "status": "pass",
-                "breakdown": {
-                    "fields-exist": {
-                        "status": "pass",
-                        "metadata": {
-                            "missingFields": []
-                        }
-                    },
-                    "declarations-page-exists": {
-                        "status": "pass",
-                        "metadata": {
-                            "documents": [
-                                {
-                                    "createdAt": "2025-01-10T16:28:07.089Z",
-                                    "issuedDate": "2024-12-24T00:00:00.000Z",
-                                    "name": "Auto Policy Document Amended",
-                                    "source": "carrier",
-                                    "type": [
-                                        "policy-agreement",
-                                        "declaration-page"
-                                    ],
-                                    "key": "doc_FqDyv9F2b6x5eZ_jokGWU.pdf",
-                                    "effectiveDate": null
-                                }
-                            ]
-                        }
+```typescript Example Rule Response
+"required-policy-information-is-present": {
+    "status": "pass",
+    "summary": {
+        "required-policy-information-is-present": "pass"
+    },
+    "rules": {
+        "required-policy-information-is-present": {
+            "status": "pass",
+            "breakdown": {
+                "fields-exist": {
+                    "status": "pass",
+                    "metadata": {
+                        "missingFields": []
                     }
                 },
-                "metadata": {}
-            }
+                "declarations-page-exists": {
+                    "status": "pass",
+                    "metadata": {
+                        "documents": [
+                            {
+                                "createdAt": "2025-01-10T16:28:07.089Z",
+                                "issuedDate": "2024-12-24T00:00:00.000Z",
+                                "name": "Auto Policy Document Amended",
+                                "source": "carrier",
+                                "type": [
+                                    "policy-agreement",
+                                    "declaration-page"
+                                ],
+                                "key": "doc_FqDyv9F2b6x5eZ_jokGWU.pdf",
+                                "effectiveDate": null
+                            }
+                        ]
+                    }
+                }
+            },
+            "metadata": {}
         }
     }
-    ```
+}
+```
 
-  </Accordion>
+</Accordion>
 </AccordionGroup>
