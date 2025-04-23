@@ -1156,29 +1156,62 @@ This Rule combines two separate sub-rules:
 
 - `requiredFields`: An object used to specify which fields must exist on the policy. Each key maps to a boolean (or nested object / array structure) indicating whether that particular field is required. The shape of the object mirrors the Axle Policy Schema.
 
-Below is an example request specifying the required fields. If either the required fields or the declarations page check is satisfied, the Rule evaluates to `pass`.
+Below is an example request specifying all the possible required fields that can be checked for existence. If you receive a 400 Input Validation error, please check that you provided only fields listed in the example below.
+
+If either the required fields or the declarations page check is satisfied, the Rule evaluates to `pass`.
 
 ```typescript Example Rule Request
+// The below example shows all the possible fields that can be checked for existence
 {
   "rule": "required-policy-information-is-present",
   "input": {
      "requiredFields": {
         "carrier": true,
-        "isActive": true,
+        "type": true,
         "policyNumber": true,
-        "expirationDate": true,
         "premium": true,
+        "isActive": true,
+        "effectiveDate": true,
+        "expirationDate": true,
+        "address": {
+          "addressLine1": true,
+          "state": true,
+          "city": true,
+          "postalCode": true
+        }
         "properties": [
           {
             "data": {
-              "vin": true
+              "vin": true,
+              "year": true,
+              "make": true,
+              "model": true,
+              "use": true
             }
+          }
+        ],
+        "coverages":[
+          {
+            "deductible": true,
+            "limitPerPerson": true,
+            "limitPerAccident": true
           }
         ],
         "insureds":[
           {
             "firstName": true,
             "lastName": true
+          }
+        ],
+        "thirdParties":[
+          {
+            "name": true,
+            "address": {
+              "addressLine1": true,
+              "state": true,
+              "city": true,
+              "postalCode": true
+            }
           }
         ]
     }
