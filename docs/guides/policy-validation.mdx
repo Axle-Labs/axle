@@ -1167,6 +1167,7 @@ Below is an example request specifying the required fields. If either the requir
         "isActive": true,
         "policyNumber": true,
         "expirationDate": true,
+        "premium": true,
         "properties": [
           {
             "data": {
@@ -1196,9 +1197,9 @@ Below is an example request specifying the required fields. If either the requir
             "status": "pass",
             "breakdown": {
                 "fields-exist": {
-                    "status": "pass",
+                    "status": "fail",
                     "metadata": {
-                        "missingFields": []
+                        "missingFields": ["premium"]
                     }
                 },
                 "declarations-page-exists": {
