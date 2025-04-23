@@ -961,20 +961,19 @@ This example Rule will verify if the policy contains collision coverage for the 
     "address-match": {
       "status": "pass",
       "metadata": {
-         "pass" : 
-          [
-            {
-                "addressLine1": "123 Axle Street NE",
-                "addressLine2": "APT 111",
-                "city": "Atlanta",
-                "state": "GA",
-                "postalCode": "30303",
-                "country": "US"
-            },
-          ]
-          "fail": [],
-          "caution": [],
-          "unknown": []
+        "pass": [
+          {
+            "addressLine1": "123 Axle Street NE",
+            "addressLine2": "APT 111",
+            "city": "Atlanta",
+            "state": "GA",
+            "postalCode": "30303",
+            "country": "US"
+          }
+        ],
+        "fail": [],
+        "caution": [],
+        "unknown": []
       }
     }
     ```
@@ -1013,27 +1012,27 @@ Evaluates if provided year-make-model matches year-make-model listed as one of t
 ```
 
 ```typescript Example Rule Response
-   "properties-match": {
-      "status": "pass",
-        "metadata": {
-          "pass": [
-            {
-              "type": "vehicle",
-              "data": {
-                  "bodyStyle": "minivan",
-                  "vin": "5FNRL38209B014050",
-                  "model": "Odyssey",
-                  "year": "2009",
-                  "make": "Honda"
-              },
-              "id": "prp_tmGUxLpgHjmW9r6M6WjhS"
-            }
-          ],
-        "fail": [],
-        "caution": [],
-        "unknown": []
+  "properties-match": {
+    "status": "pass",
+    "metadata": {
+      "pass": [
+        {
+          "type": "vehicle",
+          "data": {
+            "bodyStyle": "minivan",
+            "vin": "5FNRL38209B014050",
+            "model": "Odyssey",
+            "year": "2009",
+            "make": "Honda"
+          },
+          "id": "prp_tmGUxLpgHjmW9r6M6WjhS"
         }
+      ],
+      "fail": [],
+      "caution": [],
+      "unknown": []
     }
+  }
 ```
 
 ### VIN (property type `vehicle`)
@@ -1062,25 +1061,25 @@ Evaluates if provided VIN matches the VIN listed as one of the properties when `
 ```
 
 ```typescript Example Rule Response
- "properties-match": {
+  "properties-match": {
     "status": "pass",
-      "metadata": {
-        "pass": [
-          {
-              "type": "vehicle",
-              "data": {
-                  "vin": "AAABC38A450011111",
-                  "model": "Q4",
-                  "year": "2025",
-                  "make": "Audi"
-              },
-              "id": "prp_8BKSFvreM7FOwI_3X2sxB"
-          }
-        ],
-        "fail": [],
-        "caution": [],
-        "unknown": []
-      }
+    "metadata": {
+      "pass": [
+        {
+          "type": "vehicle",
+          "data": {
+            "vin": "AAABC38A450011111",
+            "model": "Q4",
+            "year": "2025",
+            "make": "Audi"
+          },
+          "id": "prp_8BKSFvreM7FOwI_3X2sxB"
+        }
+      ],
+      "fail": [],
+      "caution": [],
+      "unknown": []
+    }
   }
 ```
 
@@ -1111,25 +1110,24 @@ Evaluates if provided address matches the address listed as one of the propertie
 ```
 
 ```typescript Example Rule Response
-"address-match": {
-  "status": "pass",
-  "metadata": {    
-    "pass" : 
-    [
-      {
+  "address-match": {
+    "status": "pass",
+    "metadata": {
+      "pass": [
+        {
           "addressLine1": "123 Axle Street NE",
           "addressLine2": "APT 111",
           "city": "Atlanta",
           "state": "GA",
           "postalCode": "30303",
           "country": "US"
-      },
-    ]
-    "fail": [],
-    "caution": [],
-    "unknown": []
+        }
+      ],
+      "fail": [],
+      "caution": [],
+      "unknown": []
+    }
   }
-}
 ```
 
 </Accordion>
