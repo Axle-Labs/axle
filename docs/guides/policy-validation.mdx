@@ -961,22 +961,19 @@ This example Rule will verify if the policy contains collision coverage for the 
     "address-match": {
       "status": "pass",
       "metadata": {
-        "address" : {
+        "pass": [
+          {
             "addressLine1": "123 Axle Street NE",
             "addressLine2": "APT 111",
             "city": "Atlanta",
             "state": "GA",
             "postalCode": "30303",
             "country": "US"
-        },
-        "input": {
-            "addressLine1": "123 Axle Street NE",
-            "addressLine2": "APT 111",
-            "city": "Atlanta",
-            "state": "GA",
-            "postalCode": "30303",
-            "country": "US"
-        }
+          }
+        ],
+        "fail": [],
+        "caution": [],
+        "unknown": []
       }
     }
     ```
@@ -984,157 +981,154 @@ This example Rule will verify if the policy contains collision coverage for the 
   </Accordion>
   <Accordion title="Properties Match">
 
-### `properties-match`
+    ### `properties-match`
 
-Evaluates whether input property matches the property that is listed on Axle Policy. Properties can be matched via year-make-model, VIN, or address (corresponding to type of property).
+    Evaluates whether input property matches the property that is listed on Axle Policy. Properties can be matched via year-make-model, VIN, or address (corresponding to type of property).
 
-### Year-make-model (property type `vehicle`)
+    ### Year-make-model (property type `vehicle`)
 
-Evaluates if provided year-make-model matches year-make-model listed as one of the properties when `policy.properties.type=vehicle`
+    Evaluates if provided year-make-model matches year-make-model listed as one of the properties when `policy.properties.type=vehicle`
 
-| Status    | Cause                                                                                                                                |
-| --------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `pass`    | Exact match on the year and high similarity threshold score on `make` and `model` to one of the properties listed on the Axle Policy |
-| `caution` | Exact match on the year and medium similarity threshold score on `make` and `model`                                                  |
-| `fail`    | No match on year or low similarity threshold score on `make` and `model`                                                             |
-| `unknown` | There is insufficient information to compare input year-make-model and Axle Policy                                                   |
+    | Status    | Cause                                                                                                                                |
+    | --------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+    | `pass`    | Exact match on the year and high similarity threshold score on `make` and `model` to one of the properties listed on the Axle Policy |
+    | `caution` | Exact match on the year and medium similarity threshold score on `make` and `model`                                                  |
+    | `fail`    | No match on year or low similarity threshold score on `make` and `model`                                                             |
+    | `unknown` | There is insufficient information to compare input year-make-model and Axle Policy                                                   |
 
-**Input Parameters**
+    **Input Parameters**
 
-- `year-make-model`: Provide a string in the following format "&lt;year&gt; &lt;make model of the vehicle&gt;". For example, you can provide "2009 Honda Odyssey"
+    - `year-make-model`: Provide a string in the following format "&lt;year&gt; &lt;make model of the vehicle&gt;". For example, you can provide "2009 Honda Odyssey"
 
-**Example Usage**
+    **Example Usage**
 
-```typescript Example Rule Request
-{
-    "rule": "properties-match",
-    "input": {
-        "year-make-model": "2009 Honda Odyssey"
+    ```typescript Example Rule Request
+    {
+      "rule": "properties-match",
+      "input": {
+          "year-make-model": "2009 Honda Odyssey"
+      }
     }
-}
-```
+    ```
 
-```typescript Example Rule Response
-   "properties-match": {
-      "status": "pass",
+    ```typescript Example Rule Response
+    "properties-match": {
+        "status": "pass",
         "metadata": {
-              "properties": [
-                  {
-                      "type": "vehicle",
-                      "data": {
-                          "bodyStyle": "minivan",
-                          "vin": "5FNRL38209B014050",
-                          "model": "Odyssey",
-                          "year": "2009",
-                          "make": "Honda"
-                      },
-                      "id": "prp_tmGUxLpgHjmW9r6M6WjhS"
-                  }
-              ],
-              "input": {
-                  "year-make-model": "2009 Honda Odyssey"
-              }
+          "pass": [
+            {
+              "type": "vehicle",
+              "data": {
+                "bodyStyle": "minivan",
+                "vin": "5FNRL38209B014050",
+                "model": "Odyssey",
+                "year": "2009",
+                "make": "Honda"
+              },
+              "id": "prp_tmGUxLpgHjmW9r6M6WjhS"
+            }
+          ],
+          "fail": [],
+          "caution": [],
+          "unknown": []
         }
     }
-```
+    ```
 
-### VIN (property type `vehicle`)
+    ### VIN (property type `vehicle`)
 
-Evaluates if provided VIN matches the VIN listed as one of the properties when `policy.properties.type=vehicle`
+    Evaluates if provided VIN matches the VIN listed as one of the properties when `policy.properties.type=vehicle`
 
-| Status    | Cause                                                                  |
-| --------- | ---------------------------------------------------------------------- |
-| `pass`    | VIN matches a property listed on the Axle Policy                       |
-| `fail`    | VIN doesn't match any of the properties                                |
-| `unknown` | There is insufficient information to compare input VIN and Axle Policy |
+    | Status    | Cause                                                                  |
+    | --------- | ---------------------------------------------------------------------- |
+    | `pass`    | VIN matches a property listed on the Axle Policy                       |
+    | `fail`    | VIN doesn't match any of the properties                                |
+    | `unknown` | There is insufficient information to compare input VIN and Axle Policy |
 
-**Input Parameters**
+    **Input Parameters**
 
-- `vin`: Provide VIN number of the vehicle as a `string`
+    - `vin`: Provide VIN number of the vehicle as a `string`
 
-**Example Usage**
+    **Example Usage**
 
-```typescript Example Rule Request
-{
-    "rule": "properties-match",
-    "input": {
-        "vin": "ZAMBC38A450014565"
-    }
-}
-```
-
-```typescript Example Rule Response
- "properties-match": {
-    "status": "pass",
-      "metadata": {
-            "properties": [
-                {
-                    "type": "vehicle",
-                    "data": {
-                        "vin": "ZAMBC38A450014565",
-                        "model": "Coupe",
-                        "year": "2005",
-                        "make": "Maserati"
-                    },
-                    "id": "prp_8BKSFvreM7FOwI_3X2sxB"
-                }
-            ],
-            "input": {
-                "vin": "ZAMBC38A450014565"
-            }
+    ```typescript Example Rule Request
+    {
+      "rule": "properties-match",
+      "input": {
+          "vin": "AAABC38A450011111"
       }
-  }
-```
-
-### Address (property type `dwelling`)
-
-Evaluates if provided address matches the address listed as one of the properties when `policy.properties.type=dwelling`
-
-| Status    | Cause                                                                                       |
-| --------- | ------------------------------------------------------------------------------------------- |
-| `pass`    | Input address matches one of the properties on the Axle Policy                              |
-| `caution` | Input address may not match any of the properties because of a difference in `addressLine2` |
-| `fail`    | Input address does not match any of the properties                                          |
-| `unknown` | There is insufficient information to compare input address and Axle Policy                  |
-
-**Input Parameters**
-
-- `address`: Full address provided as a `string` that includes both Address Line 1 and 2 along with city, postal code, and state.
-
-**Example Usage**
-
-```typescript Example Rule Request
-{
-  "rule": "properties-match",
-  "input": {
-    "address": "123 Axle St. NE, Apartment 111, Atlanta, GA 30303"
-  }
-}
-```
-
-```typescript Example Rule Response
-"address-match": {
-  "status": "pass",
-  "metadata": {
-    "address" : {
-        "addressLine1": "123 Axle Street NE",
-        "addressLine2": "APT 111",
-        "city": "Atlanta",
-        "state": "GA",
-        "postalCode": "30303",
-        "country": "US"
-    },
-    "input": {
-        "addressLine1": "123 Axle Street NE",
-        "addressLine2": "APT 111",
-        "city": "Atlanta",
-        "state": "GA",
-        "postalCode": "30303",
-        "country": "US"
     }
-  }
-}
-```
+    ```
+
+    ```typescript Example Rule Response
+    "properties-match": {
+      "status": "pass",
+      "metadata": {
+        "pass": [
+          {
+            "type": "vehicle",
+            "data": {
+              "vin": "AAABC38A450011111",
+              "model": "Q4",
+              "year": "2025",
+              "make": "Audi"
+            },
+            "id": "prp_8BKSFvreM7FOwI_3X2sxB"
+          }
+        ],
+        "fail": [],
+        "caution": [],
+        "unknown": []
+      }
+    }
+    ```
+
+    ### Address (property type `dwelling`)
+
+    Evaluates if provided address matches the address listed as one of the properties when `policy.properties.type=dwelling`
+
+    | Status    | Cause                                                                                       |
+    | --------- | ------------------------------------------------------------------------------------------- |
+    | `pass`    | Input address matches one of the properties on the Axle Policy                              |
+    | `caution` | Input address may not match any of the properties because of a difference in `addressLine2` |
+    | `fail`    | Input address does not match any of the properties                                          |
+    | `unknown` | There is insufficient information to compare input address and Axle Policy                  |
+
+    **Input Parameters**
+
+    - `address`: Full address provided as a `string` that includes both Address Line 1 and 2 along with city, postal code, and state.
+
+    **Example Usage**
+
+    ```typescript Example Rule Request
+    {
+      "rule": "properties-match",
+      "input": {
+        "address": "123 Axle St. NE, Apartment 111, Atlanta, GA 30303"
+      }
+    }
+    ```
+
+    ```typescript Example Rule Response
+    "address-match": {
+      "status": "pass",
+      "metadata": {
+        "pass": [
+          {
+            "addressLine1": "123 Axle Street NE",
+            "addressLine2": "APT 111",
+            "city": "Atlanta",
+            "state": "GA",
+            "postalCode": "30303",
+            "country": "US"
+          }
+        ],
+        "fail": [],
+        "caution": [],
+        "unknown": []
+      }
+    }
+    ```
 
 </Accordion>
 <Accordion title="Required Policy Information is Present">
