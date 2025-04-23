@@ -608,6 +608,7 @@ This example Rule will verify if the policy contains collision coverage for the 
             "isActive": true,
             "policyNumber": true,
             "expirationDate": true,
+            "premium": true,
             "properties": [
               {
                 "data": {
@@ -637,9 +638,9 @@ This example Rule will verify if the policy contains collision coverage for the 
                 "status": "pass",
                 "breakdown": {
                     "fields-exist": {
-                        "status": "pass",
+                        "status": "fail",
                         "metadata": {
-                            "missingFields": []
+                            "missingFields": ["premium"]
                         }
                     },
                     "declarations-page-exists": {
