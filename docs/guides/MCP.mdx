@@ -1,0 +1,46 @@
+---
+title: "Axle's Docs MCP"
+description: "Set up Axle's Docs MCP to grant AI tools the knowledge of Axle docs"
+---
+
+If you use AI-powered tools like like Cursor, VS Code Copilot, or Claude Desktop to build your Axle integrations, you can now link these tools directly to the Axle docs for faster integration building!
+
+You can do this by installing the Axle Docs [Model Context Protocol](https://modelcontextprotocol.io/introduction) (MCP) Server.
+
+# Installation Instructions
+
+<Note>
+
+This is an early alphabeta feature, so expect that these instructions may change due to updates from Mintlify or from the MCP Clients (Cursor, VS Code, Claude, etc.)
+
+</Note>
+
+## Installation Requirements:
+
+You must have `npm` installed on your machine. If not, start by [installing npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm).
+
+We also recommend installing an MCP compatible IDE or Chatbot tool before you begin this setup process. As of today, these primarily include VS Code, Cursor, and Claude Desktop.
+
+### MCP Installation:
+
+1. In any directory on your machine, run **`npm i -g @mintlify/mcp` to install the Mintlify MCP Generator**
+2. In the same directory where you ran the previous command, run `npx @mintlify/mcp@latest add axle` .
+3. This will open a CLI tool which will walk you through generating a copy of the Axle Docs MCP on your machine. Follow the instructions which appear to complete your setup. If you have Cursor or Claude Desktop installed, you will be prompted here for which MCP Clients you’d like to enable - Cursor, Claude or Both.
+
+### Additional Instructions For VS Code:
+
+The Mintlify MCP generator doesn’t currently support VS Code as a setup option, but VS Code will read in MCPs from Cursor’s MCP config, so you should select Cursor as your installation option.
+
+When you open VS Code after installing an MCP in Cursor, you may see a prompt like “Would you like to use Cursor MCPs?”. Answer yes.
+
+If you need more information about setting up this MCP with VS Code, read their official guide to [MCP Servers](https://code.visualstudio.com/docs/copilot/chat/mcp-servers).
+
+## Using the MCP
+
+Once you’ve completed the MCP installation, you can simply ask your chatbot of choice a questions about the Axle docs.
+
+For example:
+
+- “Walk me through implementing the first steps of the Axle ‘Getting Started’ guide”
+- “What options are available to check collision coverage using Axle's policy validation API?”
+- “Write a function which makes a request to Axle’s ‘Start Ignition’ endpoint which takes in a `userId` , `first name` and `last name` as arguments.”
