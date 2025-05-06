@@ -66,8 +66,7 @@
           ]
         },
         "guides/policy-validation",
-        "guides/sandbox",
-        "guides/MCP"
+        "guides/sandbox"
       ]
     },
     {
@@ -124,6 +123,10 @@
           ]
         }
       ]
+    },
+    {
+      "group": "Advanced",
+      "pages": ["advanced/mcp"]
     }
   ],
   "footerSocials": {
