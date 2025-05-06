@@ -162,6 +162,32 @@ paths:
                   - data
         "400":
           $ref: "#/components/responses/InputValidation"
+        "401":
+          description: "The request is not authorized. See the error message for details."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "The authCode provided is not authorized. Potential issues include: expiration of the authCode, formatting issues, or use of an invalid authCode."
+        "403":
+          description: "The client is not authorized to make this request. See the error message for details."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "This authCode has already been exchanged. For security reasons, each authCode can only be exchanged once."
         "429":
           $ref: "#/components/responses/TooManyRequests"
       deprecated: false
