@@ -123,6 +123,10 @@
           ]
         }
       ]
+    },
+    {
+      "group": "Advanced",
+      "pages": ["advanced/mcp"]
     }
   ],
   "footerSocials": {
