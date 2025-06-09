@@ -440,6 +440,86 @@ paths:
           $ref: "#/components/responses/TooManyRequests"
     parameters:
       - $ref: "#/components/parameters/policy"
+  /policies/{id}/validate/{template}:
+    post:
+      summary: Validate Policy with Template
+      description: "The Validate Policy endpoint returns the result of a evaluating a template of Rules against the requested policy object."
+      operationId: ValidatePolicy
+      parameters:
+        - $ref: "#/components/parameters/x-client-id"
+        - $ref: "#/components/parameters/x-destination-client-id"
+        - $ref: "#/components/parameters/x-access-token"
+      requestBody:
+        description: ""
+        content:
+          application/json:
+            schema:
+              type: object
+              description: "Metadata that contains inputs required for Rule evaluation. Note: object must be flattened."
+            example: { "customField": "2025-01-01" }
+        required: true
+      responses:
+        "200":
+          "description": ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    $ref: "#/components/schemas/Success"
+                  data:
+                    type: object
+                    properties:
+                      status:
+                        type: string
+                        description: "The overall status across all specified Rules."
+                        enum:
+                          - "pass"
+                          - "fail"
+                          - "caution"
+                      summary:
+                        type: object
+                        description: "A summary of the Rule evaluation statuses."
+                        properties:
+                          policy-active:
+                            $ref: "#/components/schemas/EvaluationStatus"
+                            description: "The evaluation status of the policy-effective Rule."
+                          rental-covered-for-collision:
+                            $ref: "#/components/schemas/EvaluationStatus"
+                            description: "The evaluation status of the rental-covered-for-collision Rule."
+                          expiration-date-comparison:
+                            $ref: "#/components/schemas/EvaluationStatusWithoutCaution"
+                            description: "The evaluation status of the expiration-date-comparison Rule."
+                      rules:
+                        type: object
+                        description: "A detailed report of the Rule evaluation results."
+                        properties:
+                          example-rule:
+                            type: object
+                            description: ""
+                            properties:
+                              status:
+                                $ref: "#/components/schemas/EvaluationStatus"
+                              metadata:
+                                type: object
+                                description: "Additional metadata about the Rule."
+                              message:
+                                type: object
+                                description: "An object containing the message code and human-readable message, if needed."
+                              breakdown:
+                                type: object
+                                description: "Detail on contributing Rules, if needed."
+                            required:
+                              - status
+                              - metadata
+        "400":
+          $ref: "#/components/responses/InputValidation"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+    parameters:
+      - $ref: "#/components/parameters/policy"
+      - $ref: "#/components/parameters/template"
   /carriers/{id}:
     get:
       summary: Get Carrier
@@ -1654,6 +1734,13 @@ components:
       description:
         The unique ID for the requested policy. Returned by Get Account for each
         Policy associated with the Account.
+    template:
+      name: template
+      in: path
+      required: true
+      schema:
+        type: string
+      description: The unique ID of the Validation template.
     carrier:
       name: id
       in: path

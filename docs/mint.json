@@ -98,7 +98,8 @@
             "api-reference/policies/coverages",
             "api-reference/policies/get-policy",
             "api-reference/policies/get-policy-report",
-            "api-reference/policies/validate-policy"
+            "api-reference/policies/validate-policy",
+            "api-reference/policies/validate-policy-template"
           ]
         },
         {
