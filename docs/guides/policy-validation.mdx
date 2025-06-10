@@ -1288,11 +1288,11 @@ Templates can be used to simplify the configuration of Rules in your application
 
 ### Usage
 <Steps>
-  <Step title="Add dynamic inputs to Ignition metadata (optional)">
-    Include metadata in [Start Ignition](/api-reference/ignition/start-ignition) to serve as dynamic Rule inputs. Ensure the metadata object is formatted correctly with the keys specified in your Template and the values conforming to the associated Rule input(s).
-  </Step>
   <Step title="Create or modify Validation Template">
     **Note:** Currently, Axle does not support creating or modifying templates via API. We hope to launch this in the near future. Please reach out to the Axle team to configure your Templates.  
+  </Step>
+  <Step title="Provide dynamic inputs to Ignition metadata (optional)">
+    Include metadata in [Start Ignition](/api-reference/ignition/start-ignition) to serve as dynamic Rule inputs. Ensure the metadata object is formatted correctly with the keys specified in your Template and the values conforming to the associated Rule input(s).
   </Step>
   <Step title="Retrieve Validation Templates">
     After creating a template, you can store the Template identifier in your application or retrieve a list of Templates configured for your Axle client or destination client when needed. 
