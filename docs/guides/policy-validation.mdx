@@ -1260,7 +1260,7 @@ If either the required fields or the declarations page check is satisfied, the R
 
 ## Validation Templates
 
-Templates can be used to simplify the configuration of Rules in your application. A Validation Template stores the list of rules with any default inputs and can pull dynamic input values from custom metadata shared via Start Ignition or per Validate request. 
+Templates can be used to simplify the configuration of Rules in your application by storing the list of rules with any default inputs. Validation Templates can also access dynamic input values from custom metadata shared via Start Ignition or individual Validate request. 
 
 <Info>
   Validation Templates are currently in development. Please reach out to the Axle team if you would like to enable them for your client or platform.
@@ -1287,7 +1287,6 @@ Templates can be used to simplify the configuration of Rules in your application
 ```
 
 ### Usage
-
 <Steps>
   <Step title="Add dynamic inputs to Ignition metadata (optional)">
     Include metadata in [Start Ignition](/api-reference/ignition/start-ignition) to serve as dynamic Rule inputs. Ensure the metadata object is formatted correctly with the keys specified in your Template and the values conforming to the associated Rule input(s).
@@ -1296,7 +1295,9 @@ Templates can be used to simplify the configuration of Rules in your application
     **Note:** Currently, Axle does not support creating or modifying templates via API. We hope to launch this in the near future. Please reach out to the Axle team to configure your Templates.  
   </Step>
   <Step title="Retrieve Validation Templates">
-    After creating a template, you can store the Template identifier in your application or retrieve a list of templates configured for your Axle client or destination client. See [Get Validation Config](/api-reference/configs/get-config-validation) or [Get Client Validation Config](/api-reference/platform/get-client-config-validation) for more details.
+    After creating a template, you can store the Template identifier in your application or retrieve a list of Templates configured for your Axle client or destination client when needed. 
+    
+    See [Get Validation Config](/api-reference/configs/get-config-validation) or [Get Client Validation Config](/api-reference/platform/get-client-config-validation) for more details.
   </Step>
   <Step title="Request Policy Validation with Template">
     Use the Template identifier to make a request to [Validate Policy with Template](/api-reference/policies/validate-policy-template). Ensure the request object is formatted correctly with the keys specified in your Template and the values conforming to the associated Rule input(s).
