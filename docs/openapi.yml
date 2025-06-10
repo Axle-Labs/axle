@@ -511,7 +511,10 @@ paths:
   /carriers/{id}:
     get:
       summary: Get Carrier
-      description: The Get Carrier endpoint returns a Carrier object that include additional details about an Axle-supported insurance carrier.
+      description: |-
+        The Get Carrier endpoint returns a Carrier object that include additional details (such as image) about an Axle-supported insurance carrier.
+
+        **Note**: this is only available for carriers that are listed on Account or Policy objects that are generated via Ignition result=`link`.
       operationId: GetCarrier
       parameters:
         - $ref: "#/components/parameters/x-client-id"
