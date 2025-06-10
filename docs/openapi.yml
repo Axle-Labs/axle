@@ -372,9 +372,9 @@ paths:
                   - $ref: "#/components/schemas/RuleWithInput"
             example:
               [
-                { "rule": "policy-active" },
+                { "rule": "example-rule" },
                 {
-                  "rule": "expiration-date-comparison",
+                  "rule": "example-rule-with-input",
                   "input": { "date": "2025-01-01" },
                 },
               ]
@@ -403,15 +403,9 @@ paths:
                         type: object
                         description: "A summary of the Rule evaluation statuses."
                         properties:
-                          policy-active:
+                          example-rule:
                             $ref: "#/components/schemas/EvaluationStatus"
-                            description: "The evaluation status of the policy-effective Rule."
-                          rental-covered-for-collision:
-                            $ref: "#/components/schemas/EvaluationStatus"
-                            description: "The evaluation status of the rental-covered-for-collision Rule."
-                          expiration-date-comparison:
-                            $ref: "#/components/schemas/EvaluationStatusWithoutCaution"
-                            description: "The evaluation status of the expiration-date-comparison Rule."
+                            description: "The evaluation status of the example Rule."
                       rules:
                         type: object
                         description: "A detailed report of the Rule evaluation results."
@@ -482,15 +476,9 @@ paths:
                         type: object
                         description: "A summary of the Rule evaluation statuses."
                         properties:
-                          policy-active:
+                          example-rule:
                             $ref: "#/components/schemas/EvaluationStatus"
-                            description: "The evaluation status of the policy-effective Rule."
-                          rental-covered-for-collision:
-                            $ref: "#/components/schemas/EvaluationStatus"
-                            description: "The evaluation status of the rental-covered-for-collision Rule."
-                          expiration-date-comparison:
-                            $ref: "#/components/schemas/EvaluationStatusWithoutCaution"
-                            description: "The evaluation status of the expiration-date-comparison Rule."
+                            description: "The evaluation status of the example Rule."
                       rules:
                         type: object
                         description: "A detailed report of the Rule evaluation results."
@@ -580,10 +568,11 @@ paths:
     get:
       summary: Get Validation Config
       description: |-
-        Get the Policy Validation configuration for your client.
+        Get the Policy Validation configuration for your client or on behalf of a destination client.
       operationId: GetValidationConfig
       parameters:
         - $ref: "#/components/parameters/x-client-id"
+        - $ref: "#/components/parameters/x-destination-client-id"
       responses:
         "200":
           description: ""
@@ -699,38 +688,6 @@ paths:
       deprecated: false
       tags:
         - Clients
-  /platform/clients/{id}/configs/validation:
-    get:
-      summary: Get Client Validation Config
-      description: |-
-        Get the Policy Validation configuration for a destination client associated with your platform client.
-      operationId: GetDestinationClientValidationConfig
-      parameters:
-        - $ref: "#/components/parameters/x-client-id"
-      responses:
-        "200":
-          description: ""
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    $ref: "#/components/schemas/Success"
-                  data:
-                    type: array
-                    description: List of Validation Templates for client.
-                    items:
-                      $ref: "#/components/schemas/ValidationConfig"
-        "400":
-          $ref: "#/components/responses/InputValidation"
-        "429":
-          $ref: "#/components/responses/TooManyRequests"
-      deprecated: false
-      tags:
-        - Clients
-    parameters:
-      - $ref: "#/components/parameters/client"
   /sandbox/accounts/{id}/event:
     post:
       summary: Trigger Account event
