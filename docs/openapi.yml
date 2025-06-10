@@ -372,9 +372,9 @@ paths:
                   - $ref: "#/components/schemas/RuleWithInput"
             example:
               [
-                { "rule": "policy-active" },
+                { "rule": "example-rule" },
                 {
-                  "rule": "expiration-date-comparison",
+                  "rule": "example-rule-with-input",
                   "input": { "date": "2025-01-01" },
                 },
               ]
@@ -403,15 +403,9 @@ paths:
                         type: object
                         description: "A summary of the Rule evaluation statuses."
                         properties:
-                          policy-active:
+                          example-rule:
                             $ref: "#/components/schemas/EvaluationStatus"
-                            description: "The evaluation status of the policy-effective Rule."
-                          rental-covered-for-collision:
-                            $ref: "#/components/schemas/EvaluationStatus"
-                            description: "The evaluation status of the rental-covered-for-collision Rule."
-                          expiration-date-comparison:
-                            $ref: "#/components/schemas/EvaluationStatusWithoutCaution"
-                            description: "The evaluation status of the expiration-date-comparison Rule."
+                            description: "The evaluation status of the example Rule."
                       rules:
                         type: object
                         description: "A detailed report of the Rule evaluation results."
@@ -440,6 +434,80 @@ paths:
           $ref: "#/components/responses/TooManyRequests"
     parameters:
       - $ref: "#/components/parameters/policy"
+  /policies/{id}/validate/{template}:
+    post:
+      summary: Validate Policy with Template
+      description: "The Validate Policy endpoint returns the result of a evaluating a template of Rules against the requested policy object."
+      operationId: ValidatePolicy
+      parameters:
+        - $ref: "#/components/parameters/x-client-id"
+        - $ref: "#/components/parameters/x-destination-client-id"
+        - $ref: "#/components/parameters/x-access-token"
+      requestBody:
+        description: ""
+        content:
+          application/json:
+            schema:
+              type: object
+              description: "Metadata that contains inputs required for Rule evaluation. Note: object must be flattened."
+            example: { "customField": "2025-01-01" }
+        required: true
+      responses:
+        "200":
+          "description": ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    $ref: "#/components/schemas/Success"
+                  data:
+                    type: object
+                    properties:
+                      status:
+                        type: string
+                        description: "The overall status across all specified Rules."
+                        enum:
+                          - "pass"
+                          - "fail"
+                          - "caution"
+                      summary:
+                        type: object
+                        description: "A summary of the Rule evaluation statuses."
+                        properties:
+                          example-rule:
+                            $ref: "#/components/schemas/EvaluationStatus"
+                            description: "The evaluation status of the example Rule."
+                      rules:
+                        type: object
+                        description: "A detailed report of the Rule evaluation results."
+                        properties:
+                          example-rule:
+                            type: object
+                            description: ""
+                            properties:
+                              status:
+                                $ref: "#/components/schemas/EvaluationStatus"
+                              metadata:
+                                type: object
+                                description: "Additional metadata about the Rule."
+                              message:
+                                type: object
+                                description: "An object containing the message code and human-readable message, if needed."
+                              breakdown:
+                                type: object
+                                description: "Detail on contributing Rules, if needed."
+                            required:
+                              - status
+                              - metadata
+        "400":
+          $ref: "#/components/responses/InputValidation"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+    parameters:
+      - $ref: "#/components/parameters/policy"
+      - $ref: "#/components/parameters/template"
   /carriers/{id}:
     get:
       summary: Get Carrier
@@ -496,11 +564,42 @@ paths:
       deprecated: false
       tags:
         - Carriers
+  /configs/validation:
+    get:
+      summary: Get Validation Config
+      description: |-
+        Get the Policy Validation configuration for your client or on behalf of a destination client.
+      operationId: GetValidationConfig
+      parameters:
+        - $ref: "#/components/parameters/x-client-id"
+        - $ref: "#/components/parameters/x-destination-client-id"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    $ref: "#/components/schemas/Success"
+                  data:
+                    type: array
+                    description: List of Validation Templates for client.
+                    items:
+                      $ref: "#/components/schemas/ValidationConfig"
+        "400":
+          $ref: "#/components/responses/InputValidation"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+      deprecated: false
+      tags:
+        - Clients
   /platform/clients:
     get:
       summary: Get Clients
       description: |-
-        Get a list of destination clients associated with your platform client and secret. This request will return a list of destination client `id`s that you can use to make requests to the Axle API on behalf of your destination clients.
+        Get a list of destination clients associated with your platform client. This request will return a list of destination client `id`s that you can use to make requests to the Axle API on behalf of your destination clients.
 
         See the [Axle for Platforms](/guides/platform-integration) guide for more information on how to use this endpoint and the destination client `id`.
       operationId: GetDestinationClients
@@ -534,7 +633,7 @@ paths:
     post:
       summary: Create Client
       description: |-
-        Create a destination client associated with your platform client and secret. This request will return a destination client `id` that you can use to make requests to the Axle API on behalf of your destination clients.
+        Create a destination client associated with your platform client. This request will return a destination client `id` that you can use to make requests to the Axle API on behalf of your destination clients.
 
         See the [Axle for Platforms](/guides/platform-integration) guide for more information on how to use this endpoint and the destination client `id`.
       operationId: CreateDestinationClient
@@ -1551,8 +1650,12 @@ components:
             - "comprehensive-coverage-meets-requirements"
             - "bodily-injury-coverage-meets-requirements"
             - "property-damage-coverage-meets-requirements"
+            - "uninsured-underinsured-bi-coverage-meets-requirements"
+            - "uninsured-underinsured-pd-coverage-meets-requirements"
             - "expiration-date-comparison"
             - "insureds-match"
+            - "properties-match"
+            - "address-match"
             - "required-policy-information-is-present"
         input:
           type: object
@@ -1570,6 +1673,58 @@ components:
             - "rental-covered-for-collision"
       required:
         - rule
+    RuleTemplateWithNoInput:
+      title: Rule With No Input
+      type: object
+      properties:
+        rule:
+          type: string
+          enum:
+            - "policy-active"
+            - "rental-covered-for-collision"
+      required:
+        - rule
+    RuleTemplateWithInput:
+      title: Rule With Input
+      type: object
+      properties:
+        rule:
+          type: string
+          enum:
+            - "collision-coverage-meets-requirements"
+            - "comprehensive-coverage-meets-requirements"
+            - "bodily-injury-coverage-meets-requirements"
+            - "property-damage-coverage-meets-requirements"
+            - "uninsured-underinsured-bi-coverage-meets-requirements"
+            - "uninsured-underinsured-pd-coverage-meets-requirements"
+            - "expiration-date-comparison"
+            - "insureds-match"
+            - "properties-match"
+            - "address-match"
+            - "required-policy-information-is-present"
+        input:
+          type: object
+          description: Input configuration to evaluate the rule. See [Supported Rules](/guides/policy-validation#supported-rules) for details on which Rules require additional input.
+          properties:
+            inputKey:
+              type: object
+              description: The inputKey is the key corresponding to the Rule input, e.g., "vin" or "deductible".
+              properties:
+                source:
+                  type: string
+                  description: The source key of the input value send via Ignition metadata or in the [Validate Policy with Template](/api-reference/policies/validate-policy-template) request body.
+                default:
+                  oneOf:
+                    - type: string
+                    - type: number
+                    - type: boolean
+                    - type: array
+                  description: The default value of the input key if not provided in the Ignition metadata or in the [Validate Policy with Template](/api-reference/policies/validate-policy-template) request body.
+              required:
+                - source
+      required:
+        - rule
+        - input
     ClientEntity:
       title: ClientEntity
       type: string
@@ -1583,12 +1738,37 @@ components:
       properties:
         id:
           type: string
-          description: The client ID of the destination client. You'll use this to make requests to the Axle API on behalf of your destination client.
+          description: The unique identifier of the destination client. You'll use this to make requests to the Axle API on behalf of your destination client.
         entity:
           $ref: "#/components/schemas/ClientEntity"
       required:
         - id
         - entity
+    ValidationConfig:
+      title: ValidationConfig
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unqiue identifier of the Validation template. You'll use this to make requests to the [Validate Policy with Template](/api-reference/policies/validate-policy-template) endpoint.
+        createdAt:
+          type: string
+          description: ISO 8601 timestamp at which the Validation template was created.
+        modifiedAt:
+          type: string
+          description: ISO 8601 timestamp at which the Validation template was last modified.
+        rules:
+          type: array
+          description: List of rules to be evaluated against the Policy object.
+          items:
+            oneOf:
+              - $ref: "#/components/schemas/RuleTemplateWithNoInput"
+              - $ref: "#/components/schemas/RuleTemplateWithInput"
+      required:
+        - id
+        - rules
+        - createdAt
+        - modifiedAt
 
   parameters:
     x-client-id:
@@ -1654,6 +1834,20 @@ components:
       description:
         The unique ID for the requested policy. Returned by Get Account for each
         Policy associated with the Account.
+    client:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: The unique ID for the requested client. Returned in Get Clients.
+    template:
+      name: template
+      in: path
+      required: true
+      schema:
+        type: string
+      description: The unique ID of the Validation template.
     carrier:
       name: id
       in: path
