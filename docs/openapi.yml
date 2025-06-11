@@ -1658,6 +1658,7 @@ components:
             - "expiration-date-comparison"
             - "insureds-match"
             - "properties-match"
+            - "vehicle-use-meets-requirements"
             - "address-match"
             - "required-policy-information-is-present"
         input:
@@ -1703,6 +1704,7 @@ components:
             - "expiration-date-comparison"
             - "insureds-match"
             - "properties-match"
+            - "vehicle-use-meets-requirements"
             - "address-match"
             - "required-policy-information-is-present"
         input:
