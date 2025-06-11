@@ -1169,6 +1169,8 @@ Checks whether any vehicle in the policy has a specified use (e.g., business, co
 
 ### **Example Usage**
 
+### **pass — Specific vehicle matches use via VIN + YMM**
+
 ```typescript Example Rule Request
 {
   "rule": "vehicle-use-meets-requirements",
@@ -1202,6 +1204,54 @@ Checks whether any vehicle in the policy has a specified use (e.g., business, co
     "unknown": []
   }
 }
+
+```
+
+### **pass — Any vehicle has specified use (no VIN/YMM)**
+
+```typescript Example Rule Request
+{
+  "rule": "vehicle-use-meets-requirements",
+  "input": {
+    "use": "business"
+  }
+}
+```
+
+```typescript Example Rule Response
+"vehicle-use-meets-requirements": {
+    status: "pass",
+    metadata: {
+      pass: [
+        {
+          id: "prp_tmGUxLpgHjmW9r6M6WjhS",
+          type: "vehicle",
+          data: {
+            vin: "5FNRL38209B014050",
+            make: "Honda",
+            year: "2019",
+            model: "Odyssey",
+            use: "business",
+          },
+        },
+      ],
+      fail: [
+        {
+          id: "prp_tmGUxLpgHjmW434M6WjhS",
+          type: "vehicle",
+          data: {
+            vin: "3432434",
+            make: "Suzuki",
+            year: "2019",
+            model: "xyz",
+            use: "pleasure",
+          },
+        },
+      ],
+      caution: [],
+      unknown: [],
+    },
+  }
 
 ```
 
