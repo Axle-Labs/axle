@@ -1495,7 +1495,6 @@ components:
             - lienholder
             - lessor
             - interest
-          default: interest
           nullable: true
           description: Should be used for display purposes only. All listed thirdParties have established financial interest in the associated property.
         name:

@@ -280,14 +280,16 @@ Rules applied:
       If your application requires matching your users against policy insureds, it is recommended to combine `firstName` and `lastName` into a single value and using a "fuzzy" matching algorithm with a strict threshold.
     </Tip>
 
-    <ResponseField name="type" type="string">
-      The role of the insured individual, indicating whether they are the primary policyholder / user or a secondary insured party. Note that this field is in continued development and is subject to modification.
+    <ResponseField name="type" type="string or null">
+      The role of the insured individual, indicating whether they are the primary policyholder / user or a secondary insured party. **Note:** this field is in continued development and is subject to modification. Should be used for display purposes only. 
 
       Available options:
 
       `primary` - The policyholder or primary user of the insured property.
 
       `secondary` - An additional person insured under the policy, such as an additional driver.
+
+       If the role of the Insured is not specified, type will be `null`.
     </ResponseField>
 
     <ResponseField name="dateOfBirthYear" type="string or null">
@@ -320,13 +322,13 @@ List of external parties with interest in the policy.
 
     <Expandable title="ThirdParty">
 
-        <ResponseField name="type" type="string" default="interest">
-          The role of the Third Party associated with the insured property. **Note:** this field is in continued development and is subject to modification.
+        <ResponseField name="type" type="string or null">
+          The role of the Third Party associated with the insured property. 
+          **Note:** this field is in continued development and is subject to modification. Should be used for display purposes only. 
 
           The Axle Schema currently supports the following Third Party options. See below for details on Axle's standardization of Third Party type based on data provided by the insurance carrier.
 
           Available options:
-
 
           `lienholder` - A financial institution or individual that holds a legal claim on the insured property. This includes mortgagees.
 
@@ -335,7 +337,8 @@ List of external parties with interest in the policy.
           `interest` - Any Third Party with a financial interest in the insured property. This option serves as the conservative default used in the following cases:
             1. The Third Party is specifically listed as an "additional interest".
             2. The Third Party falls across options (e.g. a Third Party that is both an additional insured and an additional interest).
-            3. The specific role of the Third Party is uncertain or not clearly defined.
+            
+          If the role of the Third Party is not specified, type will be `null`. 
         </ResponseField>
 
         <ResponseField name="name" type="string">
