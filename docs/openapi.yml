@@ -1658,9 +1658,9 @@ components:
             - "expiration-date-comparison"
             - "insureds-match"
             - "properties-match"
-            - "vehicle-use-meets-requirements"
             - "address-match"
             - "required-policy-information-is-present"
+            - "vehicle-use-meets-requirements"
         input:
           type: object
           description: Additional input to evaluate the rule. See [Supported Rules](/guides/policy-validation#supported-rules) for details on which Rules require additional input.
@@ -1704,9 +1704,9 @@ components:
             - "expiration-date-comparison"
             - "insureds-match"
             - "properties-match"
-            - "vehicle-use-meets-requirements"
             - "address-match"
             - "required-policy-information-is-present"
+            - "vehicle-use-meets-requirements"
         input:
           type: object
           description: Input configuration to evaluate the rule. See [Supported Rules](/guides/policy-validation#supported-rules) for details on which Rules require additional input.
