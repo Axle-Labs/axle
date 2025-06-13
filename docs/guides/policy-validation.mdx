@@ -983,22 +983,22 @@ This example Rule will verify if the policy contains collision coverage for the 
 
     ### `properties-match`
 
-    Evaluates whether input property matches the property that is listed on Axle Policy. Properties can be matched via year-make-model, VIN, or address (corresponding to type of property).
+    Evaluates whether input property matches the property that is listed on Axle Policy. Properties can be matched via yearMakeModel, VIN, or address (corresponding to type of property).
 
-    ### Year-make-model (property type `vehicle`)
+    ### yearMakeModel (property type `vehicle`)
 
-    Evaluates if provided year-make-model matches year-make-model listed as one of the properties when `policy.properties.type=vehicle`
+    Evaluates if provided yearMakeModel matches yearMakeModel listed as one of the properties when `policy.properties.type=vehicle`
 
     | Status    | Cause                                                                                                                                |
     | --------- | ------------------------------------------------------------------------------------------------------------------------------------ |
     | `pass`    | Exact match on the year and high similarity threshold score on `make` and `model` to one of the properties listed on the Axle Policy |
     | `caution` | Exact match on the year and medium similarity threshold score on `make` and `model`                                                  |
     | `fail`    | No match on year or low similarity threshold score on `make` and `model`                                                             |
-    | `unknown` | There is insufficient information to compare input year-make-model and Axle Policy                                                   |
+    | `unknown` | There is insufficient information to compare input yearMakeModel and Axle Policy                                                   |
 
     **Input Parameters**
 
-    - `year-make-model`: Provide a string in the following format "&lt;year&gt; &lt;make model of the vehicle&gt;". For example, you can provide "2009 Honda Odyssey"
+    - `yearMakeModel`: Provide a string in the following format "&lt;year&gt; &lt;make model of the vehicle&gt;". For example, you can provide "2009 Honda Odyssey"
 
     **Example Usage**
 
@@ -1006,7 +1006,7 @@ This example Rule will verify if the policy contains collision coverage for the 
     {
       "rule": "properties-match",
       "input": {
-          "year-make-model": "2009 Honda Odyssey"
+          "yearMakeModel": "2009 Honda Odyssey"
       }
     }
     ```
@@ -1035,7 +1035,7 @@ This example Rule will verify if the policy contains collision coverage for the 
     }
     ```
 
-    ### VIN (property type `vehicle`)
+    ### vin (property type `vehicle`)
 
     Evaluates if provided VIN matches the VIN listed as one of the properties when `policy.properties.type=vehicle`
 
