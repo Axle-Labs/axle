@@ -1132,131 +1132,6 @@ This example Rule will verify if the policy contains collision coverage for the 
 
 </Accordion>
 
-<Accordion title="Vehicle Use Meets Requirements">
-
-### `vehicle-use-meets-requirements`
-
-Checks whether any vehicle in the policy has a specified use (e.g., business, commute, or pleasure). If a `vin` or `year-make-model` is provided, the rule ensures that the matched vehicle has the expected use.
-
----
-
-#### **Validation Value**
-
-- `pass`: At least one vehicle meets the usage requirement.
-- `fail`: No vehicle meets the requirement or the specified vehicle doesn’t match.
-- `unknown`: Use not provided, or matching vehicle not found.
-- `caution`: _Not applicable_
-
----
-
-### **Inputs**
-
-- `use` (required): One of `business`, `commute`, or `pleasure`.
-- `vin` (optional): VIN of a specific vehicle.
-- `year-make-model` (optional): Formatted string, e.g., `"2020 Toyota Camry"`.
-
----
-
-### **Responses**
-
-| Status    | Cause                                                                        |
-| --------- | ---------------------------------------------------------------------------- |
-| `pass`    | At least one vehicle has the expected use (or specific vehicle matches).     |
-| `fail`    | No vehicle meets the expected use (or specific vehicle does not match).      |
-| `unknown` | Use not defined, input use missing, or matching vehicle not found in policy. |
-
----
-
-### **Example Usage**
-
-### **pass — Specific vehicle matches use via VIN + YMM**
-
-```typescript Example Rule Request
-{
-  "rule": "vehicle-use-meets-requirements",
-  "input": {
-    "use": "business",
-    "vin": "5FNRL38209B014050",
-    "year-make-model": "2019 Honda Odyssey"
-  }
-}
-```
-
-```typescript Example Rule Response
-"vehicle-use-meets-requirements": {
-  "status": "pass",
-  "metadata": {
-    "pass": [
-      {
-        "id": "prp_tmGUxLpgHjmW9r6M6WjhS",
-        "type": "vehicle",
-        "data": {
-          "vin": "5FNRL38209B014050",
-          "make": "Honda",
-          "year": "2019",
-          "model": "Odyssey",
-          "use": "business"
-        }
-      }
-    ],
-    "fail": [],
-    "caution": [],
-    "unknown": []
-  }
-}
-
-```
-
-### **pass — Any vehicle has specified use (no VIN/YMM)**
-
-```typescript Example Rule Request
-{
-  "rule": "vehicle-use-meets-requirements",
-  "input": {
-    "use": "business"
-  }
-}
-```
-
-```typescript Example Rule Response
-"vehicle-use-meets-requirements": {
-    status: "pass",
-    metadata: {
-      pass: [
-        {
-          id: "prp_tmGUxLpgHjmW9r6M6WjhS",
-          type: "vehicle",
-          data: {
-            vin: "5FNRL38209B014050",
-            make: "Honda",
-            year: "2019",
-            model: "Odyssey",
-            use: "business",
-          },
-        },
-      ],
-      fail: [
-        {
-          id: "prp_tmGUxLpgHjmW434M6WjhS",
-          type: "vehicle",
-          data: {
-            vin: "3432434",
-            make: "Suzuki",
-            year: "2019",
-            model: "xyz",
-            use: "pleasure",
-          },
-        },
-      ],
-      caution: [],
-      unknown: [],
-    },
-  }
-
-```
-
-</Accordion>
-
 <Accordion title="Required Policy Information is Present">
   ### `required-policy-information-is-present`
 
@@ -1382,6 +1257,66 @@ If either the required fields or the declarations page check is satisfied, the R
 ```
 
 </Accordion>
+
+<Accordion title="Vehicle Use Meets Requirements">
+
+### `vehicle-use-meets-requirements`
+
+Evaluates whether any vehicle on the policy has a specified use (e.g., business, commute, or pleasure). If a `vin` or `year-make-model` is provided, the rule ensures that the matched vehicle has the expected use.
+
+#### Input Parameters
+
+- `use` (required): One of `business`, `commute`, or `pleasure`.
+- `vin` (optional): The Vehicle Identification Number of the vehicle you want to check. If provided, the rule will only evaluate the vehicle with this VIN.
+- `year-make-model` (optional): Formatted string, e.g., `"2020 Toyota Camry"` specifying which vehicle to check. If provided, the rule will only evaluate the vehicle that matches this year-make-model.
+
+#### Responses
+
+| Status    | Cause                                                                                  |
+| --------- | -------------------------------------------------------------------------------------- |
+| `pass`    | At least one vehicle (or the specified vehicle) has the expected use.                  |
+| `fail`    | All vehicles (or just the specified vehicle) fail to meet the usage requirement.       |
+| `unknown` | Vehicle use data is not available or the specified vehicle is not found on the policy. |
+
+#### Example Usage
+
+```typescript Example Rule Request
+{
+  "rule": "vehicle-use-meets-requirements",
+  "input": {
+    "use": "business",
+    "vin": "5FNRL38209B014050",
+  }
+}
+```
+
+```typescript Example Rule Response
+"vehicle-use-meets-requirements": {
+  "status": "pass",
+  "metadata": {
+    "pass": [
+      {
+        "id": "prp_tmGUxLpgHjmW9r6M6WjhS",
+        "type": "vehicle",
+        "data": {
+          "vin": "5FNRL38209B014050",
+          "make": "Honda",
+          "year": "2019",
+          "model": "Odyssey",
+          "use": "business"
+        }
+      }
+    ],
+    "fail": [],
+    "caution": [],
+    "unknown": []
+  }
+}
+
+```
+
+</Accordion>
+
 </AccordionGroup>
 
 ## Validation Templates
