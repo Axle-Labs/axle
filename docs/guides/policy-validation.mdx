@@ -1131,6 +1131,7 @@ This example Rule will verify if the policy contains collision coverage for the 
     ```
 
 </Accordion>
+
 <Accordion title="Required Policy Information is Present">
   ### `required-policy-information-is-present`
 
@@ -1256,17 +1257,79 @@ If either the required fields or the declarations page check is satisfied, the R
 ```
 
 </Accordion>
+
+<Accordion title="Vehicle Use Meets Requirements">
+
+### `vehicle-use-meets-requirements`
+
+Evaluates whether any vehicle on the policy has a specified use (e.g., business, commute, or pleasure). If a `vin` or `year-make-model` is provided, the rule ensures that the matched vehicle has the expected use.
+
+#### Input Parameters
+
+- `use` (required): One of `business`, `commute`, or `pleasure`.
+- `vin` (optional): The Vehicle Identification Number of the vehicle you want to check. If provided, the rule will only evaluate the vehicle with this VIN.
+- `year-make-model` (optional): Formatted string, e.g., `"2020 Toyota Camry"` specifying which vehicle to check. If provided, the rule will only evaluate the vehicle that matches this year-make-model.
+
+#### Responses
+
+| Status    | Cause                                                                                  |
+| --------- | -------------------------------------------------------------------------------------- |
+| `pass`    | At least one vehicle (or the specified vehicle) has the expected use.                  |
+| `fail`    | All vehicles (or just the specified vehicle) fail to meet the usage requirement.       |
+| `unknown` | Vehicle use data is not available or the specified vehicle is not found on the policy. |
+
+#### Example Usage
+
+```typescript Example Rule Request
+{
+  "rule": "vehicle-use-meets-requirements",
+  "input": {
+    "use": "business",
+    "vin": "5FNRL38209B014050",
+  }
+}
+```
+
+```typescript Example Rule Response
+"vehicle-use-meets-requirements": {
+  "status": "pass",
+  "metadata": {
+    "pass": [
+      {
+        "id": "prp_tmGUxLpgHjmW9r6M6WjhS",
+        "type": "vehicle",
+        "data": {
+          "vin": "5FNRL38209B014050",
+          "make": "Honda",
+          "year": "2019",
+          "model": "Odyssey",
+          "use": "business"
+        }
+      }
+    ],
+    "fail": [],
+    "caution": [],
+    "unknown": []
+  }
+}
+
+```
+
+</Accordion>
+
 </AccordionGroup>
 
 ## Validation Templates
 
-Templates can be used to simplify the configuration of Rules in your application by storing the list of rules with any default inputs. Validation Templates can also access dynamic input values from custom metadata shared via Start Ignition or individual Validate request. 
+Templates can be used to simplify the configuration of Rules in your application by storing the list of rules with any default inputs. Validation Templates can also access dynamic input values from custom metadata shared via Start Ignition or individual Validate request.
 
 <Info>
-  Validation Templates are currently in development. Please reach out to the Axle team if you would like to enable them for your client or platform.
+  Validation Templates are currently in development. Please reach out to the
+  Axle team if you would like to enable them for your client or platform.
 </Info>
 
 ### Example Template
+
 ```json
 {
   "id": "tem_jsK9vrCIfABlCW7PqIknc",
@@ -1287,6 +1350,7 @@ Templates can be used to simplify the configuration of Rules in your application
 ```
 
 ### Usage
+
 <Steps>
   <Step title="Create or modify Validation Template">
     **Note:** Currently, Axle does not support creating or modifying templates via API. We hope to launch this in the near future. Please reach out to the Axle team to configure your Templates.  
@@ -1303,5 +1367,6 @@ Templates can be used to simplify the configuration of Rules in your application
     Use the Template identifier to make a request to [Validate Policy with Template](/api-reference/policies/validate-policy-template). Ensure the request object is formatted correctly with the keys specified in your Template and the values conforming to the associated Rule input(s).
 
     <Warning>Providing inputs to the Validate Policy endpoint will overwrite any metadata provided via Start Ignition.</Warning>
+
   </Step>
 </Steps>
