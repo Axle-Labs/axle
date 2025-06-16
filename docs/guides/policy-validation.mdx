@@ -1262,13 +1262,13 @@ If either the required fields or the declarations page check is satisfied, the R
 
 ### `vehicle-use-meets-requirements`
 
-Evaluates whether any vehicle on the policy has a specified use (e.g., business, commute, or pleasure). If a `vin` or `year-make-model` is provided, the rule ensures that the matched vehicle has the expected use.
+Evaluates whether any vehicle on the policy has a specified use (e.g., business, commute, or pleasure). If a `vin` or `yearMakeModel` is provided, the rule ensures that the matched vehicle has the expected use.
 
 #### Input Parameters
 
 - `use` (required): One of `business`, `commute`, or `pleasure`.
 - `vin` (optional): The Vehicle Identification Number of the vehicle you want to check. If provided, the rule will only evaluate the vehicle with this VIN.
-- `year-make-model` (optional): Formatted string, e.g., `"2020 Toyota Camry"` specifying which vehicle to check. If provided, the rule will only evaluate the vehicle that matches this year-make-model.
+- `yearMakeModel` (optional): Formatted string, e.g., `"2020 Toyota Camry"` specifying which vehicle to check. If provided, the rule will only evaluate the vehicle that matches this yearMakeModel.
 
 #### Responses
 
