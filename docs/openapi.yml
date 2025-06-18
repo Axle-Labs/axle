@@ -45,7 +45,9 @@ paths:
                   description: |-
                     Optional object to store ephemeral information about the session, such as `reservationTime`. Will be returned in webhook events.
 
-                    ⚠️  The `metadata` field does not support nested objects. All keys must have values of type: `string`, `integer`, or `array`.
+                    ⚠️  The `metadata` field does not support nested objects. All keys must have values of type: `string`, `boolean`, `number`, or `array`.
+
+                    ℹ️ `metadata` object can be used in policy validation templates as a dynamic rule input. For more info refer to the [Validation Templates Guide](/guides/policy-validation#example-template).
               required:
                 - user
             example:
