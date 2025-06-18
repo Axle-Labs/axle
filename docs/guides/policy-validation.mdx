@@ -1317,6 +1317,71 @@ Evaluates whether any vehicle on the policy has a specified use (e.g., business,
 
 </Accordion>
 
+<Accordion title="Third Party Name and Address Match">
+
+### `third-party-name-address-match`
+
+Evaluates whether the third party (e.g., lender) listed on the policy matches the provided name and, if provided, the address. The rule checks for a substring or fuzzy match on the name and validates the address using an existing address match rule.
+
+#### Input Parameters
+
+- `name` (required): String representing the name of the third party (e.g., "Sunrise Bank").
+- `address` (optional): String or object representing the address of the third party.
+
+#### Responses
+
+| Status    | Cause                                                                                 |
+| --------- | ------------------------------------------------------------------------------------- |
+| `pass`    | Name is a substring or high-confidence fuzzy match AND address matches (if provided). |
+| `caution` | Name is a medium-confidence fuzzy match OR address match results in caution.          |
+| `fail`    | Name does not match OR address match fails.                                           |
+| `unknown` | Name is null OR address match results in unknown.                                     |
+
+#### Example Usage
+
+````typescript
+{
+  "rule": "third-party-name-address-match",
+  "input": {
+    "name": "Sunrise Bank",
+    "address": "123 Main St, Springfield, IL 62701",
+  }
+}
+
+```typescript Example Rule Response
+{
+  "third-party-name-address-match": {
+    "status": "pass",
+    "metadata": {
+      "pass": [
+        {
+          "id": "prp_lienholder_abc123",
+          "type": "interest",
+          "data": {
+            "name": "Sunrise Bank",
+            "address": {
+              addressLine1: "123 Main St",
+              country: "USA",
+              addressLine2: "",
+              state: "IL",
+              city: "Springfield",
+              postalCode: "62701",
+            }
+          }
+        }
+      ],
+      "fail": [],
+      "caution": [],
+      "unknown": []
+    }
+  }
+}
+```
+
+</Accordion>
+
+
+
 </AccordionGroup>
 
 ## Validation Templates
@@ -1347,7 +1412,7 @@ Templates can be used to simplify the configuration of Rules in your application
   "createdAt": "2025-06-10T13:57:22.300Z",
   "modifiedAt": "2025-06-10T13:57:22.300Z"
 }
-```
+````
 
 ### Usage
 
