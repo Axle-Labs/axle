@@ -1,0 +1,114 @@
+---
+title: "Validate Policy with Template"
+description: "Evaluate a set of Rules against a policy to determine if your application’s requirements are met." 
+---
+
+<Info>
+  If you have not received access to the Axle sandbox, please reach out to the
+  Axle team!
+</Info>
+
+## Step 1: Create and Complete Ignition Session
+
+Follow the steps provided in [this guide](/guides/sandbox-ignition-completion) to create and complete ignition session. Once complete, note your [policy identifier](/api-reference/policies/policy#fields) which will be used to make API call to policy validation engine.
+
+### Optional: Provide `metadata` object when generating ignition session
+
+Include metadata in [Start Ignition](/api-reference/ignition/start-ignition) which will be used as a dynamic input in policy validation.
+
+Ensure the metadata object is formatted correctly with the keys specified in your Template and the values conforming to the associated Rule input(s).
+
+
+## Step 2: Retrieve Validation Template
+
+Once Policy Validation feature has been activated for your client in **sandbox**, you will be able to access two sample validation templates associated with your client. 
+
+See [Get Validation Config](/api-reference/configs/get-config-validation#response-input-input-key) API call to retrieve all the templates associated with your client. Once you make this API call, you will get template identifier which you can use along with your policy identifier to validate the policy.
+
+More information on template structure can be found [here](/guides/policy-validation#example-template)
+
+## Step 3: Validate `policy` using template
+
+Use the template identifier to make a request to [Validate Policy with Template](/api-reference/policies/validate-policy-template). In Sandbox environment, we provide two sample templates that you can use to validate your policy.
+
+For validation rules that need input parameters (e.g. `insureds-match`), ensure the request object is formatted correctly with the keys specified in your Template and the values conforming to the associated Rule input(s).
+
+More information about rules with `input` can be found [here](https://docs.axle.insure/api-reference/configs/get-config-validation#response-data-rules)
+
+### Case: Loaner
+
+This rule simulates the validation of a vehicle on the policy to determine whether it qualifies as a loaner. The following template has 3 rules: `collision-coverage-meets-requirements`, `comprehensive-coverage-meets-requirements` and `insureds-match` 
+
+Each rule has `default` variable; for cases `collision-coverage-meets-requirements` and `comprehensive-coverage-meets-requirements`, `deductible` is set to be 1000. 
+
+Additionally, rule `insureds-match` needs `input` where source is specified as `names` field. Ensure field `names` exists in either ignition metadata or in the body of the API call.
+
+```json 
+{
+    id: "tem_loaner_validate_case1",
+    rules: [
+      {
+        rule: "collision-coverage-meets-requirements",
+         input: {
+          deductible: {
+            default: "1000",
+          },
+        },
+      },
+      {
+        rule: "comprehensive-coverage-meets-requirements",
+        input: {
+          deductible: {
+            default: "1000",
+          },
+        },
+      },
+      {
+        rule: "insureds-match",
+        input: {
+          insuredNames: {
+            default: ["Jane Doe"],
+            source: "names", 
+          },
+        },
+      },
+    ],
+    createdAt: "2025-06-01T13:57:22.300Z",
+    modifiedAt: "2025-06-10T13:57:22.300Z",
+  }
+```
+
+### Case: Rental
+
+This rule simulates the validation of a vehicle on the policy to determine whether it qualifies as a rental. Similar to Loaner case, Rental also has 3 validation rules. The main difference is `rental-covered-for-collision` rule that has no default and no `source` field specified.
+
+```json
+{
+    id: "tem_rental_validate_case1",
+    rules: [
+      {
+        rule: "rental-covered-for-collision",
+      },
+      {
+        rule: "comprehensive-coverage-meets-requirements",
+        input: {
+          deductible: {
+            default: "1000",
+          },
+        },
+      },
+      {
+        rule: "insureds-match",
+        input: {
+          insuredNames: {
+            default: ["Jane Doe"],
+            source: "names", 
+          },
+        },
+      },
+    ],
+    createdAt: "2025-05-10T13:57:22.300Z",
+    modifiedAt: "2025-06-10T13:57:22.300Z",
+  }
+```
+
