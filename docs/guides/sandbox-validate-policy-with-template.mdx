@@ -10,7 +10,7 @@ description: "Evaluate a set of Rules against a policy to determine if your appl
 
 ## Step 1: Create and Complete Ignition Session
 
-Follow the steps provided in [this guide](guides/sandbox-ignition-completion#testing-ignition-completions-in-the-sandbox) to create and complete ignition session. Once complete, note your [policy identifier](/api-reference/policies/policy#fields) which will be used to make API call to policy validation engine.
+Follow the steps provided in [this guide](/guides/sandbox-ignition-completion) to create and complete ignition session. Once complete, note your [policy identifier](/api-reference/policies/policy#fields) which will be used to make API call to policy validation engine.
 
 ### Optional: Provide `metadata` object when generating ignition session
 
@@ -23,52 +23,45 @@ Ensure the metadata object is formatted correctly with the keys specified in you
 
 Once Policy Validation feature has been activated for your client in **sandbox**, you will be able to access two sample validation templates associated with your client. 
 
-See [Get Validation Config](api-reference/configs/get-config-validation) API call to retrieve all the templates associated with your client. Once you make this API call, you will get template identifier which you can use along with your policy identifier to validate the policy.
+See [Get Validation Config](/api-reference/configs/get-config-validation#response-input-input-key) API call to retrieve all the templates associated with your client. Once you make this API call, you will get template identifier which you can use along with your policy identifier to validate the policy.
 
-Each validation template has following structure:
-
-```json
-{
-  rule: "<name of the rule>", //e.g. "insureds-match"
-  input: {
-    "<rule parameter>": { //e.g. "insuredNames"
-      default: "<default value>",
-      source: "<field name you specified in ignition.metadata OR validatePolicy body>", 
-    },
-  },
-}
-
-```
+More information on template structure can be found [here](/guides/policy-validation#example-template)
 
 ## Step 3: Validate `policy` using template
 
-Use the Template identifier to make a request to Validate Policy with Template. In Sandbox environment, we provide two sample templates that you can use to validate your policy.
+Use the template identifier to make a request to [Validate Policy with Template](/api-reference/policies/validate-policy-template). In Sandbox environment, we provide two sample templates that you can use to validate your policy.
 
 For validation rules that need input parameters (e.g. `insureds-match`), ensure the request object is formatted correctly with the keys specified in your Template and the values conforming to the associated Rule input(s).
 
-See [Validate Policy with Template](api-reference/policies/validate-policy-template) API call to view the format of the endpoint. 
+More information about rules with `input` can be found [here](https://docs.axle.insure/api-reference/configs/get-config-validation#response-data-rules)
 
-### Optional: Provide 
+### Case: Loaner
 
-For policies that need input parameter. 
+This rule simulates the validation of a vehicle on the policy to determine whether it qualifies as a loaner. The following template has 3 rules: `collision-coverage-meets-requirements`, `comprehensive-coverage-meets-requirements` and `insureds-match` 
 
-For example, for rule `insureds-match`, you need to provide insured name
+Each rule has `default` variable; for cases `collision-coverage-meets-requirements` and `comprehensive-coverage-meets-requirements`, `deductible` is set to be 1000. 
 
-**Case: Loaner**
+Additionally, rule `insureds-match` needs `input` where source is specified as `names` field. Ensure field `names` exists in either ignition metadata or in the body of the API call.
 
-The following template has 3 rules: `collision-coverage-meets-requirements`, `comprehensive-coverage-meets-requirements` and `insureds-match` 
-
-Only `insureds-match` needs input parameter `insuredsMatch`. You can provide
-
-```json
+```json 
 {
     id: "tem_loaner_validate_case1",
     rules: [
       {
         rule: "collision-coverage-meets-requirements",
+         input: {
+          deductible: {
+            default: "1000",
+          },
+        },
       },
       {
         rule: "comprehensive-coverage-meets-requirements",
+        input: {
+          deductible: {
+            default: "1000",
+          },
+        },
       },
       {
         rule: "insureds-match",
@@ -85,7 +78,9 @@ Only `insureds-match` needs input parameter `insuredsMatch`. You can provide
   }
 ```
 
-**Case: Rental**
+### Case: Rental
+
+This rule simulates the validation of a vehicle on the policy to determine whether it qualifies as a rental. Similar to Loaner case, Rental also has 3 validation rules. The main difference is `rental-covered-for-collision` rule that has no default and no `source` field specified.
 
 ```json
 {
@@ -96,6 +91,11 @@ Only `insureds-match` needs input parameter `insuredsMatch`. You can provide
       },
       {
         rule: "comprehensive-coverage-meets-requirements",
+        input: {
+          deductible: {
+            default: "1000",
+          },
+        },
       },
       {
         rule: "insureds-match",
