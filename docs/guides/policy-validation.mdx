@@ -1132,15 +1132,79 @@ This example Rule will verify if the policy contains collision coverage for the 
 
 </Accordion>
 
+<Accordion title="Third Parties Match">
+
+### `third-party-match`
+
+Evaluates whether a third party listed on the policy matches the provided name and, if provided, the third party's address.
+
+#### Input Parameters
+
+- `name` (required): String representing the name of the third party (e.g., "Major Bank").
+- `address` (optional): String representing the address of the third party.
+
+#### Responses
+
+| Status    | Cause                                                                                               |
+| --------- | --------------------------------------------------------------------------------------------------- |
+| `pass`    | Input name is a high-confidence match. If provided, address is also a high-confidence match.        |
+| `caution` | Input name is a medium-confidence match OR, if provided, address is a medium confidence match.      |
+| `fail`    | Input name does not match or address does not match.                                                |
+| `unknown` | There is insufficient information to compare the input third party details with those on the policy |
+
+#### Example Usage
+
+```typescript Example Rule Request
+{
+  "rule": "third-party-match",
+  "input": {
+    "name": "Major Bank",
+    "address": "123 Main St, Springfield, IL 62701",
+  }
+}
+```
+
+```typescript Example Rule Response
+{
+  "third-party-match": {
+    "status": "pass",
+    "metadata": {
+      "pass": [
+        {
+          "id": "prp_abc123",
+          "type": "interest",
+          "data": {
+            "name": "Major Bank",
+            "address": {
+              addressLine1: "123 Main St",
+              addressLine2: null,
+              state: "IL",
+              city: "Springfield",
+              country: "USA",
+              postalCode: "62701",
+            }
+          }
+        }
+      ],
+      "fail": [],
+      "caution": [],
+      "unknown": []
+    }
+  }
+}
+```
+
+</Accordion>
+
 <Accordion title="Required Policy Information is Present">
-  ### `required-policy-information-is-present`
+### `required-policy-information-is-present`
 
 Evaluates if the policy either has (1) certain required fields present OR (2) at least one declarations page. If either sub-rule passes, the overall Rule resolves to `pass`. Otherwise, it resolves to `fail`.
 
 This Rule combines two separate sub-rules:
 
-    1. `fields-exist` – Verifies that all fields specified by your `requiredFields` input are present on the policy. If every requested field is found, this Rule resolves to `pass`; otherwise, it resolves to `fail` and includes a `missingFields` list in the metadata.
-    2. `declarations-page-exists` – Checks whether the policy has at least one document classified by Axle as a declaration page.
+1. `fields-exist` – Verifies that all fields specified by your `requiredFields` input are present on the policy. If every requested field is found, this Rule resolves to `pass`; otherwise, it resolves to `fail` and includes a `missingFields` list in the metadata.
+2. `declarations-page-exists` – Checks whether the policy has at least one document classified by Axle as a declaration page.
 
 | Status | Cause                                                                                 |
 | ------ | ------------------------------------------------------------------------------------- |
@@ -1158,101 +1222,101 @@ If either the required fields or the declarations page check is satisfied, the R
 ```typescript Example Rule Request
 // The below example shows all the possible fields that can be checked for existence
 {
-  "rule": "required-policy-information-is-present",
-  "input": {
-     "requiredFields": {
-        "carrier": true,
-        "type": true,
-        "policyNumber": true,
-        "premium": true,
-        "isActive": true,
-        "effectiveDate": true,
-        "expirationDate": true,
-        "address": {
-          "addressLine1": true,
-          "state": true,
-          "city": true,
-          "postalCode": true
+"rule": "required-policy-information-is-present",
+"input": {
+   "requiredFields": {
+      "carrier": true,
+      "type": true,
+      "policyNumber": true,
+      "premium": true,
+      "isActive": true,
+      "effectiveDate": true,
+      "expirationDate": true,
+      "address": {
+        "addressLine1": true,
+        "state": true,
+        "city": true,
+        "postalCode": true
+      }
+      "properties": [
+        {
+          "data": {
+            "vin": true,
+            "year": true,
+            "make": true,
+            "model": true,
+            "use": true
+          }
         }
-        "properties": [
-          {
-            "data": {
-              "vin": true,
-              "year": true,
-              "make": true,
-              "model": true,
-              "use": true
-            }
+      ],
+      "coverages":[
+        {
+          "deductible": true,
+          "limitPerPerson": true,
+          "limitPerAccident": true
+        }
+      ],
+      "insureds":[
+        {
+          "firstName": true,
+          "lastName": true
+        }
+      ],
+      "thirdParties":[
+        {
+          "name": true,
+          "address": {
+            "addressLine1": true,
+            "state": true,
+            "city": true,
+            "postalCode": true
           }
-        ],
-        "coverages":[
-          {
-            "deductible": true,
-            "limitPerPerson": true,
-            "limitPerAccident": true
-          }
-        ],
-        "insureds":[
-          {
-            "firstName": true,
-            "lastName": true
-          }
-        ],
-        "thirdParties":[
-          {
-            "name": true,
-            "address": {
-              "addressLine1": true,
-              "state": true,
-              "city": true,
-              "postalCode": true
-            }
-          }
-        ]
-    }
+        }
+      ]
   }
+}
 }
 ```
 
 ```typescript Example Rule Response
 "required-policy-information-is-present": {
-    "status": "pass",
-    "summary": {
-        "required-policy-information-is-present": "pass"
-    },
-    "rules": {
-        "required-policy-information-is-present": {
-            "status": "pass",
-            "breakdown": {
-                "fields-exist": {
-                    "status": "fail",
-                    "metadata": {
-                        "missingFields": ["premium"]
-                    }
-                },
-                "declarations-page-exists": {
-                    "status": "pass",
-                    "metadata": {
-                        "documents": [
-                            {
-                                "createdAt": "2025-01-10T16:28:07.089Z",
-                                "issuedDate": "2024-12-24T00:00:00.000Z",
-                                "name": "Auto Policy Document Amended",
-                                "source": "carrier",
-                                "type": [
-                                    "policy-agreement",
-                                    "declaration-page"
-                                ],
-                                "key": "doc_FqDyv9F2b6x5eZ_jokGWU.pdf",
-                                "effectiveDate": null
-                            }
-                        ]
-                    }
-                }
-            },
-            "metadata": {}
-        }
-    }
+  "status": "pass",
+  "summary": {
+      "required-policy-information-is-present": "pass"
+  },
+  "rules": {
+      "required-policy-information-is-present": {
+          "status": "pass",
+          "breakdown": {
+              "fields-exist": {
+                  "status": "fail",
+                  "metadata": {
+                      "missingFields": ["premium"]
+                  }
+              },
+              "declarations-page-exists": {
+                  "status": "pass",
+                  "metadata": {
+                      "documents": [
+                          {
+                              "createdAt": "2025-01-10T16:28:07.089Z",
+                              "issuedDate": "2024-12-24T00:00:00.000Z",
+                              "name": "Auto Policy Document Amended",
+                              "source": "carrier",
+                              "type": [
+                                  "policy-agreement",
+                                  "declaration-page"
+                              ],
+                              "key": "doc_FqDyv9F2b6x5eZ_jokGWU.pdf",
+                              "effectiveDate": null
+                          }
+                      ]
+                  }
+              }
+          },
+          "metadata": {}
+      }
+  }
 }
 ```
 
@@ -1282,105 +1346,40 @@ Evaluates whether any vehicle on the policy has a specified use (e.g., business,
 
 ```typescript Example Rule Request
 {
-  "rule": "vehicle-use-meets-requirements",
-  "input": {
-    "use": "business",
-    "vin": "5FNRL38209B014050",
-  }
+"rule": "vehicle-use-meets-requirements",
+"input": {
+  "use": "business",
+  "vin": "5FNRL38209B014050",
+}
 }
 ```
 
 ```typescript Example Rule Response
 "vehicle-use-meets-requirements": {
-  "status": "pass",
-  "metadata": {
-    "pass": [
-      {
-        "id": "prp_tmGUxLpgHjmW9r6M6WjhS",
-        "type": "vehicle",
-        "data": {
-          "vin": "5FNRL38209B014050",
-          "make": "Honda",
-          "year": "2019",
-          "model": "Odyssey",
-          "use": "business"
-        }
+"status": "pass",
+"metadata": {
+  "pass": [
+    {
+      "id": "prp_tmGUxLpgHjmW9r6M6WjhS",
+      "type": "vehicle",
+      "data": {
+        "vin": "5FNRL38209B014050",
+        "make": "Honda",
+        "year": "2019",
+        "model": "Odyssey",
+        "use": "business"
       }
-    ],
-    "fail": [],
-    "caution": [],
-    "unknown": []
-  }
-}
-
-```
-
-</Accordion>
-
-<Accordion title="Third Party Name and Address Match">
-
-### `third-party-name-address-match`
-
-Evaluates whether the third party (e.g., lender) listed on the policy matches the provided name and, if provided, the address. The rule checks for a substring or fuzzy match on the name and validates the address using an existing address match rule.
-
-#### Input Parameters
-
-- `name` (required): String representing the name of the third party (e.g., "Sunrise Bank").
-- `address` (optional): String or object representing the address of the third party.
-
-#### Responses
-
-| Status    | Cause                                                                                 |
-| --------- | ------------------------------------------------------------------------------------- |
-| `pass`    | Name is a substring or high-confidence fuzzy match AND address matches (if provided). |
-| `caution` | Name is a medium-confidence fuzzy match OR address match results in caution.          |
-| `fail`    | Name does not match OR address match fails.                                           |
-| `unknown` | Name is null OR address match results in unknown.                                     |
-
-#### Example Usage
-
-````typescript
-{
-  "rule": "third-party-name-address-match",
-  "input": {
-    "name": "Sunrise Bank",
-    "address": "123 Main St, Springfield, IL 62701",
-  }
-}
-
-```typescript Example Rule Response
-{
-  "third-party-name-address-match": {
-    "status": "pass",
-    "metadata": {
-      "pass": [
-        {
-          "id": "prp_lienholder_abc123",
-          "type": "interest",
-          "data": {
-            "name": "Sunrise Bank",
-            "address": {
-              addressLine1: "123 Main St",
-              country: "USA",
-              addressLine2: "",
-              state: "IL",
-              city: "Springfield",
-              postalCode: "62701",
-            }
-          }
-        }
-      ],
-      "fail": [],
-      "caution": [],
-      "unknown": []
     }
-  }
+  ],
+  "fail": [],
+  "caution": [],
+  "unknown": []
 }
+}
+
 ```
 
 </Accordion>
-
-
 
 </AccordionGroup>
 
@@ -1412,26 +1411,33 @@ Templates can be used to simplify the configuration of Rules in your application
   "createdAt": "2025-06-10T13:57:22.300Z",
   "modifiedAt": "2025-06-10T13:57:22.300Z"
 }
-````
+```
 
 ### Usage
 
 <Steps>
-  <Step title="Create or modify Validation Template">
-    **Note:** Currently, Axle does not support creating or modifying templates via API. We hope to launch this in the near future. Please reach out to the Axle team to configure your Templates.  
-  </Step>
-  <Step title="Provide dynamic inputs to Ignition metadata (optional)">
-    Include metadata in [Start Ignition](/api-reference/ignition/start-ignition) to serve as dynamic Rule inputs. Ensure the metadata object is formatted correctly with the keys specified in your Template and the values conforming to the associated Rule input(s).
-  </Step>
-  <Step title="Retrieve Validation Templates">
-    After creating a template, you can store the Template identifier in your application or retrieve a list of Templates configured for your Axle client or destination client when needed. 
-    
-    See [Get Validation Config](/api-reference/configs/get-config-validation) for more details.
-  </Step>
-  <Step title="Request Policy Validation with Template">
-    Use the Template identifier to make a request to [Validate Policy with Template](/api-reference/policies/validate-policy-template). Ensure the request object is formatted correctly with the keys specified in your Template and the values conforming to the associated Rule input(s).
+<Step title="Create or modify Validation Template">
+  **Note:** Currently, Axle does not support creating or modifying templates via API. We hope to launch this in the near future. Please reach out to the Axle team to configure your Templates.
+</Step>
+<Step title="Provide dynamic inputs to Ignition metadata (optional)">
+  Include metadata in [Start Ignition](/api-reference/ignition/start-ignition) to serve as dynamic Rule inputs. Ensure the metadata object is formatted correctly with the keys specified in your Template and the values conforming to the associated Rule input(s).
+</Step>
+<Step title="Retrieve Validation Templates">
+  After creating a template, you can store the Template identifier in your application or retrieve a list of Templates configured for your Axle client or destination client when needed.
 
-    <Warning>Providing inputs to the Validate Policy endpoint will overwrite any metadata provided via Start Ignition.</Warning>
+See [Get Validation Config](/api-reference/configs/get-config-validation) for more details.
 
-  </Step>
+</Step>
+<Step title="Request Policy Validation with Template">
+  Use the Template identifier to make a request to [Validate Policy with Template](/api-reference/policies/validate-policy-template). Ensure the request object is formatted correctly with the keys specified in your Template and the values conforming to the associated Rule input(s).
+
+{" "}
+
+<Warning>
+  Providing inputs to the Validate Policy endpoint will overwrite any metadata
+  provided via Start Ignition.
+</Warning>
+
+</Step>
 </Steps>
+````
