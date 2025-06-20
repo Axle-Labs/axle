@@ -1665,6 +1665,7 @@ components:
             - "address-match"
             - "required-policy-information-is-present"
             - "vehicle-use-meets-requirements"
+            - "third-party-matches"
         input:
           type: object
           description: Additional input to evaluate the rule. See [Supported Rules](/guides/policy-validation#supported-rules) for details on which Rules require additional input.
@@ -1711,6 +1712,7 @@ components:
             - "address-match"
             - "required-policy-information-is-present"
             - "vehicle-use-meets-requirements"
+            - "third-party-matches"
         input:
           type: object
           description: Input configuration to evaluate the rule. See [Supported Rules](/guides/policy-validation#supported-rules) for details on which Rules require additional input.
