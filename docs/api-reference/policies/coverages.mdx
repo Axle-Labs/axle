@@ -351,3 +351,48 @@ Rules applied to all coverages:
     <ResponseField name="limitPerAccident" type="number" />
     <ResponseField name="limitPerPerson" type="number" />
 </Accordion>
+
+## Flood Policy Coverage Types
+
+<Accordion title="Dwelling" icon="house">
+    Rules applied:
+    1. When the deductible is listed differently based on the type of claim, the deductible associated with covered perils will be returned. This deductible value is often represented as “All Perils”, “All Covered Perils”, or “Other Covered Perils”.
+
+    Suppression checks:
+    1. If both the policy `premium` and Dwelling coverage `limitPerAccident` values are defined, the Axle Service will ensure that the premium-to-Dwelling-limitPerAccident ratio falls within our set bounds of reasonability. If this ratio is greater than our upper bound, both the policy `premium` and Dwelling coverage `limitPerAccident` values will be conservatively set to `null`. If a `premium` value exists but no Dwelling `limitPerAccident` value is present, then the `premium` will be conservatively set to `null`.
+    2. `limitPerAccident` and `deductible` fields contain certain min / max value thresholds used to suppress inaccurate or nonsensical data.
+
+    ### Fields
+    <ResponseField name="code" type="string" required>
+        DW
+    </ResponseField>
+
+    <ResponseField name="label" type="string" required>
+        Dwelling
+    </ResponseField>
+
+    <ResponseField name="limitPerAccident" type="number or null" />
+
+    <ResponseField name="deductible" type="number or null" />
+</Accordion>
+
+<Accordion title="Personal Property" icon="bag-shopping">
+    Rules applied:
+    1. When the deductible is listed differently based on the type of claim, the deductible associated with covered perils will be returned. This deductible value is often represented as “All Perils”, “All Covered Perils”, or “Other Covered Perils”.
+    
+    Suppression checks:
+    1. `limitPerAccident` and `deductible` fields contain certain min / max value thresholds used to suppress inaccurate or nonsensical data.
+    
+    ### Fields
+    <ResponseField name="code" type="string" required>
+        PP
+    </ResponseField>
+
+    <ResponseField name="label" type="string" required>
+        Personal Property
+    </ResponseField>
+
+    <ResponseField name="limitPerAccident" type="number or null" />
+
+    <ResponseField name="deductible" type="number or null" />
+</Accordion>
